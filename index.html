@@ -232,11 +232,11 @@ label{font-weight:800;font-size:13px;display:block;margin-bottom:6px}
 .ind-top{display:flex;justify-content:space-between;font-size:13px;font-weight:700}
 
 /* modal/overlay base */
-.ov{position:fixed;inset:0;background:rgba(46,42,69,.5);backdrop-filter:blur(6px);z-index:1500;display:none;align-items:center;justify-content:center;padding:18px}
+.ov{position:fixed;inset:0;background:rgba(46,42,69,.5);backdrop-filter:blur(6px);z-index:1500;display:none;align-items:flex-start;justify-content:center;padding:18px;overflow-y:auto;-webkit-overflow-scrolling:touch}
 .ov.show{display:flex;animation:enter .3s var(--ease)}
 
 /* login */
-.login-card{width:100%;max-width:430px;background:#fff;border-radius:26px;padding:30px 26px;text-align:center;box-shadow:0 30px 70px -20px rgba(80,60,180,.6)}
+.login-card{width:100%;max-width:430px;margin:auto;background:#fff;border-radius:26px;padding:30px 26px;text-align:center;box-shadow:0 30px 70px -20px rgba(80,60,180,.6)}
 .login-av{width:92px;margin:0 auto 8px}
 .login-card h1{font-size:21px;font-weight:900;margin-bottom:4px}
 .login-card .ls{font-size:12.5px;color:var(--muted);margin-bottom:18px;line-height:1.7}
@@ -249,7 +249,7 @@ label{font-weight:800;font-size:13px;display:block;margin-bottom:6px}
 .cd-chip b{color:var(--purple-d);font-size:15px;font-weight:900}
 
 /* Aurora orbs background */
-.aurora-bg{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.aurora-bg{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
 .aurora-orb{position:absolute;border-radius:50%;filter:blur(90px)}
 .ao1{width:550px;height:550px;background:radial-gradient(circle,#C4B5FD 0%,#818CF8 60%,transparent 100%);top:-180px;right:-120px;opacity:.55;animation:ao1 14s ease-in-out infinite}
 .ao2{width:450px;height:450px;background:radial-gradient(circle,#FCA5A5 0%,#F472B6 60%,transparent 100%);bottom:-140px;left:-100px;opacity:.45;animation:ao2 17s ease-in-out infinite}
@@ -263,7 +263,7 @@ label{font-weight:800;font-size:13px;display:block;margin-bottom:6px}
 .login-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(109,91,208,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(109,91,208,.07) 1px,transparent 1px);background-size:44px 44px}
 
 /* Rays — purple theme */
-.rays{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:700px;height:700px;border-radius:50%;z-index:1;pointer-events:none;opacity:.6;will-change:transform}
+.rays{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:700px;height:700px;border-radius:50%;z-index:1;pointer-events:none;opacity:.6;will-change:transform}
 .rays span{position:absolute;left:0;top:calc(50% - 2px);width:38px;height:4px;background:rgba(109,91,208,.25);border-radius:80px;transform-origin:350px;transform:rotate(calc(var(--i)*(360deg/50)));transition:background .25s}
 .rays span.hot{background:#7C3AED;box-shadow:0 0 14px rgba(124,58,237,.9)}
 
@@ -334,6 +334,14 @@ label{font-weight:800;font-size:13px;display:block;margin-bottom:6px}
   .hero h1{font-size:21px}
   .topbar{padding:10px 14px}
   .btn{padding:10px 16px}
+  /* Compact login card so the supervisor section fits on small screens */
+  .ov{padding:12px}
+  .login-card{padding:20px 18px;border-radius:20px}
+  .login-card h1{font-size:19px}
+  .login-card .ls{margin-bottom:12px}
+  .lf{margin-bottom:9px}
+  .rays{width:460px;height:460px}
+  .rays span{transform-origin:230px}
 }
 </style>
 </head>
@@ -646,7 +654,7 @@ label{font-weight:800;font-size:13px;display:block;margin-bottom:6px}
       <button type="button" class="eye-btn" onclick="toggleEye('lId',this)" tabindex="-1">👁</button></div>
       <div style="font-size:10.5px;color:#A89274;margin-top:4px">⚠️ يُكتب الرقم بالأرقام الإنجليزية (مثل 202012345)</div></div>
     <div class="lf"><label>🏢 اسم المؤسسة التدريبية <span class="req">*</span></label><input id="lOrg" placeholder="" onkeydown="if(event.key==='Enter')document.getElementById('lSup').focus()"></div>
-    <div class="lf"><label>اسم المشرفة في المؤسسة <span style="color:#A89274;font-weight:400">(اختياري)</span></label>
+    <div class="lf"><label>المشرفة في المؤسسة <span style="color:#A89274;font-weight:400">(اختياري)</span></label>
       <input id="lSup" placeholder="" onkeydown="if(event.key==='Enter')doLogin()"><div class="lerr" id="lErr">الرجاء تعبئة الحقول المطلوبة (الرقم الجامعي ٦ أرقام على الأقل).</div></div>
     <button class="btn btn-primary" style="width:100%" onclick="doLogin()">دخول إلى المنصة ←</button>
     <div style="margin-top:20px;padding:16px;background:linear-gradient(135deg,rgba(86,66,184,.08),rgba(124,58,237,.12));border-radius:16px;border:1.5px solid rgba(86,66,184,.2)">
