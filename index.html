@@ -297,6 +297,11 @@ label{font-weight:800;font-size:13px;display:block;margin-bottom:6px}
 @keyframes btn-shine{0%{transform:translateX(-100%)}40%,100%{transform:translateX(100%)}}
 #loginOv .login-card .btn-primary:hover{box-shadow:0 18px 36px -8px rgba(109,91,208,.8)!important}
 
+/* Eye toggle */
+.eye-wrap{position:relative;display:flex;align-items:center}
+.eye-wrap input{flex:1;padding-inline-start:38px}
+.eye-btn{position:absolute;inset-inline-start:10px;background:none;border:none;cursor:pointer;font-size:17px;color:var(--muted);padding:4px;opacity:.65;transition:opacity .2s;line-height:1}
+.eye-btn:hover{opacity:1}
 /* toast */
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(90px);background:var(--ink);color:#fff;
   padding:12px 22px;border-radius:14px;font-size:13px;z-index:3000;transition:transform .4s var(--ease);pointer-events:none;box-shadow:0 14px 30px rgba(0,0,0,.3);max-width:90%;text-align:center}
@@ -598,7 +603,8 @@ label{font-weight:800;font-size:13px;display:block;margin-bottom:6px}
   <h1>دخول المشرفة</h1>
   <div class="ls">هذا القسم مخصّص للمشرفة الأكاديمية. أدخلي كلمة السرّ للمتابعة.</div>
   <div class="lf"><label>🔑 كلمة سرّ المشرفة</label>
-    <input id="supPassIn" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')submitSupPass()">
+    <div class="eye-wrap"><input id="supPassIn" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')submitSupPass()">
+    <button type="button" class="eye-btn" onclick="toggleEye('supPassIn',this)" tabindex="-1">👁</button></div>
     <div class="lerr" id="supPassErr">كلمة السرّ غير صحيحة. حاولي مرة أخرى.</div></div>
   <div class="row" style="gap:8px"><button class="btn btn-primary" style="flex:1" onclick="submitSupPass()">دخول</button>
     <button class="btn btn-ghost" onclick="closeSupPass()">إلغاء</button></div>
@@ -635,7 +641,9 @@ label{font-weight:800;font-size:13px;display:block;margin-bottom:6px}
     <div id="countdown" class="cd-chip"></div>
     <div class="ls" style="margin-top:8px">أدخلي بياناتك للدخول</div>
     <div class="lf"><label>👩‍🎓 اسم الطالبة <span class="req">*</span></label><input id="lName" placeholder="الاسم الكامل" onkeydown="if(event.key==='Enter')document.getElementById('lId').focus()"></div>
-    <div class="lf"><label>🔢 الرقم الجامعي <span class="req">*</span></label><input id="lId" inputmode="numeric" placeholder="مثال: 202012345" onkeydown="if(event.key==='Enter')document.getElementById('lOrg').focus()">
+    <div class="lf"><label>🔢 الرقم الجامعي <span class="req">*</span></label>
+      <div class="eye-wrap"><input id="lId" type="password" inputmode="numeric" placeholder="مثال: 202012345" onkeydown="if(event.key==='Enter')document.getElementById('lOrg').focus()">
+      <button type="button" class="eye-btn" onclick="toggleEye('lId',this)" tabindex="-1">👁</button></div>
       <div style="font-size:10.5px;color:#A89274;margin-top:4px">⚠️ يُكتب الرقم بالأرقام الإنجليزية (مثل 202012345)</div></div>
     <div class="lf"><label>🏢 اسم المؤسسة التدريبية <span class="req">*</span></label><input id="lOrg" placeholder="" onkeydown="if(event.key==='Enter')document.getElementById('lSup').focus()"></div>
     <div class="lf"><label>اسم المشرفة في المؤسسة <span style="color:#A89274;font-weight:400">(اختياري)</span></label>
@@ -653,6 +661,7 @@ label{font-weight:800;font-size:13px;display:block;margin-bottom:6px}
 <script>
 const ar=n=>Number(n).toLocaleString('ar-EG');
 let toastT;
+function toggleEye(id,btn){const i=document.getElementById(id);i.type=i.type==='password'?'text':'password';btn.textContent=i.type==='password'?'👁':'🫣';}
 function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),2700);}
 function closeSidebar(){document.getElementById('sidebar').classList.remove('open');}
 
