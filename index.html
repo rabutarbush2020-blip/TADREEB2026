@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<title>التدريب الميداني — منصة تعليمية للخدمة الاجتماعية</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<style>
+/* ════════════ Unified Design System ════════════ */
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --purple:#6D5BD0; --purple-d:#5642B8; --purple-l:#A99BF0; --purple-soft:#EFEBFF;
+  --pink:#F4B6D6; --pink-soft:#FDEEF6; --rose:#FF8FC7;
+  --ink:#2E2A45; --muted:#8A86A8; --line:rgba(109,91,208,.14);
+  --glass:rgba(255,255,255,.62); --glass-strong:rgba(255,255,255,.82);
+  --radius:22px; --radius-s:14px;
+  --shadow:0 14px 40px -12px rgba(80,60,180,.28);
+  --shadow-hover:0 26px 60px -14px rgba(80,60,180,.40);
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+html{scroll-behavior:smooth}
+body{font-family:'Tajawal',system-ui,Tahoma,sans-serif;color:var(--ink);direction:rtl;min-height:100vh;
+  font-size:14.5px;line-height:1.6;overflow-x:hidden;position:relative;
+  background:linear-gradient(135deg,#F6F2FF 0%,#FFFFFF 45%,#FDEEF6 100%);}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+
+/* Animated background blobs */
+.bg-fx{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+.blob{position:absolute;border-radius:50%;filter:blur(60px);opacity:.5;animation:float 18s var(--ease) infinite}
+.blob.b1{width:420px;height:420px;background:#CDBEFF;top:-120px;right:-80px}
+.blob.b2{width:360px;height:360px;background:#FFC8E6;bottom:-100px;left:-60px;animation-duration:22s}
+.blob.b3{width:300px;height:300px;background:#BFE3FF;top:40%;left:55%;animation-duration:26s;opacity:.35}
+@keyframes float{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(-30px,40px) scale(1.08)}66%{transform:translate(40px,-30px) scale(.95)}}
+@media(prefers-reduced-motion:reduce){.blob{animation:none}}
+
+/* Glass surfaces */
+.glass{background:var(--glass);backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);
+  border:1px solid rgba(255,255,255,.6);border-radius:var(--radius);box-shadow:var(--shadow)}
+
+/* Layout */
+.app{display:flex;min-height:100vh}
+.sidebar{width:248px;flex-shrink:0;padding:18px 14px;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;
+  background:linear-gradient(180deg,rgba(109,91,208,.96),rgba(86,66,184,.96));backdrop-filter:blur(12px);color:#fff;z-index:60}
+.logo{display:flex;gap:11px;align-items:center;padding:6px 8px 16px;border-bottom:1px solid rgba(255,255,255,.14)}
+.logo-badge{width:46px;height:46px;border-radius:15px;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo-title{font-size:16px;font-weight:900}
+.logo-sub{font-size:10px;opacity:.7;margin-top:2px}
+.nav{flex:1;overflow-y:auto;padding:12px 0;display:flex;flex-direction:column;gap:3px}
+.nav-sec{font-size:10px;opacity:.55;padding:10px 12px 4px;letter-spacing:.5px}
+.nav-item{display:flex;align-items:center;gap:11px;padding:11px 14px;border-radius:14px;cursor:pointer;
+  color:rgba(255,255,255,.78);font-size:13.5px;font-weight:700;transition:all .25s var(--ease);position:relative}
+.nav-item:hover{background:rgba(255,255,255,.12);color:#fff;transform:translateX(-4px)}
+.nav-item.active{background:#fff;color:var(--purple-d);box-shadow:0 8px 20px -6px rgba(0,0,0,.3)}
+.nav-ic{font-size:17px;width:22px;text-align:center}
+.nav-item .bdg{margin-right:auto;background:var(--rose);color:#fff;font-size:10px;font-weight:800;padding:1px 8px;border-radius:20px}
+.side-user{display:flex;align-items:center;gap:9px;background:rgba(255,255,255,.12);border-radius:16px;padding:10px}
+.side-user .ui{flex:1;min-width:0}
+.side-user .un{font-size:12.5px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.side-user .ur{font-size:10px;opacity:.7;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.icon-btn{background:rgba(255,255,255,.16);border:none;color:#fff;width:34px;height:34px;border-radius:11px;cursor:pointer;font-size:15px;flex-shrink:0;transition:.2s}
+.icon-btn:hover{background:rgba(255,255,255,.3)}
+
+.main{flex:1;min-width:0;display:flex;flex-direction:column}
+.topbar{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:12px;padding:12px 22px;
+  background:var(--glass-strong);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
+.menu-tg{display:none;background:var(--purple-soft);border:none;width:40px;height:40px;border-radius:12px;font-size:18px;cursor:pointer;color:var(--purple-d)}
+.page-title{font-size:18px;font-weight:900;flex:1}
+.content{flex:1;padding:24px 22px;max-width:1180px;width:100%;margin:0 auto}
+
+/* Buttons */
+.btn{padding:11px 20px;border-radius:14px;border:none;cursor:pointer;font-family:inherit;font-size:13.5px;font-weight:800;
+  display:inline-flex;align-items:center;gap:7px;transition:all .25s var(--ease)}
+.btn:active{transform:scale(.96)}
+.btn-primary{background:linear-gradient(135deg,var(--purple),var(--purple-l));color:#fff;box-shadow:0 10px 24px -8px rgba(109,91,208,.7)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 16px 30px -8px rgba(109,91,208,.8)}
+.btn-ghost{background:rgba(255,255,255,.7);border:1.5px solid var(--line);color:var(--ink)}
+.btn-ghost:hover{border-color:var(--purple);color:var(--purple);transform:translateY(-2px)}
+.btn-pink{background:linear-gradient(135deg,var(--rose),var(--pink));color:#fff;box-shadow:0 10px 24px -8px rgba(255,143,199,.6)}
+.btn-sm{padding:7px 13px;font-size:12px;border-radius:11px}
+
+/* Cards / views */
+.view{display:none}
+.view.active{display:block;animation:enter .5s var(--ease)}
+@keyframes enter{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+.card{background:var(--glass);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.55);border-radius:var(--radius);
+  padding:20px;box-shadow:var(--shadow);margin-bottom:18px;transition:transform .35s var(--ease),box-shadow .35s var(--ease)}
+.card-3d{transform-style:preserve-3d;will-change:transform}
+.card-3d:hover{box-shadow:var(--shadow-hover)}
+.card-title{font-size:15px;font-weight:900;display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.card-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(2,1fr)} .g3{grid-template-columns:repeat(3,1fr)} .g4{grid-template-columns:repeat(4,1fr)}
+
+/* Floating companion */
+.companion{animation:bob 4s ease-in-out infinite;filter:drop-shadow(0 16px 22px rgba(80,60,180,.35))}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-12px) rotate(-2deg)}}
+
+/* Hero (home) */
+.hero{position:relative;overflow:hidden;display:flex;align-items:center;gap:24px;padding:30px;
+  background:linear-gradient(130deg,rgba(109,91,208,.95),rgba(169,155,240,.9) 55%,rgba(255,143,199,.85));
+  color:#fff;border-radius:28px;box-shadow:0 24px 60px -16px rgba(109,91,208,.6);margin-bottom:20px}
+.hero::after{content:"";position:absolute;top:-60px;left:-40px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.1)}
+.hero-txt{flex:1;z-index:2}
+.hero h1{font-size:25px;font-weight:900;margin-bottom:6px}
+.hero p{opacity:.95;font-size:14px;max-width:480px}
+.hero-comp{width:130px;flex-shrink:0;z-index:2}
+
+/* stat tiles */
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px}
+.tile{background:var(--glass);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.5);border-radius:20px;padding:16px;
+  display:flex;align-items:center;gap:13px;box-shadow:var(--shadow);transition:transform .35s var(--ease)}
+.tile:hover{transform:translateY(-5px)}
+.tile-ic{width:48px;height:48px;border-radius:15px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;background:var(--purple-soft)}
+.tile-n{font-size:23px;font-weight:900;line-height:1}
+.tile-l{font-size:12px;color:var(--muted);margin-top:3px}
+
+/* ring progress */
+.ring{--p:0;width:74px;height:74px;border-radius:50%;display:grid;place-items:center;flex-shrink:0;
+  background:conic-gradient(var(--purple) calc(var(--p)*1%),var(--purple-soft) 0)}
+.ring::before{content:"";position:absolute;width:56px;height:56px;border-radius:50%;background:#fff}
+.ring span{position:relative;font-weight:900;color:var(--purple-d);font-size:15px}
+
+/* progress bar */
+.pbar{height:12px;background:var(--purple-soft);border-radius:99px;overflow:hidden}
+.pfill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--purple),var(--rose));transition:width 1s var(--ease)}
+
+/* tasks */
+.task{display:flex;align-items:center;gap:11px;padding:12px;border-radius:14px;background:rgba(255,255,255,.55);
+  border:1.5px solid transparent;cursor:pointer;transition:.2s;margin-bottom:8px}
+.task:hover{border-color:var(--purple-l);transform:translateX(-3px)}
+.task.done{background:var(--purple-soft)}
+.tcheck{width:22px;height:22px;border-radius:8px;border:2px solid var(--purple-l);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;transition:.2s}
+.task.done .tcheck{background:var(--purple);border-color:var(--purple);color:#fff}
+.task.done .tt{text-decoration:line-through;color:var(--muted)}
+.chip{display:inline-block;padding:3px 11px;border-radius:99px;font-size:11px;font-weight:800;background:var(--purple-soft);color:var(--purple-d)}
+.chip.pink{background:var(--pink-soft);color:var(--rose)}
+
+/* day path */
+.daypath{display:flex;align-items:flex-start;gap:0;overflow-x:auto;padding:6px 2px}
+.dnode{display:flex;flex-direction:column;align-items:center;gap:6px;flex-shrink:0;cursor:pointer;width:108px}
+.dcirc{width:58px;height:58px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900;
+  background:var(--glass);border:2px solid var(--purple-l);color:var(--purple-d);transition:.3s;box-shadow:var(--shadow)}
+.dnode:hover .dcirc{transform:translateY(-4px)}
+.dnode.active .dcirc{background:linear-gradient(135deg,var(--purple),var(--purple-l));color:#fff;animation:pulse 1.8s infinite}
+.dnode.done .dcirc{background:linear-gradient(135deg,var(--rose),var(--pink));color:#fff;border-color:var(--rose)}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(109,91,208,.4)}50%{box-shadow:0 0 0 12px rgba(109,91,208,0)}}
+.dlbl{font-size:11.5px;font-weight:800;text-align:center}
+.dsub{font-size:9px;color:var(--muted);text-align:center}
+.dline{height:3px;flex:1;min-width:18px;background:var(--purple-soft);margin-top:28px;border-radius:9px}
+.dline.done{background:var(--rose)}
+
+textarea,input,select{width:100%;border:1.5px solid var(--line);border-radius:13px;padding:11px 13px;font-family:inherit;font-size:13.5px;
+  background:rgba(255,255,255,.7);color:var(--ink);outline:none;transition:.2s;direction:rtl}
+textarea:focus,input:focus,select:focus{border-color:var(--purple);box-shadow:0 0 0 4px rgba(109,91,208,.14)}
+label{font-weight:800;font-size:13px;display:block;margin-bottom:6px}
+
+/* faces quiz */
+.faces{display:flex;gap:8px}
+.face{flex:1;background:rgba(255,255,255,.6);border:1.5px solid var(--line);border-radius:14px;padding:10px;text-align:center;cursor:pointer;font-size:22px;transition:.2s}
+.face:hover{border-color:var(--purple)}
+.face.sel{background:var(--purple-soft);border-color:var(--purple);transform:scale(1.06)}
+.face span{display:block;font-size:10px;color:var(--muted);margin-top:2px;font-weight:700}
+
+/* banners */
+.banner{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;border-radius:18px;margin-bottom:16px;font-size:13.5px;
+  background:var(--purple-soft);border:1px solid var(--line)}
+.banner.pink{background:var(--pink-soft);border-color:rgba(255,143,199,.25)}
+.banner .bic{font-size:22px;flex-shrink:0}
+
+/* map */
+.mstep{display:flex;gap:14px}
+.mnum{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--purple-l));color:#fff;
+  display:flex;align-items:center;justify-content:center;font-weight:900;flex-shrink:0;box-shadow:var(--shadow)}
+.mwrap{display:flex;flex-direction:column;align-items:center}
+.mvl{width:2px;flex:1;background:var(--purple-soft);margin:3px 0}
+.mbody{background:rgba(255,255,255,.55);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:12px;flex:1}
+.mbody .mt{font-weight:800;margin-bottom:3px}
+.mbody .md{font-size:12.5px;color:var(--muted)}
+
+/* chat assistant */
+.chatbox{height:300px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;padding:12px;background:rgba(255,255,255,.45);border-radius:16px;border:1px solid var(--line);margin-bottom:12px}
+.msg{display:flex;gap:9px;max-width:86%}
+.msg.u{flex-direction:row-reverse;margin-right:auto}.msg.b{margin-left:auto}
+.mav{width:30px;height:30px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:14px}
+.mav.b{background:var(--purple);color:#fff}.mav.u{background:var(--rose);color:#fff}
+.bub{padding:10px 13px;border-radius:15px;font-size:13px}
+.msg.b .bub{background:#fff;border:1px solid var(--line);border-top-right-radius:4px}
+.msg.u .bub{background:var(--purple);color:#fff;border-top-left-radius:4px}
+.chips{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:10px}
+.fchip{padding:6px 13px;border-radius:99px;font-size:12px;font-weight:700;cursor:pointer;background:rgba(255,255,255,.6);border:1.5px solid var(--line);transition:.2s}
+.fchip:hover{background:var(--purple);color:#fff;border-color:var(--purple)}
+.row{display:flex;gap:8px}
+
+/* templates */
+.tmpl{background:rgba(255,255,255,.6);border:1px dashed var(--purple-l);border-radius:14px;padding:15px;font-size:13px;line-height:1.9;white-space:pre-wrap;position:relative}
+.copy{position:absolute;top:10px;left:10px;background:var(--purple-soft);color:var(--purple-d);border:none;padding:5px 11px;border-radius:9px;font-size:11px;font-weight:800;cursor:pointer}
+
+/* community */
+.post{background:rgba(255,255,255,.6);border:1px solid var(--line);border-radius:18px;padding:15px;margin-bottom:13px;transition:.3s}
+.post:hover{box-shadow:var(--shadow)}
+.phead{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.pav{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--rose));color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0}
+.pname{font-size:13px;font-weight:800}.ptime{font-size:10px;color:var(--muted)}
+.ptag{margin-right:auto;font-size:10px;font-weight:800;background:var(--purple-soft);color:var(--purple-d);padding:3px 10px;border-radius:99px}
+.ptag.sup{background:#E3F9EC;color:#1f9d57}
+.pbody{font-size:13.5px;line-height:1.7;margin-bottom:10px}
+.pact{display:flex;gap:16px;font-size:12px;color:var(--muted);align-items:center}
+.pact span{cursor:pointer;display:inline-flex;align-items:center;gap:5px;transition:.2s}
+.pact span:hover{color:var(--purple)}
+.del{margin-right:auto;cursor:pointer;color:var(--rose);opacity:.75;font-size:12px;font-weight:700}
+.del:hover{opacity:1}
+.pact .liked{color:var(--rose);font-weight:800}
+.comments{margin-top:11px;padding-top:11px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:9px}
+.cmt{background:rgba(255,255,255,.7);border-radius:12px;padding:9px 11px;margin-right:14px}
+.cmt .ch{display:flex;align-items:center;gap:7px;margin-bottom:4px}
+.cmt .cav{width:24px;height:24px;border-radius:50%;background:var(--purple-l);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800}
+.cmt .cn{font-size:11.5px;font-weight:800}.cmt .cb{font-size:12.5px}
+.reply{margin-right:24px;background:var(--purple-soft)}
+
+/* supervisor */
+.stbl{width:100%;border-collapse:collapse}
+.stbl th{text-align:right;padding:10px;font-size:11px;color:var(--muted);border-bottom:2px solid var(--line);font-weight:800}
+.stbl td{padding:11px 10px;border-bottom:1px solid var(--line);font-size:13px}
+.stbl tr:hover td{background:rgba(255,255,255,.4)}
+.lvl{display:inline-block;padding:3px 11px;border-radius:99px;font-size:11px;font-weight:800}
+.lvl.high{background:#E3F9EC;color:#1f9d57}.lvl.mid{background:var(--purple-soft);color:var(--purple-d)}.lvl.low{background:#FFE9E0;color:#E07B4F}
+.ind{display:flex;flex-direction:column;gap:5px;margin-bottom:13px}
+.ind-top{display:flex;justify-content:space-between;font-size:13px;font-weight:700}
+
+/* modal/overlay base */
+.ov{position:fixed;inset:0;background:rgba(46,42,69,.5);backdrop-filter:blur(6px);z-index:1500;display:none;align-items:center;justify-content:center;padding:18px}
+.ov.show{display:flex;animation:enter .3s var(--ease)}
+
+/* login */
+.login-card{width:100%;max-width:430px;background:#fff;border-radius:26px;padding:30px 26px;text-align:center;box-shadow:0 30px 70px -20px rgba(80,60,180,.6)}
+.login-av{width:92px;margin:0 auto 8px}
+.login-card h1{font-size:21px;font-weight:900;margin-bottom:4px}
+.login-card .ls{font-size:12.5px;color:var(--muted);margin-bottom:18px;line-height:1.7}
+.lf{text-align:right;margin-bottom:13px}
+.lerr{color:var(--rose);font-size:11.5px;margin-top:5px;display:none}
+.lnote{font-size:10.5px;color:var(--muted);margin-top:13px}
+/* ══════════ Aurora Login Design ══════════ */
+.req{color:var(--purple-d);font-weight:900;margin-inline-start:2px}
+.cd-chip{display:inline-block;background:rgba(109,91,208,.1);color:var(--purple-d);border:1px solid rgba(109,91,208,.25);border-radius:99px;padding:6px 15px;font-size:12.5px;font-weight:700}
+.cd-chip b{color:var(--purple-d);font-size:15px;font-weight:900}
+
+/* Aurora orbs background */
+.aurora-bg{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.aurora-orb{position:absolute;border-radius:50%;filter:blur(90px)}
+.ao1{width:550px;height:550px;background:radial-gradient(circle,#C4B5FD 0%,#818CF8 60%,transparent 100%);top:-180px;right:-120px;opacity:.55;animation:ao1 14s ease-in-out infinite}
+.ao2{width:450px;height:450px;background:radial-gradient(circle,#FCA5A5 0%,#F472B6 60%,transparent 100%);bottom:-140px;left:-100px;opacity:.45;animation:ao2 17s ease-in-out infinite}
+.ao3{width:320px;height:320px;background:radial-gradient(circle,#6EE7F7 0%,#818CF8 60%,transparent 100%);top:35%;left:28%;opacity:.3;animation:ao3 22s ease-in-out infinite}
+.ao4{width:200px;height:200px;background:radial-gradient(circle,#FDE68A 0%,#F472B6 60%,transparent 100%);top:10%;left:15%;opacity:.25;animation:ao2 19s ease-in-out infinite reverse}
+@keyframes ao1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-50px,70px) scale(1.12)}}
+@keyframes ao2{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(60px,-50px) scale(1.08)}}
+@keyframes ao3{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(-40px,50px) scale(1.06)}66%{transform:translate(50px,-30px) scale(.94)}}
+
+/* Grid overlay */
+.login-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(109,91,208,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(109,91,208,.07) 1px,transparent 1px);background-size:44px 44px}
+
+/* Rays — purple theme */
+.rays{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:700px;height:700px;border-radius:50%;z-index:1;pointer-events:none;opacity:.6;will-change:transform}
+.rays span{position:absolute;left:0;top:calc(50% - 2px);width:38px;height:4px;background:rgba(109,91,208,.25);border-radius:80px;transform-origin:350px;transform:rotate(calc(var(--i)*(360deg/50)));transition:background .25s}
+.rays span.hot{background:#7C3AED;box-shadow:0 0 14px rgba(124,58,237,.9)}
+
+/* Enhanced glass card for login */
+#loginOv .login-card{
+  background:rgba(255,255,255,.78)!important;
+  backdrop-filter:blur(28px) saturate(1.6)!important;
+  -webkit-backdrop-filter:blur(28px) saturate(1.6)!important;
+  border:1px solid rgba(255,255,255,.9)!important;
+  box-shadow:0 32px 80px -20px rgba(80,60,180,.28),0 0 0 1px rgba(255,255,255,.6) inset!important;
+  animation:card-appear .8s cubic-bezier(.22,1,.36,1)!important
+}
+@keyframes card-appear{from{opacity:0;transform:translateY(36px) scale(.96);filter:blur(6px)}to{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}}
+
+/* Animated gradient title */
+#loginOv .login-card h1{
+  background:linear-gradient(135deg,#5642B8 0%,#7C3AED 45%,#DB2777 100%);
+  background-size:200% 200%;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  animation:grad-shift 5s ease infinite
+}
+@keyframes grad-shift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+
+#loginOv .login-card .ls{color:#6B7280!important}
+#loginOv .login-card label{color:#374151!important;font-weight:700}
+#loginOv .login-card input:focus{border-color:var(--purple)!important;box-shadow:0 0 0 4px rgba(109,91,208,.18)!important}
+
+/* Shimmer login button */
+#loginOv .login-card .btn-primary{background:linear-gradient(135deg,#5642B8,#7C3AED)!important;box-shadow:0 10px 30px -8px rgba(109,91,208,.65)!important;overflow:hidden;position:relative}
+#loginOv .login-card .btn-primary::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,.22) 50%,transparent 100%);transform:translateX(-100%);animation:btn-shine 3.5s ease-in-out infinite}
+@keyframes btn-shine{0%{transform:translateX(-100%)}40%,100%{transform:translateX(100%)}}
+#loginOv .login-card .btn-primary:hover{box-shadow:0 18px 36px -8px rgba(109,91,208,.8)!important}
+
+/* toast */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(90px);background:var(--ink);color:#fff;
+  padding:12px 22px;border-radius:14px;font-size:13px;z-index:3000;transition:transform .4s var(--ease);pointer-events:none;box-shadow:0 14px 30px rgba(0,0,0,.3);max-width:90%;text-align:center}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+/* audio settings popover */
+.audio-pop{position:absolute;top:54px;left:14px;width:230px;background:#fff;border-radius:18px;padding:16px;box-shadow:var(--shadow);z-index:80;display:none}
+.audio-pop.show{display:block;animation:enter .25s var(--ease)}
+.switch{position:relative;width:46px;height:26px;background:var(--purple-soft);border-radius:99px;cursor:pointer;transition:.25s;flex-shrink:0}
+.switch.on{background:var(--purple)}
+.switch::after{content:"";position:absolute;top:3px;right:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:.25s;box-shadow:0 2px 5px rgba(0,0,0,.2)}
+.switch.on::after{right:23px}
+
+::-webkit-scrollbar{width:7px;height:7px}
+::-webkit-scrollbar-thumb{background:var(--purple-l);border-radius:99px}
+::-webkit-scrollbar-track{background:transparent}
+
+/* Responsive */
+.menu-tg{display:none}
+@media(max-width:880px){
+  .sidebar{position:fixed;right:-270px;transition:right .3s var(--ease);box-shadow:0 0 40px rgba(0,0,0,.3)}
+  .sidebar.open{right:0}
+  .menu-tg{display:block}
+  .g2,.g3,.g4,.tiles{grid-template-columns:1fr}
+  .hero{flex-direction:column;text-align:center;padding:24px}
+  .content{padding:18px 14px}
+}
+@media(max-width:480px){
+  body{font-size:14px}
+  .hero h1{font-size:21px}
+  .topbar{padding:10px 14px}
+  .btn{padding:10px 16px}
+}
+</style>
+</head>
+<body>
+<h2 class="sr-only">التدريب الميداني — منصة تعليمية حديثة لطالبات التدريب الميداني في الخدمة الاجتماعية</h2>
+
+<div class="bg-fx"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+
+<svg width="0" height="0" style="position:absolute"><defs>
+  <g id="rafiqa">
+    <circle cx="32" cy="32" r="31" fill="#F1ECFF"/>
+    <circle cx="32" cy="32" r="22" fill="none" stroke="#6D5BD0" stroke-width="2.6"/>
+    <g stroke="#A99BF0" stroke-width="1.4" stroke-linecap="round">
+      <line x1="32" y1="11" x2="32" y2="15"/><line x1="32" y1="49" x2="32" y2="53"/>
+      <line x1="11" y1="32" x2="15" y2="32"/><line x1="49" y1="32" x2="53" y2="32"/>
+    </g>
+    <polygon points="32,13 38,32 32,35 26,32" fill="#6D5BD0"/>
+    <polygon points="32,51 38,32 32,29 26,32" fill="#C9BEF5"/>
+    <circle cx="32" cy="32" r="3.2" fill="#5642B8"/>
+  </g>
+</defs></svg>
+
+<div class="app">
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="logo">
+      <div class="logo-badge"><svg viewBox="0 0 64 64" width="34" height="34">
+        <circle cx="32" cy="27" r="22" fill="#FFE08A" opacity=".4"/>
+        <g stroke="#FFD23F" stroke-width="3" stroke-linecap="round">
+          <line x1="32" y1="2" x2="32" y2="8"/><line x1="11" y1="10" x2="15.5" y2="14.5"/><line x1="53" y1="10" x2="48.5" y2="14.5"/><line x1="4" y1="28" x2="10" y2="28"/><line x1="60" y1="28" x2="54" y2="28"/>
+        </g>
+        <path d="M32 9 C21 9 13 17 13 28 c0 6.5 3.5 11.5 8.5 15 l0 4 h21 l0-4 c5-3.5 8.5-8.5 8.5-15 0-11-8-19-19-19z" fill="#FFD23F" stroke="#F2B705" stroke-width="1.6"/>
+        <path d="M26 26 L31 36 L33 36 L38 26" stroke="#C9851F" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        <rect x="24" y="47" width="16" height="5" rx="2" fill="#C9A12B"/><rect x="26" y="52" width="12" height="4" rx="2" fill="#A8851F"/><rect x="28" y="56" width="8" height="3" rx="1.5" fill="#8A6E18"/>
+      </svg></div>
+      <div><div class="logo-title">التدريب الميداني</div><div class="logo-sub">منصة دعم الأسبوع الأول</div></div>
+    </div>
+    <nav class="nav">
+      <div class="nav-sec">الطالبة</div>
+      <div class="nav-item active" data-v="home" onclick="go('home',this)"><span class="nav-ic">🏠</span> الرئيسية</div>
+      <div class="nav-item" data-v="guide" onclick="go('guide',this)"><span class="nav-ic">📘</span> دليل التدريب</div>
+      <div class="nav-item" data-v="map" onclick="go('map',this)"><span class="nav-ic">🧭</span> خريطة الإجراءات</div>
+      <div class="nav-item" data-v="week" onclick="go('week',this)"><span class="nav-ic">🗺️</span> مسار الأسبوع <span class="bdg">٣ أيام</span></div>
+      <div class="nav-item" onclick="openSim();closeSidebar()"><span class="nav-ic">🎭</span> سيناريو يوم تدريبي</div>
+      <div class="nav-item" data-v="assistant" onclick="go('assistant',this)"><span class="nav-ic">🤖</span> المساعد الذكي</div>
+      <div class="nav-item" data-v="forms" onclick="go('forms',this)"><span class="nav-ic">📝</span> النماذج</div>
+      <div class="nav-item" data-v="community" onclick="go('community',this)"><span class="nav-ic">💬</span> مجتمع التعلّم</div>
+      <div class="nav-sec">المشرفة</div>
+      <div class="nav-item" data-v="supervisor" onclick="go('supervisor',this)"><span class="nav-ic">👩‍🏫</span> لوحة المتابعة</div>
+      <div class="nav-item" data-v="indicators" onclick="go('indicators',this)"><span class="nav-ic">📊</span> مؤشرات الدعم المهني</div>
+    </nav>
+    <div class="side-user">
+      <div class="ui"><div class="un" id="sbName">طالبة</div><div class="ur" id="sbId">—</div></div>
+      <button class="icon-btn" title="تسجيل الخروج" onclick="logout()">🚪</button>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <div class="main">
+    <div class="topbar">
+      <button class="menu-tg" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
+      <div style="position:relative">
+        <button class="icon-btn" style="background:var(--purple-soft);color:var(--purple-d)" onclick="toggleAudioPop()" title="إعدادات الصوت">🔊</button>
+        <div class="audio-pop" id="audioPop">
+          <div style="font-weight:900;font-size:14px;margin-bottom:12px">🔊 إعدادات الصوت</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+            <span style="font-size:13px;font-weight:700">تشغيل الأصوات</span>
+            <div class="switch on" id="audSwitch" onclick="toggleAudio()"></div>
+          </div>
+          <div style="font-size:13px;font-weight:700;margin-bottom:6px">مستوى الصوت</div>
+          <input type="range" min="0" max="100" value="70" id="audVol" oninput="setVol(this.value)">
+          <button class="btn btn-ghost btn-sm" style="margin-top:12px;width:100%" onclick="playWelcome()">▶️ تجربة رسالة الترحيب</button>
+        </div>
+      </div>
+      <div class="page-title" id="pageTitle">الرئيسية</div>
+      <button class="btn btn-ghost btn-sm" onclick="logout()">🚪 خروج</button>
+    </div>
+
+    <div class="content">
+
+      <!-- ═══ HOME (minimal) ═══ -->
+      <div class="view active" id="v-home">
+        <div class="hero card-3d" id="hero">
+          <div class="hero-txt">
+            <h1 id="heroHi">أهلاً بكِ 🌸</h1>
+            <p>دليلكِ في الأسبوع التدريبي الأول — خطوة بخطوة، بثقة وطمأنينة.</p>
+            <button class="btn" style="background:#fff;color:var(--purple-d);margin-top:14px" onclick="go('guide',null)">📘 دليل التدريب</button>
+          </div>
+        </div>
+
+        <div class="grid g3" style="margin-bottom:18px">
+          <div class="card card-3d" style="display:flex;align-items:center;gap:16px;margin:0">
+            <div class="ring" id="homeRing" style="position:relative"><span id="homePct">٠٪</span></div>
+            <div><div style="font-weight:900;font-size:15px">نسبة الإنجاز</div><div style="font-size:12px;color:var(--muted)">من مهام الأسبوع</div></div>
+          </div>
+          <div class="card card-3d" style="display:flex;align-items:center;gap:14px;margin:0">
+            <div class="tile-ic" style="background:var(--pink-soft)">📅</div>
+            <div><div style="font-weight:900;font-size:15px" id="homeDay">اليوم الأول</div><div style="font-size:12px;color:var(--muted)">يومك التدريبي الحالي</div></div>
+          </div>
+          <div class="card card-3d" style="display:flex;align-items:center;gap:14px;margin:0">
+            <div class="tile-ic">🔔</div>
+            <div><div style="font-weight:900;font-size:13.5px" id="homeNotif">مرحبًا بكِ في المنصة</div><div style="font-size:12px;color:var(--muted)">آخر إشعار</div></div>
+          </div>
+        </div>
+
+        <div class="banner pink"><div class="bic">💡</div><div>للاطّلاع على الضوابط والجدول والفيديوهات، افتحي <b>دليل التدريب</b>. ولبدء مهامك اليومية افتحي <b>مسار الأسبوع</b>.</div></div>
+      </div>
+
+      <!-- ═══ GUIDE ═══ -->
+      <div class="view" id="v-guide">
+        <div class="banner"><div class="bic">📅</div><div><b>جدول التدريب الميداني:</b> يبدأ <b>٢٣ أغسطس</b> وينتهي <b>٣ ديسمبر ٢٠٢٦</b> في جميع المؤسسات · <b>٦ ساعات</b> يوميًا · أيام <b>الأحد والثلاثاء والخميس</b>.</div></div>
+
+        <div class="card card-3d">
+          <div class="card-title">📢 إعلان تمهيدي</div>
+          <p style="font-size:13px;color:var(--muted);margin:6px 0 12px">شاهدي الإعلان التمهيدي للتعرّف على التدريب الميداني وخطواته قبل البدء.</p>
+          <video id="vidIntro" controls playsinline preload="metadata" src="intro.mp4" style="width:100%;border-radius:14px;background:#2E2A45"></video>
+        </div>
+
+        <div class="banner"><div class="bic">🔎</div><div><b>قبل النزول للميدان:</b> ابحثي عن مؤسستك التدريبية عبر <b>موقعها الإلكتروني</b> و<b>وسائل التواصل الاجتماعي</b> (نشاطها، أهدافها، أقسامها، الفئة المستفيدة).</div></div>
+
+        <div class="card card-3d">
+          <div class="card-title">🎬 كلمة مشرفة التدريب · الفصل الأول ٢٠٢٦</div>
+          <div class="row" style="flex-wrap:wrap;margin:10px 0">
+            <button class="btn btn-ghost btn-sm" onclick="playWelcome()">✨ الكلمة الافتتاحية (صوت)</button>
+            <button class="btn btn-ghost btn-sm" onclick="loadVid('supervisor.mp4','كلمة المشرفة')">🎥 فيديو المشرفة</button>
+          </div>
+          <video id="vid" controls playsinline style="width:100%;border-radius:14px;background:#2E2A45;display:none"></video>
+          <a href="https://padlet.com/rabutarbush2020/padlet-hkvdrms57eqcuyvw" target="_blank" style="font-size:12px;color:var(--purple-d);font-weight:800;display:inline-block;margin-top:10px">🔗 لوحة Padlet للتدريب</a>
+        </div>
+
+        <div class="card card-3d" style="border:1.5px solid var(--rose)">
+          <div class="card-title">📖 خطوة إلزامية: قراءة التوصيف</div>
+          <p style="font-size:13px;color:var(--muted);margin:6px 0 12px">على جميع الطالبات قراءة <b>توصيف مقرر التدريب الميداني</b> في بلاك بورد قبل الانتقال لبقية الأقسام.</p>
+          <a href="https://elearning.qu.edu.qa/" target="_blank" class="btn btn-ghost btn-sm" style="margin-bottom:12px">🔗 فتح بلاك بورد</a>
+          <div class="task" id="sylTask" onclick="toggleSyl()"><div class="tcheck" id="sylCheck"></div><span class="tt">أقرّ بأنني قرأتُ توصيف المقرر في بلاك بورد (إلزامي)</span></div>
+        </div>
+
+        <div class="card card-3d">
+          <div class="card-title">📋 ضوابط التدريب الميداني في المؤسسات التدريبية</div>
+          <div class="grid g3" style="margin-top:10px">
+            <div class="task" style="cursor:default"><span>⏰</span><span class="tt">الانضباط بالحضور ومتابعة البلاك بورد</span></div>
+            <div class="task" style="cursor:default"><span>👔</span><span class="tt">الالتزام باللباس المهني المحتشم</span></div>
+            <div class="task" style="cursor:default"><span>🔒</span><span class="tt">السرية وعدم نقل المعلومات خارج المؤسسة</span></div>
+            <div class="task" style="cursor:default"><span>🤝</span><span class="tt">التعاون مع المشرفة وفريق العمل</span></div>
+            <div class="task" style="cursor:default"><span>✍️</span><span class="tt">التوثيق الموضوعي لا القصصي</span></div>
+            <div class="task" style="cursor:default"><span>🙂</span><span class="tt">الواقعية وعدم توقّع المثالية</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ MAP ═══ -->
+      <div class="view" id="v-map">
+        <div class="banner"><div class="bic">🧭</div><div><b>خريطة الإجراءات للتدريب في المؤسسة التدريبية خلال الأسبوع الأول</b></div></div>
+        <div class="card card-3d"><div class="card-title">🧭 خطوات الإجراءات</div><div id="mapSteps" style="margin-top:12px"></div></div>
+      </div>
+
+      <!-- ═══ WEEK ═══ -->
+      <div class="view" id="v-week">
+        <div class="banner"><div class="bic">🗺️</div><div>أرافقكِ يومًا بيوم. المهام <b>اختيارية</b> — أكملي ما ينطبق. إجاباتك تُحفظ تلقائيًا.</div></div>
+        <div class="card card-3d"><div class="card-title">📅 رحلة الأسبوع الأول</div><div class="daypath" id="daypath"></div></div>
+        <div id="dayPanel"></div>
+      </div>
+
+      <!-- ═══ ASSISTANT ═══ -->
+      <div class="view" id="v-assistant">
+        <div class="card card-3d">
+          <div class="card-title">🤖 المساعد الذكي للأسئلة المتكررة</div>
+          <div class="chips" id="faqChips" style="margin:10px 0"></div>
+          <div class="chatbox" id="chatbox"><div class="msg b"><div class="mav b">🤖</div><div class="bub">مرحبًا! اسأليني عن التواصل مع المشرفة، توثيق الساعات، الغياب، أو التقرير الأسبوعي. 🌟</div></div></div>
+          <div class="row"><input id="askIn" placeholder="اكتبي سؤالك..." onkeydown="if(event.key==='Enter')sendAsk()"><button class="btn btn-primary" onclick="sendAsk()">إرسال</button></div>
+        </div>
+      </div>
+
+      <!-- ═══ FORMS ═══ -->
+      <div class="view" id="v-forms">
+        <div class="grid g2">
+          <div class="card card-3d"><div class="card-title">📄 نموذج التقرير اليومي</div>
+            <div class="tmpl" id="tDaily" style="margin-top:10px"><button class="copy" onclick="cpy('tDaily')">📋 نسخ</button>📅 التاريخ: ______
+🏢 المؤسسة/القسم: ______
+⏰ ساعات الحضور: من ____ إلى ____
+
+١) الأنشطة التي قمتُ بها (بوصف موضوعي):
+- ______
+٢) ما لاحظتُه/تعلّمتُه:
+- ______
+٣) صعوبة واجهتني وكيف تعاملتُ معها:
+- ______</div>
+          </div>
+          <div class="card card-3d"><div class="card-title">✉️ نموذج بريد مهني للمشرفة</div>
+            <div class="tmpl" id="tMail" style="margin-top:10px"><button class="copy" onclick="cpy('tMail')">📋 نسخ</button>الموضوع: استفسار بخصوص التدريب الميداني
+
+تحية طيبة أستاذتي الفاضلة،
+أنا الطالبة (الاسم)، متدربة في (المؤسسة).
+أودّ الاستفسار عن: ______
+
+شاكرة لكِ تعاونكِ،
+(الاسم) — (الرقم الجامعي)</div>
+          </div>
+        </div>
+        <div class="banner pink"><div class="bic">📌</div><div>التقرير الأسبوعي يُرفع في <b>بلاك بورد</b> — <b>كل يوم خميس الساعة ١١:٥٥ مساءً</b>، بأسلوب موضوعي. <button class="btn btn-ghost btn-sm" style="margin-top:8px" onclick="downloadNotes()">⬇️ تنزيل ملاحظاتي</button></div></div>
+      </div>
+
+      <!-- ═══ COMMUNITY ═══ -->
+      <div class="view" id="v-community">
+        <div class="banner"><div class="bic">💬</div><div>مجتمع تعلّم بين المتدربات <b>بإشراف المشرفة الأكاديمية</b>. شاركي تجربتك واطرحي أسئلتك.</div></div>
+        <div class="banner pink" style="cursor:pointer" onclick="toggleSup()"><div class="bic">👩‍🏫</div><div><b>وضع المشرفة الأكاديمية:</b> <span id="supState">غير مُفعّل</span> — للنشر والرد باسم المشرفة بتوثيق رسمي (اضغطي للتبديل).</div></div>
+        <div class="card card-3d">
+          <div class="card-head">
+            <div class="card-title">🧵 المنشورات</div>
+            <button class="btn btn-primary btn-sm" onclick="toggleComposer()">+ منشور جديد</button>
+          </div>
+          <div class="row" style="margin-bottom:12px">
+            <input id="cSearch" placeholder="🔎 بحث في المنشورات" oninput="renderPosts()">
+            <select id="cFilter" onchange="renderPosts()" style="max-width:200px"><option value="">كل المؤسسات</option></select>
+          </div>
+          <div id="composer" style="display:none;margin-bottom:14px">
+            <textarea id="cText" rows="3" placeholder="اكتبي منشورك أو سؤالك..."></textarea>
+            <div class="row" style="margin-top:8px"><input id="cOrg" placeholder="مؤسستك التدريبية (لتصنيف المنشور)" style="flex:1"><button class="btn btn-primary" onclick="addPost()">نشر</button></div>
+          </div>
+          <div id="postList"></div>
+        </div>
+      </div>
+
+      <!-- ═══ SUPERVISOR ═══ -->
+      <div class="view" id="v-supervisor">
+        <div class="banner"><div class="bic">🧠</div><div id="supSummary"><b>ملخّص:</b> جارٍ تحميل بيانات الطالبات…</div></div>
+        <div class="tiles">
+          <div class="tile"><div class="tile-ic">👩‍🎓</div><div><div class="tile-n" id="supTot">٠</div><div class="tile-l">طالبة مسجّلة</div></div></div>
+          <div class="tile"><div class="tile-ic" style="background:var(--pink-soft)">✅</div><div><div class="tile-n" id="supReg">٠</div><div class="tile-l">منتظمات بالكتابة</div></div></div>
+          <div class="tile"><div class="tile-ic" style="background:#FFE9E0">⚠️</div><div><div class="tile-n" id="supNeed">٠</div><div class="tile-l">يحتجن دعمًا</div></div></div>
+        </div>
+        <div class="card card-3d">
+          <div class="card-head"><div class="card-title">👩‍🎓 متابعة الطالبات</div>
+            <div class="row"><input id="supSearch" placeholder="🔎 بحث" oninput="filterSup(this.value)" style="width:150px"><button class="btn btn-ghost btn-sm" onclick="loadSupervisor()">🔄 تحديث</button><button class="btn btn-primary btn-sm" onclick="exportExcel()">📥 تنزيل إكسل</button></div></div>
+          <div style="overflow-x:auto"><table class="stbl"><thead><tr><th>الطالبة</th><th>الرقم الجامعي</th><th>المؤسسة</th><th>اليوم</th><th>الكتابة التأمّلية</th><th>الدعم المهني</th><th></th></tr></thead>
+            <tbody id="supRows"><tr><td colspan="7" style="text-align:center;color:var(--muted)">جارٍ التحميل…</td></tr></tbody></table></div>
+        </div>
+      </div>
+
+      <!-- ═══ INDICATORS (was analysis) ═══ -->
+      <div class="view" id="v-indicators">
+        <div class="banner"><div class="bic">📊</div><div><b>مؤشرات الدعم المهني</b> — مؤشرات نوعية لدعم الطالبة، <b>بلا درجات أو تقييم رقمي</b>، مبنية على تأمّلاتها المحفوظة.</div></div>
+        <div class="card card-3d">
+          <div class="card-head"><div class="card-title">🔎 التصفية</div>
+            <select id="indFilter" onchange="renderIndicators()" style="max-width:220px"><option value="">كل المؤسسات</option></select></div>
+          <div id="indBody"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Scenario modal -->
+<div class="ov" id="simOv"></div>
+<!-- Welcome modal -->
+<div class="ov" id="welcomeOv"><div class="login-card" style="max-width:440px">
+  <h1>كلمة ترحيب 🌸</h1>
+  <div class="ls" id="welcomeText" style="font-size:14px;line-height:1.9"></div>
+  <div class="row" style="justify-content:center;gap:8px;margin-top:6px">
+    <button class="btn btn-primary" onclick="closeWelcome()">لنبدأ ←</button>
+  </div>
+</div></div>
+<!-- Supervisor password -->
+<div class="ov" id="supPassOv" style="z-index:2000"><div class="login-card" style="max-width:380px">
+  <div style="font-size:40px;margin-bottom:6px">🔒</div>
+  <h1>دخول المشرفة</h1>
+  <div class="ls">هذا القسم مخصّص للمشرفة الأكاديمية. أدخلي كلمة السرّ للمتابعة.</div>
+  <div class="lf"><label>🔑 كلمة سرّ المشرفة</label>
+    <input id="supPassIn" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')submitSupPass()">
+    <div class="lerr" id="supPassErr">كلمة السرّ غير صحيحة. حاولي مرة أخرى.</div></div>
+  <div class="row" style="gap:8px"><button class="btn btn-primary" style="flex:1" onclick="submitSupPass()">دخول</button>
+    <button class="btn btn-ghost" onclick="closeSupPass()">إلغاء</button></div>
+</div></div>
+<!-- Student reflections (supervisor follow-up) -->
+<div class="ov" id="reflectOv" style="z-index:1800"><div class="login-card" style="max-width:560px;text-align:right;max-height:85vh;overflow:auto">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+    <h1 style="font-size:18px;margin:0">📖 تأمّلات الطالبة اليومية</h1>
+    <button class="icon-btn" style="background:var(--purple-soft);color:var(--purple-d)" onclick="closeReflect()">✕</button>
+  </div>
+  <div id="reflectBody"></div>
+  <button class="btn btn-ghost" style="width:100%;margin-top:8px" onclick="closeReflect()">إغلاق</button>
+</div></div>
+<!-- Idle warning -->
+<div class="ov" id="idleOv"><div class="login-card" style="max-width:380px">
+  <div style="font-size:40px;margin-bottom:8px">⏳</div>
+  <h1>هل ما زلتِ معنا؟</h1>
+  <div class="ls">سيتم تسجيل الخروج تلقائيًا بعد <b id="idleCount">٣٠</b> ثانية لحفظ خصوصيتك. تم حفظ بياناتك.</div>
+  <button class="btn btn-primary" style="width:100%" onclick="stayLoggedIn()">البقاء في المنصة</button>
+</div></div>
+<!-- Login -->
+<div class="ov show" id="loginOv" style="background:linear-gradient(135deg,#EEF0FF 0%,#F5F0FF 35%,#FFF0F8 70%,#EEF4FF 100%)">
+  <div class="aurora-bg">
+    <div class="aurora-orb ao1"></div>
+    <div class="aurora-orb ao2"></div>
+    <div class="aurora-orb ao3"></div>
+    <div class="aurora-orb ao4"></div>
+    <div class="login-grid"></div>
+  </div>
+  <div class="rays" id="loginRays"></div>
+  <div class="login-card" style="position:relative;z-index:5">
+    <h1 style="margin-top:6px">التدريب الميداني</h1>
+    <div class="ls">منصة دعم الأسبوع التدريبي الأول · الفصل الأول ٢٠٢٦</div>
+    <div id="countdown" class="cd-chip"></div>
+    <div class="ls" style="margin-top:8px">أدخلي بياناتك للدخول</div>
+    <div class="lf"><label>👩‍🎓 اسم الطالبة <span class="req">*</span></label><input id="lName" placeholder="الاسم الكامل" onkeydown="if(event.key==='Enter')document.getElementById('lId').focus()"></div>
+    <div class="lf"><label>🔢 الرقم الجامعي <span class="req">*</span></label><input id="lId" inputmode="numeric" placeholder="مثال: 202012345" onkeydown="if(event.key==='Enter')document.getElementById('lOrg').focus()">
+      <div style="font-size:10.5px;color:#A89274;margin-top:4px">⚠️ يُكتب الرقم بالأرقام الإنجليزية (مثل 202012345)</div></div>
+    <div class="lf"><label>🏢 اسم المؤسسة التدريبية <span class="req">*</span></label><input id="lOrg" placeholder="" onkeydown="if(event.key==='Enter')document.getElementById('lSup').focus()"></div>
+    <div class="lf"><label>اسم المشرفة في المؤسسة <span style="color:#A89274;font-weight:400">(اختياري)</span></label>
+      <input id="lSup" placeholder="" onkeydown="if(event.key==='Enter')doLogin()"><div class="lerr" id="lErr">الرجاء تعبئة الحقول المطلوبة (الرقم الجامعي ٦ أرقام على الأقل).</div></div>
+    <button class="btn btn-primary" style="width:100%" onclick="doLogin()">دخول إلى المنصة ←</button>
+    <div style="margin-top:16px;border-top:2px solid rgba(86,66,184,.25);padding-top:14px">
+      <div style="text-align:center;font-size:12px;color:#8B6F47;margin-bottom:8px;font-weight:600;letter-spacing:.5px">— دخول المشرفة الأكاديمية —</div>
+      <button class="btn" style="width:100%;background:linear-gradient(135deg,#5642B8,#7B68D4);color:#fff;font-weight:800;border:none;box-shadow:0 3px 12px rgba(86,66,184,.35)" onclick="supLogin()">👩‍🏫 الدخول كمشرفة أكاديمية</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const ar=n=>Number(n).toLocaleString('ar-EG');
+let toastT;
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),2700);}
+function closeSidebar(){document.getElementById('sidebar').classList.remove('open');}
+
+/* ════ Supabase (central save — optional) ════ */
+const SB_CONFIG={url:'https://pmvnyurrsocvaartykca.supabase.co',key:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBtdm55dXJyc29jdmFhcnR5a2NhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE2OTIxNjQsImV4cCI6MjA5NzI2ODE2NH0.aTTfYOZ-HUQPF8t0AZB_fkukWvRUlfGdQ5ozG6_exgY'};
+
+/* ════ Supervisor password gate ════ */
+const SUP_PASS='2323';
+let supUnlocked=false,_supAction=null;
+function askSupPass(action){_supAction=action;const i=document.getElementById('supPassIn');i.value='';document.getElementById('supPassErr').style.display='none';document.getElementById('supPassOv').classList.add('show');setTimeout(()=>i.focus(),120);}
+function submitSupPass(){const v=document.getElementById('supPassIn').value;if(v===SUP_PASS){supUnlocked=true;document.getElementById('supPassOv').classList.remove('show');const a=_supAction;_supAction=null;toast('🔓 تم فتح صلاحيات المشرفة');if(a)a();}else{document.getElementById('supPassErr').style.display='block';}}
+function closeSupPass(){document.getElementById('supPassOv').classList.remove('show');_supAction=null;}
+function supLogin(){askSupPass(function(){
+  student.name='المشرفة الأكاديمية';student.id='';student.org='';student.sup='';
+  document.getElementById('sbName').textContent='المشرفة الأكاديمية';
+  document.getElementById('sbId').textContent='👩‍🏫 لوحة المتابعة';
+  document.getElementById('loginOv').classList.remove('show');stopLoginFX();startIdle();
+  go('supervisor',null);toast('👩‍🏫 مرحبًا بكِ في لوحة المتابعة');
+});}
+let sb=null;
+function initSB(){try{if(SB_CONFIG.url&&SB_CONFIG.key&&window.supabase){sb=window.supabase.createClient(SB_CONFIG.url,SB_CONFIG.key);console.log('✅ Supabase متصل');}}catch(e){}}
+async function sbStudent(){if(!sb||!student.id)return;try{await sb.from('students').upsert({uid:student.id,name:student.name,org:student.org,sup:student.sup,updated_at:new Date().toISOString()},{onConflict:'uid'});}catch(e){}}
+async function sbAnswers(){if(!sb||!student.id)return;
+  try{await sb.from('answers').upsert({uid:student.id,reflect:answers.reflect,progress:stateToJSON(),updated_at:new Date().toISOString()},{onConflict:'uid'});}catch(e){}}
+async function sbLoadProgress(){if(!sb||!student.id)return;try{const r=await sb.from('answers').select('*').eq('uid',student.id).maybeSingle();
+  if(r&&r.data){let ch=false;if(r.data.reflect){answers.reflect=r.data.reflect;ch=true;}if(r.data.progress){stateFromJSON(r.data.progress);ch=true;}
+    if(r.data.sup_note&&r.data.sup_note.text){applySupNote(r.data.sup_note);toast('💬 لديكِ ردّ من المشرفة الأكاديمية');}
+    if(ch){try{localStorage.setItem('rafiqaAnswers',JSON.stringify(answers));localStorage.setItem('rafiqaState',JSON.stringify(stateToJSON()));}catch(e){}refreshWeek();}}}catch(e){}}
+async function sbFetchAll(){if(!sb)return null;try{const [st,an]=await Promise.all([sb.from('students').select('*'),sb.from('answers').select('*')]);const am={},nm={};(an.data||[]).forEach(a=>{am[a.uid]=a.reflect||{};nm[a.uid]=a.sup_note||null;});return {students:st.data||[],answers:am,notes:nm};}catch(e){return null;}}
+async function saveSupNote(uid){var inp=document.getElementById('supNoteIn');var v=(inp?inp.value:'').trim();var note={text:v,at:new Date().toISOString()};
+  if(SUP_CACHE){if(!SUP_CACHE.notes)SUP_CACHE.notes={};SUP_CACHE.notes[uid]=note;}
+  if(sb){try{await sb.from('answers').upsert({uid:uid,sup_note:note},{onConflict:'uid'});toast('📨 تم إرسال الردّ — ستراه الطالبة عند دخولها');}catch(e){toast('⚠️ تعذّر الحفظ — تأكّدي من إضافة عمود sup_note');}}else{toast('📨 تم الحفظ محليًا');}}
+function applySupNote(note){if(!note||!note.text)return;var el=document.getElementById('homeNotif');if(el)el.textContent='💬 من المشرفة: '+note.text;}
+
+/* ════ Audio system ════ */
+let audio={on:true,vol:.7};
+let actx=null;
+function initAudio(){try{const s=JSON.parse(localStorage.getItem('rafiqaAudio'));if(s){audio=s;}}catch(e){}
+  document.getElementById('audSwitch').classList.toggle('on',audio.on);
+  document.getElementById('audVol').value=Math.round(audio.vol*100);}
+function saveAudio(){try{localStorage.setItem('rafiqaAudio',JSON.stringify(audio));}catch(e){}}
+function toggleAudioPop(){document.getElementById('audioPop').classList.toggle('show');}
+function toggleAudio(){audio.on=!audio.on;document.getElementById('audSwitch').classList.toggle('on',audio.on);saveAudio();if(!audio.on){speechSynthesis.cancel();}toast(audio.on?'🔊 الأصوات مُفعّلة':'🔇 الأصوات متوقفة');}
+function setVol(v){audio.vol=v/100;saveAudio();}
+function ac(){if(!actx){try{actx=new(window.AudioContext||window.webkitAudioContext)();}catch(e){}}if(actx&&actx.state==='suspended')actx.resume();return actx;}
+function tone(freq,start,dur,type){if(!audio.on)return;const c=ac();if(!c)return;const o=c.createOscillator(),g=c.createGain();o.type=type||'sine';o.frequency.value=freq;
+  const t=c.currentTime+start;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(audio.vol*.5,t+.02);g.gain.exponentialRampToValueAtTime(.001,t+dur);
+  o.connect(g);g.connect(c.destination);o.start(t);o.stop(t+dur);}
+function sfxTask(){tone(660,0,.12);tone(880,.1,.16);}
+function sfxDay(){tone(523,0,.15);tone(659,.13,.15);tone(784,.26,.15);tone(1047,.39,.4);}
+function sfxMove(){tone(440,0,.08,'triangle');tone(620,.07,.12,'triangle');}
+/* Voice */
+let arVoice=null;
+function loadVoices(){const vs=speechSynthesis.getVoices();
+  const fem=/zariyah|zariya|fatima|fatma|amany|amani|salma|hoda|hind|laila|layla|naya|hala|amina|sana|maryam|mariam|noura|nora|latifa|iman|asma|rana|female|أنثى|سلمى|هدى|هند|ليلى|نورة|فاطمة|أماني|زاريا/i;
+  const male=/hamed|naayf|nayef|shakir|omar|ali|saleh|bashkar|tarik|moaz|male|ذكر|حامد|نايف/i;
+  const gulf=/ar-(SA|AE|QA|KW|BH|OM)/i, natural=/natural|online|neural/i;
+  let best=null,bs=-99;
+  vs.forEach(v=>{if(!/^ar/i.test(v.lang))return;let s=0;
+    if(fem.test(v.name))s+=8;else if(!male.test(v.name))s+=3;else s-=4;
+    if(gulf.test(v.lang))s+=6; if(natural.test(v.name))s+=5;
+    if(s>bs){bs=s;best=v;}});
+  arVoice=best||vs.find(v=>fem.test(v.name))||null;}
+if('speechSynthesis'in window){loadVoices();speechSynthesis.onvoiceschanged=loadVoices;}
+let _utter=null;
+function speak(text){return false;/* الصوت الآلي مُعطّل — المنصة نصّية فقط */}
+const WELCOME_TEXT='أهلاً وسهلاً بكِ يا طالبتي العزيزة في منصة التدريب الميداني. سأرافقك خطوة بخطوة خلال أسبوعك التدريبي الأول. تذكّري أن الهدف هو التعلّم والتكيّف، لا الكمال من أول يوم. لنبدأ بثقة وطمأنينة.';
+function playWelcome(){document.getElementById('welcomeText').textContent=WELCOME_TEXT;document.getElementById('welcomeOv').classList.add('show');}
+function closeWelcome(){if('speechSynthesis'in window)speechSynthesis.cancel();document.getElementById('welcomeOv').classList.remove('show');}
+
+/* ════ Navigation + gating ════ */
+const OPEN=['home','guide','map'];
+const gate={seenMap:false,readSyl:false};
+function loadGate(){try{const g=JSON.parse(localStorage.getItem('rafiqaGate'));if(g){gate.seenMap=!!g.seenMap;gate.readSyl=!!g.readSyl;}}catch(e){}}
+function saveGate(){try{localStorage.setItem('rafiqaGate',JSON.stringify(gate));}catch(e){}}
+function gateOk(){return gate.seenMap&&gate.readSyl;}
+function go(name,el){
+  if((name==='supervisor'||name==='indicators')&&!supUnlocked){askSupPass(()=>go(name,el));return;}
+  if(!OPEN.includes(name)&&name!=='supervisor'&&name!=='indicators'&&!gateOk()){
+    if(!gate.readSyl){toast('📖 أولًا أكّدي قراءة التوصيف في «دليل التدريب»');return go('guide',null);}
+    if(!gate.seenMap){toast('🧭 اطّلعي على «خريطة الإجراءات» أولًا');return go('map',null);}
+  }
+  if(name==='map'){gate.seenMap=true;saveGate();}
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  const v=document.getElementById('v-'+name);if(v)v.classList.add('active');
+  let nav=el||document.querySelector('.nav-item[data-v="'+name+'"]');
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));if(nav)nav.classList.add('active');
+  const T={home:'الرئيسية',guide:'دليل التدريب',map:'خريطة الإجراءات',week:'مسار الأسبوع',assistant:'المساعد الذكي',forms:'النماذج',community:'مجتمع التعلّم',supervisor:'لوحة المتابعة',indicators:'مؤشرات الدعم المهني'};
+  document.getElementById('pageTitle').textContent=T[name]||name;
+  if(name==='supervisor')loadSupervisor();
+  if(name==='indicators')loadIndicators();
+  closeSidebar();window.scrollTo({top:0,behavior:'smooth'});
+}
+function toggleSyl(){gate.readSyl=!gate.readSyl;saveGate();const c=document.getElementById('sylCheck'),t=document.getElementById('sylTask');
+  if(gate.readSyl){c.classList.add('done');c.textContent='✓';t.classList.add('done');sfxTask();toast('✅ تم تأكيد قراءة التوصيف');}else{c.classList.remove('done');c.textContent='';t.classList.remove('done');}}
+
+/* ════ Parallax hero ════ */
+(function(){const h=document.getElementById('hero');if(!h)return;
+  h.addEventListener('mousemove',e=>{const r=h.getBoundingClientRect();const x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;
+    h.style.transform=`perspective(900px) rotateY(${x*5}deg) rotateX(${-y*5}deg)`;});
+  h.addEventListener('mouseleave',()=>h.style.transform='perspective(900px) rotateY(0) rotateX(0)');})();
+/* تمّت إزالة إمالة البطاقات مع حركة الماوس (كانت تجعل الصفحات تتحرك) — تبقى الظلال والتأثيرات الثابتة */
+
+/* ════ Week data ════ */
+const days=[
+ {n:1,name:'اليوم الأول',dow:'الأحد',sub:'التعارف والمباشرة · ٦ ساعات',
+  tip:'يومك الأول للتعارف والمباشرة. عرّفي بنفسك، تعرّفي على المؤسسة ومشرفتك، واستكشفي بيئة العمل، وأثبتي مباشرتك.',
+  tasks:[{t:'التعرّف إلى المؤسسة وأقسامها والفئة المستفيدة'},{t:'التعرّف إلى المشرف/ة الميداني/ة وتحديد دورك'},{t:'استكشاف بيئة العمل'},{t:'رفع نموذج الحضور / إثبات المباشرة',up:1}],
+  reflect:'صفي بموضوعية ما لفت انتباهك في مؤسستك اليوم.'},
+ {n:2,name:'اليوم الثاني',dow:'الثلاثاء',sub:'الملاحظة والأدوار · ٦ ساعات',
+  tip:'راقبي بيئة العمل بهدوء وسجّلي ملاحظاتك بموضوعية، واتفقي مع مشرفتك على دورك وحدوده، وابدئي خطة تعلّم شخصية.',
+  tasks:[{t:'تسجيل الملاحظات الأولية بموضوعية'},{t:'الإجابة عن الأسئلة التأمّلية'},{t:'تحديد الأدوار والمسؤوليات مع المشرفة'},{t:'إعداد خطة تعلّم شخصية'}],
+  reflect:'صفي بموضوعية موقفًا مهنيًا لاحظتِه اليوم وما تعلّمتِه منه.'},
+ {n:3,name:'اليوم الثالث',dow:'الخميس',sub:'التقييم والتقرير · ٦ ساعات',
+  tip:'اختمي أسبوعك بتقييم التحديات وطلب الدعم، ثم اكتبي تقريرًا انعكاسيًا وجهّزي تقريرك الأسبوعي لبلاك بورد.',
+  tasks:[{t:'تقييم التحديات الأولى وطلب الدعم'},{t:'كتابة تقرير انعكاسي قصير'},{t:'تعبئة نموذج التقرير الأسبوعي'},{t:'جدولة رفع التقرير في بلاك بورد (الخميس ١١:٥٥م)',up:1}],
+  reflect:'بجملة موضوعية: كيف تصفين تجربة أسبوعك الأول؟'}
+];
+const state={cur:1,done:{},quiz:{},fin:{}};
+const answers={reflect:{}};
+function stateToJSON(){var d={};for(var k in state.done){d[k]=Array.from(state.done[k]);}return {cur:state.cur,done:d,quiz:state.quiz,fin:state.fin};}
+function stateFromJSON(o){if(!o)return;state.cur=o.cur||1;state.quiz=o.quiz||{};state.fin=o.fin||{};state.done={};if(o.done){for(var k in o.done){state.done[k]=new Set(o.done[k]);}}}
+function refreshWeek(){try{buildPath();renderDay();updateHome();}catch(e){}}
+function loadAnswers(){try{const a=JSON.parse(localStorage.getItem('rafiqaAnswers'));if(a&&a.reflect)answers.reflect=a.reflect;}catch(e){}
+  try{const st=JSON.parse(localStorage.getItem('rafiqaState'));if(st)stateFromJSON(st);}catch(e){}}
+let _pt=null;
+function persist(){try{localStorage.setItem('rafiqaAnswers',JSON.stringify(answers));localStorage.setItem('rafiqaState',JSON.stringify(stateToJSON()));}catch(e){}clearTimeout(_pt);_pt=setTimeout(sbAnswers,800);}
+function saveReflect(n,v){answers.reflect[n]=v;persist();}
+
+function buildPath(){const w=document.getElementById('daypath');w.innerHTML='';
+  days.forEach((d,i)=>{if(i>0){const l=document.createElement('div');l.className='dline'+(state.fin[days[i-1].n]?' done':'');w.appendChild(l);}
+    const node=document.createElement('div');const done=!!state.fin[d.n];
+    node.className='dnode'+(d.n===state.cur?' active':'')+(done?' done':'');
+    node.onclick=()=>{const prev=state.cur;state.cur=d.n;if(prev!==d.n){sfxMove();persist();}buildPath();renderDay();};
+    node.innerHTML=`<div class="dcirc">${done?'✓':ar(d.n)}</div><div class="dlbl">${d.dow}</div><div class="dsub">${d.name}</div>`;w.appendChild(node);});}
+function renderDay(){const d=days.find(x=>x.n===state.cur);const set=state.done[d.n]||(state.done[d.n]=new Set());
+  let tasks='';d.tasks.forEach((t,i)=>{tasks+=`<div class="task${set.has(i)?' done':''}" onclick="toggleTask(${d.n},${i})"><div class="tcheck">${set.has(i)?'✓':''}</div><span class="tt">${t.t}</span>${t.up?`<span class="chip pink" onclick="event.stopPropagation();toast('📎 نافذة رفع الملف (تجريبي)')">📎 رفع</span>`:''}</div>`;});
+  const faces=['😣','😕','🙂','😊','🤩'],labels=['صعب','مربك','مقبول','جيد','ممتاز'];
+  let q='';['فهمي للمهام','اندماجي في البيئة','مستوى التحدي'].forEach((qq,qi)=>{let r='';faces.forEach((f,fi)=>{r+=`<div class="face${state.quiz[d.n+'-'+qi]===fi?' sel':''}" onclick="setQuiz(${d.n},${qi},${fi})">${f}<span>${labels[fi]}</span></div>`;});q+=`<div style="margin-bottom:12px"><div style="font-weight:700;font-size:13px;margin-bottom:7px">${qi+1}) ${qq}</div><div class="faces">${r}</div></div>`;});
+  document.getElementById('dayPanel').innerHTML=`
+   <div class="card card-3d" style="background:var(--purple-soft)">
+     <div><div style="font-weight:900;color:var(--purple-d);margin-bottom:3px">🧭 إرشاد اليوم</div><div style="font-size:13px">${d.tip}</div></div>
+   </div>
+   <div class="grid g2">
+     <div class="card card-3d"><div class="card-title">✅ مهام ${d.name} · ${d.dow} <span style="font-size:11px;font-weight:400;color:var(--muted)">(اختيارية)</span></div><div style="margin-top:10px">${tasks}</div></div>
+     <div class="card card-3d"><div class="card-title">💭 تأمّل اليوم</div><div style="font-size:11px;color:var(--muted);margin:6px 0">لا توجد إجابة صحيحة أو خاطئة. المطلوب وصف تجربتك المهنية كما عشتها داخل المؤسسة التدريبية.</div><label>${d.reflect}</label><textarea rows="5" oninput="saveReflect(${d.n},this.value)" placeholder="اكتبي بموضوعية...">${(answers.reflect[d.n]||'').replace(/</g,'&lt;')}</textarea><div style="font-size:11px;color:var(--purple-d);margin-top:5px">💾 يُحفظ تلقائيًا</div></div>
+   </div>
+   <div class="card card-3d"><div class="card-title">📊 التقييم الذاتي السريع — نهاية ${d.name} · ${d.dow}</div><div style="margin-top:12px">${q}</div>
+     <button class="btn btn-primary" onclick="finishDay(${d.n})">إنهاء اليوم</button></div>`;}
+function toggleTask(n,i){const set=state.done[n]||(state.done[n]=new Set());if(set.has(i))set.delete(i);else{set.add(i);sfxTask();toast('✅ أحسنتِ!');}renderDay();buildPath();updateHome();persist();}
+function setQuiz(n,qi,fi){state.quiz[n+'-'+qi]=fi;renderDay();persist();}
+function finishDay(n){state.fin[n]=true;sfxDay();
+  if(n<days.length){state.cur=n+1;sfxMove();buildPath();renderDay();toast('🎉 أنهيتِ '+days.find(d=>d.n===n).name+'!');speak('أحسنتِ! أنهيتِ يومك بنجاح. لننتقل لليوم التالي بخطى واثقة.');}
+  else{buildPath();toast('🏆 مبروك! أكملتِ أسبوعك التدريبي الأول');speak('مبروك! أكملتِ أسبوعك التدريبي الأول. أنا فخورة بكِ.');}
+  updateHome();persist();}
+function updateHome(){let tot=0,dn=0;days.forEach(d=>{tot+=d.tasks.length;dn+=(state.done[d.n]?state.done[d.n].size:0);});
+  const pct=Math.round(dn/tot*100);
+  const r=document.getElementById('homeRing');if(r){r.style.setProperty('--p',pct);document.getElementById('homePct').textContent=ar(pct)+'٪';}
+  const cd=days.find(d=>d.n===state.cur);document.getElementById('homeDay').textContent=cd.name+' · '+cd.dow;}
+
+/* ════ Action map ════ */
+const mapData=[
+ {t:'الوصول والدخول',d:'احضري في الموعد، وعرّفي بنفسك في الاستقبال كطالبة تدريب ميداني.'},
+ {t:'مقابلة المشرفة الميدانية',d:'تعرّفي على مشرفتك واسأليها عن دورك وحدوده.'},
+ {t:'إثبات المباشرة',d:'وقّعي نموذج الحضور وارفعي صورة منه.'},
+ {t:'استكشاف وملاحظة',d:'تعرّفي على الأقسام وسير العمل وسجّلي ملاحظاتك بموضوعية.'},
+ {t:'توثيق الأنشطة',d:'دوّني كل نشاط/تكليف بأسلوب موضوعي أول بأول.'},
+ {t:'التقرير الأسبوعي',d:'عبّئي السجل الأسبوعي وارفعيه في بلاك بورد كل خميس ١١:٥٥م.'},
+ {t:'طلب الدعم',d:'عند أي استفسار راسلي المشرف الأكاديمي وتابعي بلاك بورد.'}
+];
+function buildMap(){const c=document.getElementById('mapSteps');c.innerHTML='';mapData.forEach((s,i)=>{c.insertAdjacentHTML('beforeend',`<div class="mstep"><div class="mwrap"><div class="mnum">${ar(i+1)}</div>${i<mapData.length-1?'<div class="mvl"></div>':''}</div><div class="mbody"><div class="mt">${s.t}</div><div class="md">${s.d}</div></div></div>`);});}
+
+/* ════ FAQ ════ */
+const faqs=[
+ {q:'كيف أتواصل مع المشرفة؟',a:'عبر القنوات الرسمية للمؤسسة وبأسلوب مهني. للأسئلة الأكاديمية راسلي المشرف الأكاديمي ببريدك الجامعي.'},
+ {q:'كيف أوثّق ساعات التدريب؟',a:'سجّلي حضورك في نموذج الحضور المعتمد، ودوّني أنشطتك بموضوعية، واحفظي إثباتات المباشرة.'},
+ {q:'ماذا أفعل إذا تغيّبت؟',a:'أبلغي المشرفة الميدانية والمشرف الأكاديمي مبكرًا مع العذر، والتزمي بسياسة الغياب في بلاك بورد.'},
+ {q:'متى يُسلّم التقرير الأسبوعي؟',a:'في بلاك بورد بخانة «التقرير الأسبوعي» كل يوم خميس الساعة ١١:٥٥ مساءً، بأسلوب موضوعي.'},
+ {q:'ماذا لو كانت المشرفة غائبة؟',a:'عرّفي بنفسك للموظفين، واستفيدي من الوقت في الملاحظة، وتابعي مع المشرفة لاحقًا — وهذا وارد في الأسبوع الأول.'}
+];
+function buildFaq(){const c=document.getElementById('faqChips');c.innerHTML='';faqs.forEach(f=>{const e=document.createElement('div');e.className='fchip';e.textContent=f.q;e.onclick=()=>ask(f.q);c.appendChild(e);});}
+function pushMsg(t,w){const b=document.getElementById('chatbox');const m=document.createElement('div');m.className='msg '+w;m.innerHTML=`<div class="mav ${w}">${w==='b'?'🤖':'👩‍🎓'}</div><div class="bub">${t}</div>`;b.appendChild(m);b.scrollTop=b.scrollHeight;}
+function ask(q){pushMsg(q,'u');let f=faqs.find(x=>x.q===q);if(!f){const ws=q.split(/\s+/).filter(w=>w.length>2);let bs=0;faqs.forEach(x=>{let s=0;ws.forEach(w=>{if((x.q+x.a).includes(w))s++;});if(s>bs){bs=s;f=x;}});if(bs===0)f=null;}
+  setTimeout(()=>pushMsg(f?f.a:'سؤال جيد! أجيب عن الأسئلة الشائعة. للاستفسارات الخاصة راسلي المشرف الأكاديمي. 🌟','b'),400);}
+function sendAsk(){const i=document.getElementById('askIn');const v=i.value.trim();if(!v)return;i.value='';ask(v);}
+
+/* ════ Forms ════ */
+function cpy(id){const t=document.getElementById(id).innerText.replace('📋 نسخ','').trim();if(navigator.clipboard)navigator.clipboard.writeText(t).then(()=>toast('📋 تم النسخ'));else toast('📋 حدّدي النص وانسخيه');}
+function loadVid(src,label){const v=document.getElementById('vid');v.style.display='block';v.src=src;v.play().catch(()=>{});toast('🎥 '+label);}
+function downloadNotes(){const L=['اليوم الأول','اليوم الثاني','اليوم الثالث'];let t='ملاحظات التدريب الميداني\n========================\n';
+  t+='الطالبة: '+(student.name||'—')+'\nالرقم: '+(student.id||'—')+'\nالمؤسسة: '+(student.org||'—')+'\nالتاريخ: '+new Date().toLocaleString('ar-EG')+'\n\n';
+  [1,2,3].forEach((n,i)=>{t+=L[i]+':\n'+(answers.reflect[n]||'(لم تُكتب)')+'\n\n';});
+  t+='ملاحظة: التقرير الأسبوعي يُرفع في بلاك بورد كل خميس ١١:٥٥م، بأسلوب موضوعي.';
+  const b=new Blob([t],{type:'text/plain;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='ملاحظات-'+(student.name||'طالبة').replace(/\s+/g,'_')+'.txt';a.click();toast('⬇️ تم تنزيل ملاحظاتك');}
+
+/* ════ Community (real) ════ */
+let posts=[],supMode=false,notif=0;
+function loadPosts(){try{const p=JSON.parse(localStorage.getItem('rafiqaPosts'));if(p&&p.length){posts=p;return;}}catch(e){}
+  posts=[
+   {id:1,author:'متدربة',org:'جمعية تنموية',sup:false,text:'مشرفتي كانت مشغولة في أول يوم ولم أعرف ماذا أفعل، كيف تصرّفتنّ؟',time:'قبل ساعتين',likes:12,liked:false,comments:[{author:'المشرفة الأكاديمية',sup:true,text:'عرّفي بنفسك للموظفين واستفيدي من الوقت بالملاحظة — أحسنتِ السؤال.',replies:[]}]},
+   {id:2,author:'متدربة',org:'مركز أسري',sup:false,text:'أنشأت خطة تعلّم شخصية ووجدتها ساعدتني كثيرًا 🌟',time:'أمس',likes:20,liked:false,comments:[]},
+   {id:3,author:'المشرفة الأكاديمية',org:'',sup:true,text:'تذكير: التقرير الأسبوعي يُرفع في بلاك بورد كل خميس ١١:٥٥ مساءً، بأسلوب موضوعي. وفّقكنّ الله 🤍',time:'أمس',likes:34,liked:false,comments:[]}
+  ];savePosts();}
+function savePosts(){try{localStorage.setItem('rafiqaPosts',JSON.stringify(posts));}catch(e){}}
+function toggleSup(){if(!supMode&&!supUnlocked){askSupPass(()=>toggleSup());return;}supMode=!supMode;document.getElementById('supState').textContent=supMode?'مُفعّل ✅':'غير مُفعّل';renderPosts();toast(supMode?'👩‍🏫 وضع المشرفة مُفعّل — يمكنك الحذف الآن':'تم إيقاف وضع المشرفة');}
+function toggleComposer(){const c=document.getElementById('composer');c.style.display=c.style.display==='none'?'block':'none';if(c.style.display==='block'){document.getElementById('cOrg').value=student.org||'';document.getElementById('cText').focus();}}
+function aName(){return supMode?'المشرفة الأكاديمية':(student.name||'متدربة');}
+function aInit(){return (aName()).trim().charAt(0);}
+function addPost(){const txt=document.getElementById('cText').value.trim();if(!txt){toast('✍️ اكتبي نص المنشور');return;}
+  const org=supMode?'':(document.getElementById('cOrg').value.trim()||student.org||'');
+  posts.unshift({id:Date.now(),author:aName(),org,sup:supMode,text:txt,time:'الآن',likes:0,liked:false,comments:[]});
+  savePosts();document.getElementById('cText').value='';toggleComposer();fillFilters();renderPosts();sfxTask();toast(supMode?'✅ نُشر كمشرفة أكاديمية':'✅ تم نشر منشورك');}
+function likePost(id){const p=posts.find(x=>x.id===id);if(!p)return;p.liked=!p.liked;p.likes+=p.liked?1:-1;if(p.liked){notif++;updateNotif();}savePosts();renderPosts();}
+function addComment(id,reply,parentIdx){const inp=document.getElementById((reply?'r':'c')+'in-'+id+(reply?'-'+parentIdx:''));const v=inp.value.trim();if(!v)return;
+  const p=posts.find(x=>x.id===id);if(reply){p.comments[parentIdx].replies.push({author:aName(),sup:supMode,text:v});}else{p.comments.push({author:aName(),sup:supMode,text:v,replies:[]});}
+  notif++;updateNotif();savePosts();renderPosts();toast('💬 تم نشر ردّك');}
+function fillFilters(){const orgs=[...new Set(posts.map(p=>p.org).filter(Boolean))];
+  [['cFilter'],['indFilter']].forEach(([id])=>{const s=document.getElementById(id);if(!s)return;const cur=s.value;s.innerHTML='<option value="">كل المؤسسات</option>'+orgs.map(o=>`<option>${o}</option>`).join('');s.value=cur;});}
+function renderPosts(){const q=(document.getElementById('cSearch').value||'').trim();const f=document.getElementById('cFilter').value;
+  const list=document.getElementById('postList');list.innerHTML='';
+  posts.filter(p=>(!q||p.text.includes(q))&&(!f||p.org===f)).forEach((p,pi)=>{
+    let cm='';p.comments.forEach((c,ci)=>{let rp='';c.replies.forEach((r,ri)=>{rp+=`<div class="cmt reply"><div class="ch"><div class="cav">${r.author.charAt(0)}</div><div class="cn">${r.author}</div>${r.sup?'<span class="ptag sup">مشرفة</span>':''}${supMode?`<span class="del" onclick="delReply(${p.id},${ci},${ri})" title="حذف الردّ">🗑️</span>`:''}</div><div class="cb">${r.text}</div></div>`;});
+      cm+=`<div class="cmt"><div class="ch"><div class="cav">${c.author.charAt(0)}</div><div class="cn">${c.author}</div>${c.sup?'<span class="ptag sup">مشرفة</span>':''}${supMode?`<span class="del" onclick="delComment(${p.id},${ci})" title="حذف التعليق">🗑️</span>`:''}</div><div class="cb">${c.text}</div>${rp}<div class="row" style="margin-top:6px"><input id="rin-${p.id}-${ci}" placeholder="ردّ..." style="font-size:12px;padding:7px 10px"><button class="btn btn-ghost btn-sm" onclick="addComment(${p.id},true,${ci})">ردّ</button></div></div>`;});
+    list.insertAdjacentHTML('beforeend',`<div class="post"><div class="phead"><div class="pav">${p.author.charAt(0)}</div><div><div class="pname">${p.author}</div><div class="ptime">${p.time}${p.org?' · '+p.org:''}</div></div>${p.sup?'<span class="ptag sup">✔ المشرفة الأكاديمية</span>':'<span class="ptag">متدربة</span>'}</div>
+      <div class="pbody">${p.text}</div>
+      <div class="pact"><span class="${p.liked?'liked':''}" onclick="likePost(${p.id})">${p.liked?'❤️':'🤍'} ${ar(p.likes)}</span><span onclick="document.getElementById('cin-${p.id}').focus()">💬 ${ar(p.comments.length)} تعليق</span>${supMode?`<span class="del" onclick="delPost(${p.id})" title="حذف المنشور">🗑️ حذف</span>`:''}</div>
+      <div class="comments">${cm}<div class="row"><input id="cin-${p.id}" placeholder="أضيفي تعليقًا..." style="font-size:12px;padding:8px 11px"><button class="btn btn-primary btn-sm" onclick="addComment(${p.id},false)">تعليق</button></div></div></div>`);
+  });}
+function delPost(id){if(!supMode)return;if(!confirm('هل تريدين حذف هذا المنشور وكل تعليقاته؟ لا يمكن التراجع.'))return;posts=posts.filter(p=>p.id!==id);savePosts();fillFilters();renderPosts();toast('🗑️ تم حذف المنشور');}
+function delComment(id,ci){if(!supMode)return;if(!confirm('حذف هذا التعليق وكل ردوده؟'))return;const p=posts.find(x=>x.id===id);if(!p)return;p.comments.splice(ci,1);savePosts();renderPosts();toast('🗑️ تم حذف التعليق');}
+function delReply(id,ci,ri){if(!supMode)return;if(!confirm('حذف هذا الردّ؟'))return;const p=posts.find(x=>x.id===id);if(!p||!p.comments[ci])return;p.comments[ci].replies.splice(ri,1);savePosts();renderPosts();toast('🗑️ تم حذف الردّ');}
+function updateNotif(){/* simple interaction counter (demo) */}
+
+/* ════ Indicators (qualitative, no scores) ════ */
+const POS=['تعلّمت','تعلمت','استفدت','تعاون','مبادرة','بادرت','ثقة','لاحظت','فهمت','أنجزت','هدف','خطة','تواصل','فريق','دور'];
+const CHAL=['صعوبة','صعب','تحدي','قلق','مرتبكة','خوف','غياب','مشكلة','حيرة','توتر','لم'];
+function levelTag(v){return v==='مرتفع'?'<span class="lvl high">مرتفع</span>':v==='متوسط'?'<span class="lvl mid">متوسط</span>':'<span class="lvl low">يحتاج دعمًا</span>';}
+function computeInd(reflect){reflect=reflect||{};
+  const txt=Object.values(reflect).join(' ');
+  const written=Object.values(reflect).filter(x=>x&&(''+x).trim()).length;
+  const pos=POS.filter(k=>txt.includes(k)).length, chal=CHAL.filter(k=>txt.includes(k)).length;
+  const lvl=g=>g>=2?'مرتفع':g>=1?'متوسط':'يحتاج دعمًا';
+  const day=[1,2,3].filter(d=>reflect[d]&&(''+reflect[d]).trim()).pop()||0;
+  return {written,pos,chal,day,
+    adapt: written>=2?(chal<=pos?'مرتفع':'متوسط'):'يحتاج دعمًا',
+    conf: lvl(pos),
+    comm: (txt.includes('تواصل')||txt.includes('فريق')||txt.includes('المشرفة'))?'مرتفع':(written?'متوسط':'يحتاج دعمًا'),
+    roles: (txt.includes('دور')||txt.includes('مسؤول')||txt.includes('حدود'))?'مرتفع':(written?'متوسط':'يحتاج دعمًا'),
+    challenges: chal===0?(written?'لا تحديات بارزة':'لم تُسجّل بعد'):CHAL.filter(k=>txt.includes(k)).slice(0,4).join('، '),
+    overall: (chal>pos&&chal>0)?'يحتاج دعمًا':(written>=2?'مرتفع':(written?'متوسط':'يحتاج دعمًا')),
+    writeLvl: written>=3?'منتظمة':(written?'جزئية':'لم تبدأ بعد')};
+}
+let SUP_CACHE=null;
+async function refreshSup(){const d=await sbFetchAll();SUP_CACHE=d;return d;}
+function supRows(){ // unified data: from Supabase if available, else current device only
+  if(SUP_CACHE&&SUP_CACHE.students.length)
+    return SUP_CACHE.students.map(s=>({uid:s.uid,name:s.name||'طالبة',org:s.org||'—',reflect:SUP_CACHE.answers[s.uid]||{}}));
+  if(student.name)return [{uid:student.id,name:student.name,org:student.org||'—',reflect:answers.reflect}];
+  return [];
+}
+function viewReflect(uid){
+  var reflect={},name='الطالبة',org='';
+  if(SUP_CACHE&&SUP_CACHE.students.length){var s=SUP_CACHE.students.find(x=>x.uid===uid);if(s){name=s.name||'الطالبة';org=s.org||'';reflect=SUP_CACHE.answers[uid]||{};}}
+  else if(student.id===uid){name=student.name;org=student.org;reflect=answers.reflect;}
+  var labels=['اليوم الأول · الأحد','اليوم الثاني · الثلاثاء','اليوم الثالث · الخميس'];
+  var html='<div style="font-size:13px;color:var(--muted);margin-bottom:14px">👩‍🎓 <b>'+name+'</b>'+(org?' · '+org:'')+' — للمتابعة والدعم، وليست للتقييم.</div>';
+  [1,2,3].forEach(function(d,i){var t=(reflect[d]||'').toString().trim();
+    html+='<div style="margin-bottom:12px"><div style="font-weight:800;color:var(--purple-d);font-size:13px;margin-bottom:5px">💭 '+labels[i]+'</div><div style="background:rgba(255,255,255,.6);border:1px solid var(--line);border-radius:12px;padding:11px 13px;font-size:13.5px;line-height:1.85;white-space:pre-wrap">'+(t?t.replace(/</g,'&lt;'):'<span style="color:var(--muted)">— لم تكتب الطالبة تأمّلها بعد —</span>')+'</div></div>';});
+  var note=(SUP_CACHE&&SUP_CACHE.notes&&SUP_CACHE.notes[uid])?SUP_CACHE.notes[uid]:null;
+  html+='<div style="margin-top:14px;border-top:1px solid var(--line);padding-top:12px">'
+    +'<div style="font-weight:800;color:var(--rose);font-size:13px;margin-bottom:6px">✍️ ردّ سريع للطالبة (تشجيع ودعم)</div>'
+    +'<textarea id="supNoteIn" rows="2" placeholder="اكتبي ردًّا قصيرًا تراه الطالبة عند دخولها...">'+(note&&note.text?note.text.toString().replace(/</g,'&lt;'):'')+'</textarea>'
+    +'<button class="btn btn-pink btn-sm" style="margin-top:8px" onclick="saveSupNote(\''+uid+'\')">📨 إرسال الردّ للطالبة</button>'
+    +(note&&note.at?'<div style="font-size:10.5px;color:var(--muted);margin-top:5px">آخر ردّ: '+new Date(note.at).toLocaleString('ar-EG')+'</div>':'')
+    +'</div>';
+  document.getElementById('reflectBody').innerHTML=html;
+  document.getElementById('reflectOv').classList.add('show');
+}
+function closeReflect(){document.getElementById('reflectOv').classList.remove('show');}
+async function deleteStudent(uid){
+  if(!supUnlocked)return;
+  var name=uid;if(SUP_CACHE&&SUP_CACHE.students){var s=SUP_CACHE.students.find(x=>x.uid===uid);if(s)name=s.name||uid;}
+  if(!confirm('حذف الطالبة «'+name+'» نهائيًا من التطبيق؟\nسيُحذف اسمها وكل تأمّلاتها وتقدّمها، ولا يمكن التراجع.'))return;
+  if(sb){try{await sb.from('answers').delete().eq('uid',uid);await sb.from('students').delete().eq('uid',uid);}catch(e){toast('⚠️ تعذّر الحذف — حاولي مجددًا');return;}}
+  if(SUP_CACHE){SUP_CACHE.students=SUP_CACHE.students.filter(x=>x.uid!==uid);if(SUP_CACHE.answers)delete SUP_CACHE.answers[uid];if(SUP_CACHE.notes)delete SUP_CACHE.notes[uid];}
+  renderSupTable();toast('🗑️ تم حذف الطالبة «'+name+'»');
+}
+function fillIndFilter(rows){const s=document.getElementById('indFilter');if(!s)return;const cur=s.value;
+  const orgs=[...new Set(rows.map(r=>r.org).filter(o=>o&&o!=='—'))];
+  s.innerHTML='<option value="">كل المؤسسات</option>'+orgs.map(o=>`<option>${o}</option>`).join('');s.value=cur;}
+async function loadSupervisor(){await refreshSup();renderSupTable();}
+function renderSupTable(){const rows=supRows();const tb=document.getElementById('supRows');
+  const tot=rows.length;let reg=0,need=0;const chalCount={};
+  let body='';
+  if(!tot){body='<tr><td colspan="7" style="text-align:center;color:var(--muted)">لا توجد طالبات مسجّلات بعد. ستظهر هنا تلقائيًا عند دخولهنّ.</td></tr>';}
+  rows.forEach(r=>{const ind=computeInd(r.reflect);if(ind.written>=2)reg++;if(ind.overall==='يحتاج دعمًا')need++;
+    if(ind.chal>0)CHAL.filter(k=>Object.values(r.reflect).join(' ').includes(k)).forEach(k=>chalCount[k]=(chalCount[k]||0)+1);
+    const wcls=ind.writeLvl==='منتظمة'?'high':ind.writeLvl==='جزئية'?'mid':'low';
+    body+=`<tr><td>${r.name}</td><td style="direction:ltr;text-align:right">${r.uid||'—'}</td><td>${r.org}</td><td>${ind.day?ar(ind.day):'—'}</td><td><span class="lvl ${wcls}">${ind.writeLvl}</span></td><td>${levelTag(ind.overall)}</td><td><button class="btn btn-ghost btn-sm" onclick="viewReflect('${r.uid}')">📖 تأمّلات</button> <button class="btn ${ind.overall==='يحتاج دعمًا'?'btn-pink':'btn-ghost'} btn-sm" onclick="go('indicators',null)">📊 المؤشرات</button> <button class="btn btn-sm" style="background:#FFE9E0;color:#E0593C;font-weight:800" onclick="deleteStudent('${r.uid}')" title="حذف الطالبة من التطبيق">🗑️</button></td></tr>`;});
+  tb.innerHTML=body;
+  document.getElementById('supTot').textContent=ar(tot);
+  document.getElementById('supReg').textContent=ar(reg);
+  document.getElementById('supNeed').textContent=ar(need);
+  const topChal=Object.entries(chalCount).sort((a,b)=>b[1]-a[1])[0];
+  const dbDown=(sb&&SUP_CACHE===null);
+  document.getElementById('supSummary').innerHTML=dbDown
+    ?'<b style="color:#E0593C">⚠️ تعذّر الاتصال بقاعدة البيانات</b> — غالبًا دخلت وضع السكون (الخطة المجانية توقفها بعد أسبوع بلا استخدام). البيانات <b>ليست محذوفة</b>: ادخلي supabase.com/dashboard ← مشروعك ← اضغطي <b>Restore</b>، ثم اضغطي هنا زر 🔄 تحديث.'
+    :(tot?`<b>ملخّص:</b> ${ar(reg)} من ${ar(tot)} طالبة منتظمات في الكتابة.${topChal?` أبرز تحدٍّ متكرّر: <b>${topChal[0]}</b>.`:''} ${need?`<b>${ar(need)}</b> يحتجن دعمًا.`:'لا توجد حالات حرجة حاليًا.'}`:'<b>ملخّص:</b> لا توجد بيانات بعد — ستظهر تلقائيًا عند تسجيل الطالبات دخولهنّ.');
+  if(dbDown)tb.innerHTML='<tr><td colspan="7" style="text-align:center;color:#E0593C">⚠️ قاعدة البيانات في وضع السكون — فعّليها من supabase.com/dashboard (زر Restore) ثم اضغطي 🔄 تحديث.</td></tr>';
+}
+/* ════ تصدير بيانات الطالبات إلى إكسل ════ */
+async function exportExcel(){
+  toast('⏳ جارٍ تجهيز الملف…');await refreshSup();
+  const rows=supRows();
+  if(!rows.length){toast(sb&&SUP_CACHE===null?'⚠️ قاعدة البيانات نائمة — فعّليها أولًا (Restore)':'لا توجد بيانات لتنزيلها بعد');return;}
+  const noteOf=u=>(SUP_CACHE&&SUP_CACHE.notes&&SUP_CACHE.notes[u]&&SUP_CACHE.notes[u].text)?SUP_CACHE.notes[u].text:'';
+  const data=rows.map(r=>{const ind=computeInd(r.reflect);return {
+    'اسم الطالبة':r.name,'الرقم الجامعي':r.uid||'','المؤسسة التدريبية':r.org,
+    'آخر يوم كُتب':ind.day?('اليوم '+ar(ind.day)):'لم تبدأ',
+    'الكتابة التأمّلية':ind.writeLvl,'الدعم المهني':ind.overall,'التحديات':ind.challenges,
+    'تأمّل اليوم الأول (الأحد)':(r.reflect[1]||'').toString(),
+    'تأمّل اليوم الثاني (الثلاثاء)':(r.reflect[2]||'').toString(),
+    'تأمّل اليوم الثالث (الخميس)':(r.reflect[3]||'').toString(),
+    'ردّ المشرفة':noteOf(r.uid)};});
+  const fname='متابعة-الطالبات-'+new Date().toISOString().slice(0,10);
+  try{
+    if(window.XLSX){
+      const ws=XLSX.utils.json_to_sheet(data);
+      ws['!cols']=[{wch:20},{wch:14},{wch:22},{wch:12},{wch:14},{wch:14},{wch:24},{wch:45},{wch:45},{wch:45},{wch:30}];
+      const wb=XLSX.utils.book_new();wb.Workbook={Views:[{RTL:true}]};
+      XLSX.utils.book_append_sheet(wb,ws,'متابعة الطالبات');
+      XLSX.writeFile(wb,fname+'.xlsx');toast('📥 تم تنزيل ملف الإكسل ('+ar(rows.length)+' طالبة)');return;}
+  }catch(e){}
+  /* بديل: CSV يفتح في إكسل (مع BOM لدعم العربية) */
+  const heads=Object.keys(data[0]);
+  const esc=v=>'"'+(v==null?'':(''+v)).replace(/"/g,'""')+'"';
+  const csv='﻿'+heads.map(esc).join(',')+'\n'+data.map(row=>heads.map(h=>esc(row[h])).join(',')).join('\n');
+  const b=new Blob([csv],{type:'text/csv;charset=utf-8'});const a=document.createElement('a');
+  a.href=URL.createObjectURL(b);a.download=fname+'.csv';a.click();toast('📥 تم التنزيل بصيغة CSV (يفتح في إكسل)');
+}
+async function loadIndicators(){await refreshSup();renderIndicators();}
+function renderIndicators(){const body=document.getElementById('indBody');if(!body)return;
+  const rows=supRows();fillIndFilter(rows);
+  const f=document.getElementById('indFilter').value;
+  const shown=rows.filter(r=>!f||r.org===f);
+  if(!shown.length){body.innerHTML='<div style="color:var(--muted);padding:8px">لا توجد بيانات طالبات بعد لعرض مؤشراتها.</div>';return;}
+  const multi=shown.length>1;
+  let html='';
+  shown.forEach(r=>{const ind=computeInd(r.reflect);
+    const inds=[['🌱 مستوى التكيّف مع المؤسسة',ind.adapt],['💪 الثقة المهنية',ind.conf],['🤝 التواصل مع الفريق',ind.comm],['🎯 الوعي بالأدوار المهنية',ind.roles]];
+    let block=`<div style="font-size:13px;font-weight:800;margin-bottom:4px">👩‍🎓 ${r.name}${r.org&&r.org!=='—'?` · ${r.org}`:''}</div><div style="font-size:11px;color:var(--muted);margin-bottom:10px">مؤشرات نوعية للدعم (بلا درجات).</div>`;
+    inds.forEach(([l,v])=>{block+=`<div class="ind"><div class="ind-top"><span>${l}</span>${levelTag(v)}</div></div>`;});
+    block+=`<div class="banner pink" style="margin-top:6px"><div class="bic">🧭</div><div><b>التحديات المتكررة:</b> ${ind.challenges}.</div></div>`;
+    block+=`<div class="banner"><div class="bic">💡</div><div><b>اقتراح دعم:</b> ${ind.chal>ind.pos&&ind.chal>0?'يُنصح بجلسة دعم فردية ومتابعة قريبة.':ind.written?'أداء تأمّلي متوازن — استمري في التشجيع والمتابعة.':'لم تُسجّل تأمّلات بعد — يُنصح بتذكير الطالبة بالكتابة.'}</div></div>`;
+    html+=multi?`<div class="card" style="margin:0 0 14px;box-shadow:none;border:1px solid var(--line)">${block}</div>`:block;});
+  body.innerHTML=html;}
+function filterSup(q){q=(q||'').trim();document.querySelectorAll('#supRows tr').forEach(tr=>tr.style.display=(!q||tr.textContent.includes(q))?'':'none');}
+
+/* ════ Scenario (reflective, no correct answers, shuffled) ════ */
+const NO_RIGHT='لا توجد إجابة صحيحة أو خاطئة. المطلوب وصف تجربتك المهنية كما عشتها داخل المؤسسة التدريبية.';
+const sim=[
+ {loc:'البداية',line:'أهلاً بكِ في سيناريو يوم تدريبي. سأضعك في مواقف واقعية قد تواجهك. '+NO_RIGHT,info:1},
+ {loc:'المشرفة غائبة',line:'حضرتِ في موعدك، لكن قيل لكِ إن المشرفة الميدانية في إجازة أو اجتماع خارجي اليوم. ماذا تفعلين؟',
+  ch:[{t:'أعرّف بنفسي للاستقبال بهدوء، وأسأل عمّن يوجّهني، وأستفيد من الوقت في الملاحظة وأتابع مع المشرفة لاحقًا.',r:'المبادرة والاستفادة من الوقت روح المتدربة الناجحة.'},
+      {t:'أتصل بالمشرفة الأكاديمية وأخبرها أنني سأغادر اليوم لعدم وجود من يتابعني.',r:'التواصل جيد، لكن يمكنك الاستفادة من اليوم بالملاحظة قبل المغادرة.'},
+      {t:'أنتظر بأدب في الاستقبال حتى تحضر المشرفة دون أن أشغل أحدًا.',r:'التهذيب جميل، لكن المبادرة بالتعريف بنفسك أفضل من الانتظار السلبي.'}]},
+ {loc:'لا تعريف بالفريق',line:'مرّ اليوم دون اجتماع ترحيبي ودون أن يعرّفك أحد بفريق العمل. كيف تتصرّفين؟',
+  ch:[{t:'أبادر بالتعريف عن نفسي بلطف، وأطلب من المشرفة تعريفي بالزملاء حين تتاح الفرصة.',r:'مبادرتك اللطيفة تترك انطباعًا مهنيًا جميلًا.'},
+      {t:'أنتظر حتى تبادر المشرفة بتعريفي بالفريق رسميًا فهذا من مهامها.',r:'التعريف الرسمي جيد، لكن انتظاره فقط يؤخّر اندماجك.'},
+      {t:'أركّز على ملاحظاتي بصمت وأؤجّل التعارف إلى فرصة رسمية.',r:'الملاحظة مهمة، لكن التعارف المبكر يسهّل تعلّمك.'}]},
+ {loc:'إسناد مهام',line:'في أول أيامك طُلب منك القيام بمهام تبدو غامضة أو أكبر من المتوقع. ما تصرّفك؟',
+  ch:[{t:'أتقبّل المهمة بإيجابية، وأستفسر بأدب عن حدودها، وأتأكد أنها ضمن دوري وبعلم المشرفة.',r:'الإيجابية مع الاستفسار عن الحدود تصرّف متوازن.'},
+      {t:'أعتذر بلطف لأنني ما زلت متدربة جديدة وأفضّل الملاحظة هذا الأسبوع.',r:'التواضع جيد، لكن المشاركة المنظّمة جزء من التعلّم.'},
+      {t:'أنفّذ المهمة بسرعة دون أسئلة حتى أترك انطباعًا جيدًا.',r:'الحماس جميل، لكن الاستفسار عن الحدود أهم من السرعة.'}]},
+ {loc:'دعم المشرف الأكاديمي',line:'اليوم كان مربكًا — غياب وتأخّر ترتيبات ومهام غير واضحة، وكله طبيعي. إذا كان لديك استفسار لم يُحَلّ، ما تصرّفك؟',
+  ch:[{t:'أتعامل بمرونة وصبر، وأرسل إيميلًا واضحًا للمشرف الأكاديمي، وأتابع بلاك بورد.',r:'المرونة + التواصل الصحيح = متدربة ناجحة.'},
+      {t:'أنتظر حتى تنتظم الأمور قبل أن أزعج المشرف الأكاديمي.',r:'تقديرك لوقت المشرف جميل، لكن الاستفسار المبكر يحلّ المشكلة أسرع.'},
+      {t:'أسأل زميلاتي المتدربات فقط لأن تجربتهنّ أقرب لي.',r:'تبادل الخبرات مفيد، لكنه لا يغني عن المرجع الرسمي.'}]}
+];
+let si=0;
+function openSim(){
+  if(!gate.readSyl){toast('📖 السيناريو متاح بعد تأكيد قراءة التوصيف في «دليل التدريب»');closeSidebar();go('guide',null);return;}
+  if(!gate.seenMap){toast('🧭 اطّلعي على «خريطة الإجراءات» أولًا');closeSidebar();go('map',null);return;}
+  si=0;sim.forEach(s=>delete s._o);renderSim();document.getElementById('simOv').classList.add('show');}
+function closeSim(){speechSynthesis.cancel();document.getElementById('simOv').classList.remove('show');}
+function renderSim(){const s=sim[si];const ov=document.getElementById('simOv');
+  let body='';
+  if(s.info){body=`<div style="font-size:14px;line-height:1.8">${s.line}</div><button class="btn btn-primary" style="margin-top:16px;width:100%" onclick="simNext()">ابدئي ←</button>`;}
+  else{if(!s._o){s._o=s.ch.map((_,i)=>i);for(let i=s._o.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[s._o[i],s._o[j]]=[s._o[j],s._o[i]];}}
+    let ch='';s._o.forEach(ci=>{const c=s.ch[ci];ch+=`<div class="task" style="cursor:pointer" onclick="simPick(this,'${c.r.replace(/'/g,"\\'")}')"><span style="color:var(--purple)">◆</span><span class="tt">${c.t}</span></div>`;});
+    body=`<div style="font-size:11px;color:var(--muted);margin-bottom:10px">${NO_RIGHT}</div><div style="font-size:14px;font-weight:700;margin-bottom:12px">${s.line}</div>${ch}<div id="simFb" style="display:none;margin-top:12px" class="banner"></div><button class="btn btn-primary" id="simNextBtn" style="margin-top:14px;width:100%;display:none" onclick="simNext()">${si===sim.length-1?'إنهاء':'التالي ←'}</button>`;}
+  ov.innerHTML=`<div class="login-card" style="max-width:560px;text-align:right">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+    <div style="flex:1"><div style="font-weight:900">سيناريو يوم تدريبي</div><div style="font-size:11px;color:var(--muted)">${s.loc} · تدريب تأمّلي ليس للتقييم</div></div>
+    <button class="icon-btn" style="background:var(--purple-soft);color:var(--purple-d)" onclick="closeSim()">✕</button></div>${body}</div>`;
+  if(!s.info)setTimeout(()=>speak(s.line),350);}
+function simPick(el,reply){el.parentElement.querySelectorAll('.task').forEach(t=>{t.style.pointerEvents='none';t.style.opacity='.6';});el.style.opacity='1';el.classList.add('done');
+  const fb=document.getElementById('simFb');fb.style.display='flex';fb.innerHTML=`<div class="bic">💬</div><div><b>تأمّل المُرشدة:</b> ${reply}</div>`;
+  document.getElementById('simNextBtn').style.display='block';speak(reply);sfxTask();}
+function simNext(){if(si<sim.length-1){si++;sfxMove();renderSim();}else{simSummary();}}
+function simSummary(){speechSynthesis.cancel();document.getElementById('simOv').innerHTML=`<div class="login-card" style="max-width:500px">
+  <div style="font-size:46px;margin-bottom:8px">🪞</div><h1>أكملتِ التدريب التأمّلي!</h1>
+  <div class="ls">${NO_RIGHT}</div>
+  <div style="text-align:right;margin-top:10px">
+   <div class="banner"><div class="bic">🪑</div><div>غياب المشرفة وارد — عرّفي بنفسك واستفيدي من وقتك.</div></div>
+   <div class="banner"><div class="bic">👥</div><div>قد لا يُعقَد اجتماع — بادري بالتعريف بلطف.</div></div>
+   <div class="banner"><div class="bic">📋</div><div>عند إسناد مهام: استفسري عن حدودها وبعلم المشرفة.</div></div>
+   <div class="banner pink"><div class="bic">📧</div><div>المشرف الأكاديمي موجود لدعمك عبر الإيميل.</div></div></div>
+  <button class="btn btn-primary" style="width:100%;margin-top:6px" onclick="closeSim()">تم</button></div>`;sfxDay();}
+
+/* ════ Login + student ════ */
+const student={name:'',id:'',org:'',sup:''};
+function applyStudent(){document.getElementById('sbName').textContent=student.name||'طالبة';document.getElementById('sbId').textContent=student.org?'🏢 '+student.org:('الرقم: '+(student.id||'—'));
+  document.getElementById('heroHi').textContent='أهلاً بكِ '+(student.name||'')+' 🌸';
+  const m=document.getElementById('tMail');if(m)m.innerHTML=m.innerHTML.replace('(الاسم)',student.name||'(الاسم)').replace('(المؤسسة)',student.org||'(المؤسسة)');}
+/* ════ Login animated background (interactive particle network) ════ */
+/* حركة أشعّة صفحة الدخول — تعمل فقط أثناء ظهور الصفحة وتتوقف تلقائيًا بعد الدخول */
+const _rays={raf:0,timer:null,sp:null,head:0,angle:0};
+function startLoginFX(){const r=document.getElementById('loginRays');if(!r)return;
+  if(!_rays.sp){_rays.sp=[];for(let i=0;i<50;i++){const s=document.createElement('span');s.style.setProperty('--i',i);r.appendChild(s);_rays.sp.push(s);}}
+  const shown=()=>document.getElementById('loginOv').classList.contains('show');
+  cancelAnimationFrame(_rays.raf);clearInterval(_rays.timer);
+  (function spin(){if(!shown())return;_rays.angle=(_rays.angle+0.15)%360;r.style.transform='translate(-50%,-50%) rotate('+_rays.angle+'deg)';_rays.raf=requestAnimationFrame(spin);})();
+  _rays.timer=setInterval(()=>{if(!shown()){clearInterval(_rays.timer);return;}
+    const sp=_rays.sp;sp.forEach(s=>s.classList.remove('hot'));
+    for(let k=0;k<3;k++)sp[(_rays.head+k)%sp.length].classList.add('hot');
+    _rays.head=(_rays.head+1)%sp.length;},90);}
+function stopLoginFX(){cancelAnimationFrame(_rays.raf);clearInterval(_rays.timer);}
+
+function doLogin(){const name=document.getElementById('lName').value.trim(),id=document.getElementById('lId').value.trim(),org=document.getElementById('lOrg').value.trim(),sup=document.getElementById('lSup').value.trim();
+  if(name.length<2||!/^[0-9]{6,}$/.test(id)||org.length<2){document.getElementById('lErr').style.display='block';return;}
+  student.name=name;student.id=id;student.org=org;student.sup=sup;try{localStorage.setItem('rafiqaStudent',JSON.stringify(student));}catch(e){}
+  /* طالبة مختلفة على نفس الجهاز؟ صفّري البيانات المحلية حتى لا تختلط ببيانات السابقة */
+  try{const prevUid=localStorage.getItem('rafiqaUid');
+    if(prevUid&&prevUid!==id){answers.reflect={};stateFromJSON({cur:1,done:{},quiz:{},fin:{}});
+      localStorage.removeItem('rafiqaAnswers');localStorage.removeItem('rafiqaState');refreshWeek();}
+    localStorage.setItem('rafiqaUid',id);}catch(e){}
+  gate.readSyl=false;gate.seenMap=false;saveGate();var _sc=document.getElementById('sylCheck');if(_sc){_sc.classList.remove('done');_sc.textContent='';document.getElementById('sylTask').classList.remove('done');}
+  applyStudent();document.getElementById('loginOv').classList.remove('show');stopLoginFX();startIdle();sbStudent();sbLoadProgress();ac();
+  toast('🌸 أهلاً بكِ '+name+'!');setTimeout(playWelcome,500);}
+(function restore(){try{const s=JSON.parse(localStorage.getItem('rafiqaStudent'));if(s&&s.name){Object.assign(student,s);applyStudent();document.getElementById('loginOv').classList.remove('show');stopLoginFX();startIdle();}}catch(e){}})();
+
+/* ════ Sessions: logout + idle warning ════ */
+let idleT=null,warnT=null,cdT=null;
+const IDLE_WARN=270000,WARN_SEC=30; // 4.5 min then 30s warning = 5 min
+function clearIdle(){clearTimeout(idleT);clearTimeout(warnT);clearInterval(cdT);}
+function startIdle(){clearIdle();if(document.getElementById('loginOv').classList.contains('show'))return;
+  idleT=setTimeout(showIdleWarn,IDLE_WARN);}
+function resetIdle(){if(document.getElementById('idleOv').classList.contains('show'))return;if(document.getElementById('loginOv').classList.contains('show'))return;startIdle();}
+function showIdleWarn(){persist();let n=WARN_SEC;document.getElementById('idleCount').textContent=ar(n);document.getElementById('idleOv').classList.add('show');
+  cdT=setInterval(()=>{n--;document.getElementById('idleCount').textContent=ar(n);if(n<=0){clearInterval(cdT);logout(true);}},1000);}
+function stayLoggedIn(){clearInterval(cdT);document.getElementById('idleOv').classList.remove('show');startIdle();toast('👍 أهلًا بعودتك');}
+function logout(auto){persist();savePosts();clearIdle();speechSynthesis.cancel();supUnlocked=false;supMode=false;try{localStorage.removeItem('rafiqaStudent');}catch(e){}
+  document.getElementById('idleOv').classList.remove('show');
+  ['lName','lId','lOrg','lSup'].forEach(id=>document.getElementById(id).value='');document.getElementById('lErr').style.display='none';
+  document.getElementById('loginOv').classList.add('show');startLoginFX();toast(auto?'⏱️ تم تسجيل الخروج تلقائيًا (تم حفظ بياناتك)':'🚪 تم تسجيل الخروج');}
+['mousemove','keydown','click','touchstart','scroll'].forEach(ev=>document.addEventListener(ev,resetIdle,{passive:true}));
+window.addEventListener('beforeunload',()=>{persist();savePosts();});
+document.addEventListener('click',e=>{if(!e.target.closest('#audioPop')&&!e.target.closest('[onclick*=toggleAudioPop]'))document.getElementById('audioPop').classList.remove('show');});
+
+/* ════ Init ════ */
+initSB();initAudio();loadGate();loadAnswers();loadPosts();
+(function(){if(gate.readSyl){const c=document.getElementById('sylCheck');if(c){c.classList.add('done');c.textContent='✓';document.getElementById('sylTask').classList.add('done');}}})();
+buildPath();renderDay();buildMap();buildFaq();updateHome();fillFilters();renderPosts();
+if(document.getElementById('loginOv').classList.contains('show'))startLoginFX();
+if(student.id)sbLoadProgress();
+/* عدّاد أيام بدء التدريب — يبدأ ٢٣ أغسطس ٢٠٢٦ بتوقيت الدوحة (UTC+3) */
+function updateCountdown(){var el=document.getElementById('countdown');if(!el)return;
+  var now=new Date();var doha=new Date(now.getTime()+now.getTimezoneOffset()*60000+3*3600000);
+  var DAY=86400000,today=Date.UTC(doha.getUTCFullYear(),doha.getUTCMonth(),doha.getUTCDate()),start=Date.UTC(2026,7,23),end=Date.UTC(2026,11,3);
+  if(today<start){el.innerHTML='⏳ متبقّي <b>'+ar(Math.round((start-today)/DAY))+'</b> يوم على بدء التدريب';}
+  else if(today<=end){el.innerHTML='📅 اليوم <b>'+ar(Math.round((today-start)/DAY)+1)+'</b> من التدريب الميداني';}
+  else{el.innerHTML='✅ انتهى التدريب الميداني — وفّقكنّ الله';}}
+updateCountdown();setInterval(updateCountdown,60000);
+/* أشعّة الدخول تُدار الآن عبر startLoginFX/stopLoginFX (تتوقف تلقائيًا بعد الدخول) */
+</script>
+</body>
+</html>
