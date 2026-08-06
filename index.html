@@ -641,16 +641,28 @@ label{font-weight:800;font-size:13px;display:block;margin-bottom:6px}
   </div>
   <div class="rays" id="loginRays"></div>
   <div class="login-card" style="position:relative;z-index:5">
-    <h1 style="margin-top:6px">التدريب الميداني</h1>
+    <div style="display:inline-block;background:rgba(86,66,184,.1);color:var(--purple-d);font-size:11px;font-weight:800;padding:4px 12px;border-radius:99px;margin-bottom:8px">نسخة تجريبية</div>
+    <h1 style="margin-top:0">التدريب الميداني</h1>
     <div class="ls">دعم الأسبوع التدريبي الأول · الفصل الأول ٢٠٢٦</div>
     <div id="countdown" class="cd-chip"></div>
-    <div class="ls" style="margin-top:8px">أدخلي بياناتك للدخول</div>
     <div class="lf"><label>اسم الطالبة <span class="req">*</span></label><input id="lName" placeholder="الاسم الكامل" onkeydown="if(event.key==='Enter')document.getElementById('lId').focus()"></div>
     <div class="lf"><label>🔢 الرقم الجامعي <span class="req">*</span></label>
       <div class="eye-wrap"><input id="lId" type="password" inputmode="numeric" placeholder="مثال: 202012345" onkeydown="if(event.key==='Enter')document.getElementById('lOrg').focus()">
       <button type="button" class="eye-btn" onclick="toggleEye('lId',this)" tabindex="-1">👁</button></div>
       <div style="font-size:10.5px;color:#A89274;margin-top:4px">⚠️ يُكتب الرقم بالأرقام الإنجليزية (مثل 202012345)</div></div>
-    <div class="lf"><label>🏢 اسم المؤسسة التدريبية <span class="req">*</span></label><input id="lOrg" placeholder="" onkeydown="if(event.key==='Enter')doLogin()">
+    <div class="lf"><label>🏢 اسم المؤسسة التدريبية <span class="req">*</span></label>
+      <select id="lOrg" onkeydown="if(event.key==='Enter')doLogin()">
+        <option value="">اختاري المؤسسة التدريبية</option>
+        <option>مدرسة الإسراء</option>
+        <option>مدرسة النهضة</option>
+        <option>مدرسة هاجر</option>
+        <option>مدرسة خولة بنت الأزور</option>
+        <option>مؤسسة حمد</option>
+        <option>مدرسة هند بنت أبي سفيان</option>
+        <option>مدرسة آمنة بنت وهب الثانوية</option>
+        <option>مدرسة الفلاح الابتدائية</option>
+        <option>مدرسة حطين</option>
+      </select>
       <div class="lerr" id="lErr">الرجاء تعبئة الحقول المطلوبة (الرقم الجامعي ٦ أرقام على الأقل).</div></div>
     <input type="hidden" id="lSup" value="">
     <button class="btn btn-primary" style="width:100%" onclick="doLogin()">دخول ←</button>
