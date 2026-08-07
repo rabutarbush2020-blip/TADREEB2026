@@ -387,9 +387,9 @@ label{font-weight:800;font-size:13px;display:block;margin-bottom:6px}
       <div class="nav-item" data-v="week" onclick="go('week',this)"><span class="nav-ic">🗺️</span> مسار الأسبوع <span class="bdg">٣ أيام</span></div>
       <div class="nav-item" data-v="assistant" onclick="go('assistant',this)"><span class="nav-ic">🤖</span> المساعد الذكي</div>
       <div class="nav-item" data-v="forms" onclick="go('forms',this)"><span class="nav-ic">📝</span> النماذج</div>
-      <div class="nav-item" data-v="community" onclick="go('community',this)"><span class="nav-ic">💬</span> مجتمع التعلّم</div>
+      <div class="nav-item" data-v="community" onclick="go('community',this)"><span class="nav-ic">📋</span> لوحة التواصل</div>
       <div class="nav-sec">المشرفة</div>
-      <div class="nav-item" data-v="supervisor" onclick="go('supervisor',this)"><span class="nav-ic">👩‍🏫</span> لوحة المتابعة</div>
+      <div class="nav-item" data-v="supervisor" onclick="go('supervisor',this)"><span class="nav-ic">📊</span> لوحة المتابعة</div>
       <div class="nav-item" data-v="indicators" onclick="go('indicators',this)"><span class="nav-ic">📊</span> مؤشرات الدعم المهني</div>
     </nav>
     <div class="side-user">
@@ -543,8 +543,8 @@ label{font-weight:800;font-size:13px;display:block;margin-bottom:6px}
 
       <!-- ═══ COMMUNITY ═══ -->
       <div class="view" id="v-community">
-        <div class="banner"><div class="bic">💬</div><div>مجتمع تعلّم بين المتدربات <b>بإشراف المشرفة الأكاديمية</b>. شاركي تجربتك واطرحي أسئلتك.</div></div>
-        <div class="banner pink" style="cursor:pointer" onclick="toggleSup()"><div class="bic">👩‍🏫</div><div><b>وضع المشرفة الأكاديمية:</b> <span id="supState">غير مُفعّل</span> — للنشر والرد باسم المشرفة بتوثيق رسمي (اضغطي للتبديل).</div></div>
+        <div class="banner"><div class="bic">📋</div><div><b>لوحة التواصل</b> لاستفسارات الطالبات السريعة أو الطارئة <b>بإشراف المشرفة الأكاديمية</b>. للاستفسارات الشخصية أو غير الطارئة، يمكنكِ التواصل مباشرة مع المشرفة الأكاديمية بإرسال بريد إلكتروني أو الحضور للساعات المكتبية يومي الاثنين والأربعاء من كل أسبوع.</div></div>
+        <div class="banner pink" style="cursor:pointer" onclick="toggleSup()"><div><b>وضع المشرفة الأكاديمية:</b> <span id="supState">غير مُفعّل</span> — للنشر والرد باسم المشرفة بتوثيق رسمي (اضغطي للتبديل).</div></div>
         <div class="card card-3d">
           <div class="card-head">
             <div class="card-title">🧵 المنشورات</div>
@@ -668,7 +668,7 @@ label{font-weight:800;font-size:13px;display:block;margin-bottom:6px}
     <button class="btn btn-primary" style="width:100%" onclick="doLogin()">دخول ←</button>
     <div style="margin-top:20px;padding:16px;background:linear-gradient(135deg,rgba(86,66,184,.08),rgba(124,58,237,.12));border-radius:16px;border:1.5px solid rgba(86,66,184,.2)">
       <div style="text-align:center;font-size:12px;color:var(--purple-d);margin-bottom:10px;font-weight:800;letter-spacing:.8px">— دخول المشرفة الأكاديمية —</div>
-      <button class="btn" style="width:100%;background:linear-gradient(135deg,#5642B8,#7C3AED);color:#fff;font-weight:800;border:none;box-shadow:0 6px 20px rgba(86,66,184,.45);font-size:14.5px;padding:13px 20px" onclick="supLogin()">👩‍🏫 الدخول كمشرفة أكاديمية</button>
+      <button class="btn" style="width:100%;background:linear-gradient(135deg,#5642B8,#7C3AED);color:#fff;font-weight:800;border:none;box-shadow:0 6px 20px rgba(86,66,184,.45);font-size:14.5px;padding:13px 20px" onclick="supLogin()">الدخول كمشرفة أكاديمية</button>
     </div>
   </div>
 </div>
@@ -678,7 +678,7 @@ label{font-weight:800;font-size:13px;display:block;margin-bottom:6px}
 <script>
 const ar=n=>Number(n).toLocaleString('ar-EG');
 let toastT;
-function toggleEye(id,btn){const i=document.getElementById(id);i.type=i.type==='password'?'text':'password';btn.textContent=i.type==='password'?'👁':'🫣';}
+function toggleEye(id,btn){const i=document.getElementById(id);i.type=i.type==='password'?'text':'password';btn.textContent=i.type==='password'?'👁':'🔒';}
 function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),2700);}
 function closeSidebar(){document.getElementById('sidebar').classList.remove('open');}
 
@@ -694,9 +694,9 @@ function closeSupPass(){document.getElementById('supPassOv').classList.remove('s
 function supLogin(){askSupPass(function(){
   student.name='المشرفة الأكاديمية';student.id='';student.org='';student.sup='';supMode=true;
   document.getElementById('sbName').textContent='المشرفة الأكاديمية';
-  document.getElementById('sbId').textContent='👩‍🏫 لوحة المتابعة';
+  document.getElementById('sbId').textContent='لوحة المتابعة';
   document.getElementById('loginOv').classList.remove('show');stopLoginFX();startIdle();
-  go('supervisor',null);toast('👩‍🏫 مرحبًا بكِ في لوحة المتابعة');
+  go('supervisor',null);toast('مرحبًا بكِ في لوحة المتابعة');
 });}
 let sb=null;
 function initSB(){try{if(SB_CONFIG.url&&SB_CONFIG.key&&window.supabase){sb=window.supabase.createClient(SB_CONFIG.url,SB_CONFIG.key);console.log('✅ Supabase متصل');}}catch(e){}}
@@ -766,7 +766,7 @@ function go(name,el){
   const v=document.getElementById('v-'+name);if(v)v.classList.add('active');
   let nav=el||document.querySelector('.nav-item[data-v="'+name+'"]');
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));if(nav)nav.classList.add('active');
-  const T={home:'الرئيسية',guide:'دليل التدريب',map:'خريطة الإجراءات',week:'مسار الأسبوع',assistant:'المساعد الذكي',forms:'النماذج',community:'مجتمع التعلّم',supervisor:'لوحة المتابعة',indicators:'مؤشرات الدعم المهني'};
+  const T={home:'الرئيسية',guide:'دليل التدريب',map:'خريطة الإجراءات',week:'مسار الأسبوع',assistant:'المساعد الذكي',forms:'النماذج',community:'لوحة التواصل',supervisor:'لوحة المتابعة',indicators:'مؤشرات الدعم المهني'};
   document.getElementById('pageTitle').textContent=T[name]||name;
   if(name==='supervisor')loadSupervisor();
   if(name==='indicators')loadIndicators();
@@ -883,7 +883,7 @@ function loadPosts(){try{const p=JSON.parse(localStorage.getItem('rafiqaPosts'))
    {id:3,author:'المشرفة الأكاديمية',org:'',sup:true,text:'تذكير: التقرير الأسبوعي يُرفع في بلاك بورد كل خميس ١١:٥٥ مساءً، بأسلوب موضوعي. وفّقكنّ الله 🤍',time:'أمس',likes:34,liked:false,comments:[]}
   ];savePosts();}
 function savePosts(){try{localStorage.setItem('rafiqaPosts',JSON.stringify(posts));}catch(e){}}
-function toggleSup(){if(!supMode&&!supUnlocked){askSupPass(()=>toggleSup());return;}supMode=!supMode;document.getElementById('supState').textContent=supMode?'مُفعّل ✅':'غير مُفعّل';renderPosts();toast(supMode?'👩‍🏫 وضع المشرفة مُفعّل — يمكنك الحذف الآن':'تم إيقاف وضع المشرفة');}
+function toggleSup(){if(!supMode&&!supUnlocked){askSupPass(()=>toggleSup());return;}supMode=!supMode;document.getElementById('supState').textContent=supMode?'مُفعّل ✅':'غير مُفعّل';renderPosts();toast(supMode?'وضع المشرفة مُفعّل — يمكنك الحذف الآن':'تم إيقاف وضع المشرفة');}
 function toggleComposer(){const c=document.getElementById('composer');c.style.display=c.style.display==='none'?'block':'none';if(c.style.display==='block'){document.getElementById('cOrg').value=student.org||'';document.getElementById('cText').focus();}}
 function aName(){return supMode?'المشرفة الأكاديمية':(student.name||'متدربة');}
 function aInit(){return (aName()).trim().charAt(0);}
@@ -1091,7 +1091,7 @@ function simSummary(){speechSynthesis.cancel();document.getElementById('simOv').
   <div class="ls">${NO_RIGHT}</div>
   <div style="text-align:right;margin-top:10px">
    <div class="banner"><div class="bic">🪑</div><div>غياب المشرفة وارد — عرّفي بنفسك واستفيدي من وقتك.</div></div>
-   <div class="banner"><div class="bic">👥</div><div>قد لا يُعقَد اجتماع — بادري بالتعريف بلطف.</div></div>
+   <div class="banner"><div class="bic">🤝</div><div>قد لا يُعقَد اجتماع — بادري بالتعريف بلطف.</div></div>
    <div class="banner"><div class="bic">📋</div><div>عند إسناد مهام: استفسري عن حدودها وبعلم المشرفة.</div></div>
    <div class="banner pink"><div class="bic">📧</div><div>المشرف الأكاديمي موجود لدعمك عبر الإيميل.</div></div></div>
   <button class="btn btn-primary" style="width:100%;margin-top:6px" onclick="closeSim()">تم</button></div>`;sfxDay();}
