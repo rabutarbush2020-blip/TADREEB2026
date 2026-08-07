@@ -389,7 +389,7 @@ label{font-weight:800;font-size:13px;display:block;margin-bottom:6px}
       <div class="nav-item" data-v="forms" onclick="go('forms',this)"><span class="nav-ic">📝</span> النماذج</div>
       <div class="nav-item" data-v="community" onclick="go('community',this)"><span class="nav-ic">📋</span> لوحة التواصل</div>
       <div class="nav-sec">المشرفة</div>
-      <div class="nav-item" data-v="supervisor" onclick="go('supervisor',this)"><span class="nav-ic">📊</span> لوحة المتابعة</div>
+      <div class="nav-item" data-v="supervisor" onclick="go('supervisor',this)"><span class="nav-ic">🖥️</span> لوحة المتابعة</div>
       <div class="nav-item" data-v="indicators" onclick="go('indicators',this)"><span class="nav-ic">📊</span> مؤشرات الدعم المهني</div>
     </nav>
     <div class="side-user">
@@ -895,8 +895,9 @@ function likePost(id){const p=posts.find(x=>x.id===id);if(!p)return;p.liked=!p.l
 function addComment(id,reply,parentIdx){const inp=document.getElementById((reply?'r':'c')+'in-'+id+(reply?'-'+parentIdx:''));const v=inp.value.trim();if(!v)return;
   const p=posts.find(x=>x.id===id);if(reply){p.comments[parentIdx].replies.push({author:aName(),sup:supMode,uid:supMode?null:student.id,text:v});}else{p.comments.push({author:aName(),sup:supMode,uid:supMode?null:student.id,text:v,replies:[]});}
   notif++;updateNotif();savePosts();renderPosts();toast('💬 تم نشر ردّك');}
-function fillFilters(){const orgs=[...new Set(posts.map(p=>p.org).filter(Boolean))];
-  [['cFilter'],['indFilter']].forEach(([id])=>{const s=document.getElementById(id);if(!s)return;const cur=s.value;s.innerHTML='<option value="">كل المؤسسات</option>'+orgs.map(o=>`<option>${o}</option>`).join('');s.value=cur;});}
+function fillFilters(){
+  const s=document.getElementById('cFilter');if(!s)return;const cur=s.value;
+  s.innerHTML='<option value="">كل المؤسسات</option>'+ORGS.map(o=>`<option>${o}</option>`).join('');s.value=cur;}
 function renderPosts(){const q=(document.getElementById('cSearch').value||'').trim();const f=document.getElementById('cFilter').value;
   const list=document.getElementById('postList');list.innerHTML='';
   posts.filter(p=>(!q||p.text.includes(q))&&(!f||p.org===f)).forEach((p,pi)=>{
@@ -922,6 +923,7 @@ function updateNotif(){/* simple interaction counter (demo) */}
 /* ════ Indicators (qualitative, no scores) ════ */
 const POS=['تعلّمت','تعلمت','استفدت','تعاون','مبادرة','بادرت','ثقة','لاحظت','فهمت','أنجزت','هدف','خطة','تواصل','فريق','دور'];
 const CHAL=['صعوبة','صعب','تحدي','قلق','مرتبكة','خوف','غياب','مشكلة','حيرة','توتر','لم'];
+const ORGS=['مدرسة الإسراء','مدرسة النهضة','مدرسة هاجر','مدرسة خولة بنت الأزور','مؤسسة حمد','مدرسة هند بنت أبي سفيان','مدرسة آمنة بنت وهب الثانوية','مدرسة الفلاح الابتدائية','مدرسة حطين'];
 function levelTag(v){return v==='مرتفع'?'<span class="lvl high">مرتفع</span>':v==='متوسط'?'<span class="lvl mid">متوسط</span>':'<span class="lvl low">يحتاج دعمًا</span>';}
 function computeInd(reflect){reflect=reflect||{};
   const txt=Object.values(reflect).join(' ');
@@ -974,8 +976,7 @@ async function deleteStudent(uid){
   renderSupTable();toast('🗑️ تم حذف الطالبة «'+name+'»');
 }
 function fillIndFilter(rows){const s=document.getElementById('indFilter');if(!s)return;const cur=s.value;
-  const orgs=[...new Set(rows.map(r=>r.org).filter(o=>o&&o!=='—'))];
-  s.innerHTML='<option value="">كل المؤسسات</option>'+orgs.map(o=>`<option>${o}</option>`).join('');s.value=cur;}
+  s.innerHTML='<option value="">كل المؤسسات</option>'+ORGS.map(o=>`<option>${o}</option>`).join('');s.value=cur;}
 async function loadSupervisor(){await refreshSup();renderSupTable();}
 function renderSupTable(){const rows=supRows();const tb=document.getElementById('supRows');
   const tot=rows.length;let reg=0,need=0;const chalCount={};
