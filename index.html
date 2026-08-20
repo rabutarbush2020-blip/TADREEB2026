@@ -446,6 +446,25 @@ label{font-weight:800;font-size:13px;display:block;margin-bottom:6px}
           </div>
         </div>
 
+        <div class="card card-3d" id="mailCard">
+          <div class="card-title">📧 مراسلة المشرفة الأكاديمية</div>
+          <p style="margin:6px 0 12px;color:var(--muted);font-size:13px">لأي استفسار أو ظرف طارئ، اكتبي رسالتك هنا وسيفتح تطبيق البريد لديكِ برسالة جاهزة موجّهة إلى <b dir="ltr" style="color:var(--purple-d)">rabutarbush@qu.edu.qa</b> — تُرسَل من بريدكِ الجامعي مباشرة إلى المشرفة، وردّها يصلكِ على بريدكِ.</p>
+          <div class="lf"><label>موضوع الرسالة</label>
+            <select id="mailTopic">
+              <option>استفسار عام</option>
+              <option>ظرف طارئ أو تأخّر/غياب</option>
+              <option>صعوبة في المؤسسة التدريبية</option>
+              <option>طلب موعد أو مقابلة</option>
+              <option>استفسار عن التقرير الأسبوعي</option>
+            </select></div>
+          <div class="lf"><label>نصّ الرسالة</label>
+            <textarea id="mailBody" rows="4" placeholder="اكتبي رسالتك بأسلوب مهني وموجز…"></textarea></div>
+          <div class="row" style="flex-wrap:wrap">
+            <button class="btn btn-primary btn-sm" onclick="sendSupMail()">✉️ إرسال البريد</button>
+            <button class="btn btn-ghost btn-sm" onclick="copySupMail()">📋 نسخ عنوان المشرفة</button>
+          </div>
+        </div>
+
         <div class="banner pink"><div class="bic">💡</div><div>للاطّلاع على الضوابط والجدول والفيديوهات، افتحي <b>دليل التدريب</b>. ولبدء مهامك اليومية افتحي <b>مسار الأسبوع</b>.</div></div>
       </div>
 
@@ -514,6 +533,17 @@ label{font-weight:800;font-size:13px;display:block;margin-bottom:6px}
 
       <!-- ═══ FORMS ═══ -->
       <div class="view" id="v-forms">
+        <div class="card card-3d" id="proofCard" style="margin-bottom:14px">
+          <div class="card-title">📸 إثبات المباشرة</div>
+          <p style="margin:6px 0 12px;color:var(--muted);font-size:13px">ارفعي صورة خطاب المباشرة أو ما يثبت بدء تدريبك. تُصغَّر الصورة تلقائيًا وتُحفظ في قاعدة البيانات لتراها المشرفة الأكاديمية. الحد الأقصى ٦ صور، ويمكنكِ حذف أي صورة وإضافة غيرها في أي وقت.</p>
+          <input type="file" id="proofFile" accept="image/*" multiple style="display:none" onchange="proofPick(this)">
+          <div class="row" style="flex-wrap:wrap;align-items:center">
+            <button class="btn btn-primary btn-sm" onclick="document.getElementById('proofFile').click()">📤 رفع صورة</button>
+            <button class="btn btn-ghost btn-sm" onclick="loadProofs()">🔄 تحديث</button>
+            <span id="proofMsg" style="font-size:12px;color:var(--muted)"></span>
+          </div>
+          <div id="proofGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-top:12px"></div>
+        </div>
         <div class="grid g2">
           <div class="card card-3d"><div class="card-title">📄 نموذج التقرير اليومي</div>
             <div class="tmpl" id="tDaily" style="margin-top:10px"><button class="copy" onclick="cpy('tDaily')">📋 نسخ</button>📅 التاريخ: ______
@@ -623,6 +653,18 @@ label{font-weight:800;font-size:13px;display:block;margin-bottom:6px}
   <div id="reflectBody"></div>
   <button class="btn btn-ghost" style="width:100%;margin-top:8px" onclick="closeReflect()">إغلاق</button>
 </div></div>
+<div class="ov" id="proofViewOv" style="z-index:1900" onclick="closeProofView()"><div class="login-card" style="max-width:680px;padding:12px">
+  <img id="proofViewImg" alt="إثبات المباشرة" style="width:100%;border-radius:14px;display:block">
+  <button class="btn btn-ghost" style="width:100%;margin-top:10px" onclick="closeProofView()">إغلاق</button>
+</div></div>
+<div class="ov" id="supProofOv" style="z-index:1800"><div class="login-card" style="max-width:620px;text-align:right;max-height:85vh;overflow:auto">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+    <h1 style="font-size:18px;margin:0">📸 إثبات المباشرة — <span id="supProofName"></span></h1>
+    <button class="icon-btn" style="background:var(--purple-soft);color:var(--purple-d)" onclick="closeSupProof()">✕</button>
+  </div>
+  <div id="supProofBody"></div>
+  <button class="btn btn-ghost" style="width:100%;margin-top:10px" onclick="closeSupProof()">إغلاق</button>
+</div></div>
 <!-- Idle warning -->
 <div class="ov" id="idleOv"><div class="login-card" style="max-width:380px">
   <div style="font-size:40px;margin-bottom:8px">⏳</div>
@@ -639,7 +681,7 @@ label{font-weight:800;font-size:13px;display:block;margin-bottom:6px}
     <div class="aurora-orb ao4"></div>
     <div class="login-grid"></div>
   </div>
-  <div class="rays" id="loginRays"></div>
+  <!-- أُوقف الشعاع الدوّار حول واجهة الدخول بطلب المستخدمة (2026-08-19) -->
   <div class="login-card" style="position:relative;z-index:5">
     <div style="display:inline-block;background:rgba(86,66,184,.1);color:var(--purple-d);font-size:11px;font-weight:800;padding:4px 12px;border-radius:99px;margin-bottom:8px">نسخة تجريبية</div>
     <h1 style="margin-top:0">التدريب الميداني</h1>
@@ -665,6 +707,11 @@ label{font-weight:800;font-size:13px;display:block;margin-bottom:6px}
       </select>
       <div class="lerr" id="lErr">الرجاء تعبئة الحقول المطلوبة (الرقم الجامعي ٦ أرقام على الأقل).</div></div>
     <input type="hidden" id="lSup" value="">
+    <label for="lConsent" style="display:flex;gap:9px;align-items:flex-start;text-align:right;background:rgba(86,66,184,.06);border:1.5px solid rgba(86,66,184,.2);border-radius:14px;padding:11px 12px;margin:4px 0 12px;cursor:pointer;font-size:11.5px;line-height:1.75;color:var(--ink)">
+      <input type="checkbox" id="lConsent" style="width:17px;height:17px;min-width:17px;margin-top:2px;accent-color:#5642B8;cursor:pointer">
+      <span>أوافق على استخدام بياناتي داخل <b>التطبيق التجريبي</b> لأغراض متابعة التدريب الميداني وتطوير التطبيق. بياناتي <b>لا تُستخدم في التقييم الأكاديمي</b> ولا تُشارَك خارج فريق الإشراف، ويمكنني طلب حذفها في أي وقت.</span>
+    </label>
+    <div class="lerr" id="cErr" style="margin-bottom:10px">للمتابعة، يرجى الموافقة على استخدام البيانات في النسخة التجريبية.</div>
     <button class="btn btn-primary" style="width:100%" onclick="doLogin()">دخول ←</button>
     <div style="margin-top:20px;padding:16px;background:linear-gradient(135deg,rgba(86,66,184,.08),rgba(124,58,237,.12));border-radius:16px;border:1.5px solid rgba(86,66,184,.2)">
       <div style="text-align:center;font-size:12px;color:var(--purple-d);margin-bottom:10px;font-weight:800;letter-spacing:.8px">— دخول المشرفة الأكاديمية —</div>
@@ -683,7 +730,22 @@ function toast(m){const t=document.getElementById('toast');t.textContent=m;t.cla
 function closeSidebar(){document.getElementById('sidebar').classList.remove('open');}
 
 /* ════ Supabase (central save — optional) ════ */
-const SB_CONFIG={url:'https://pmvnyurrsocvaartykca.supabase.co',key:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBtdm55dXJyc29jdmFhcnR5a2NhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE2OTIxNjQsImV4cCI6MjA5NzI2ODE2NH0.aTTfYOZ-HUQPF8t0AZB_fkukWvRUlfGdQ5ozG6_exgY'};
+const SB_CONFIG={url:'https://dzjharsysqfchgobifdk.supabase.co',key:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR6amhhcnN5c3FmY2hnb2JpZmRrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODcxMzY4NzEsImV4cCI6MjEwMjcxMjg3MX0.73uNnmS_e1xALIRbHIMSYLMYTWYb9H7DSzteP1PKZHI'};
+
+/* ════ سجل الأسماء المحلي (دفتر ثابت) ════
+   يحفظ اسم كل طالبة دخلت من هذا الجهاز حفظًا دائمًا، ولا يُمسح عند الخروج
+   ولا عند إغلاق المتصفح — حتى لو تعذّر الاتصال بقاعدة البيانات. */
+const SB_RPC={saveStudent:'guide_save_student',saveAnswers:'guide_save_answers',get:'guide_get',list:'guide_list',note:'guide_note',del:'guide_delete',addProof:'guide_add_proof',myProofs:'guide_my_proofs',delProof:'guide_del_proof',proofCounts:'guide_proof_counts',proofsFor:'guide_proofs_for',consent:'guide_consent'};
+let ROSTER={};
+function loadRoster(){try{const r=JSON.parse(localStorage.getItem('rafiqaRoster'));if(r&&typeof r==='object')ROSTER=r;}catch(e){}}
+function saveRoster(){try{localStorage.setItem('rafiqaRoster',JSON.stringify(ROSTER));}catch(e){}}
+function rosterAdd(o){if(!o||!o.id)return;const p=ROSTER[o.id]||{};
+  ROSTER[o.id]={uid:o.id,name:o.name||p.name||'طالبة',org:o.org||p.org||'—',sup:o.sup||p.sup||'',at:new Date().toISOString(),synced:p.synced===true};saveRoster();}
+function rosterSynced(uid,ok){if(ROSTER[uid]){ROSTER[uid].synced=!!ok;saveRoster();}}
+function rosterPending(){return Object.keys(ROSTER).map(k=>ROSTER[k]).filter(r=>!r.synced);}
+/* أرشيف التأمّلات محليًا لكل رقم جامعي — لا يُمسح عند دخول طالبة أخرى */
+function saveLocalReflect(){if(!student.id)return;try{const m=JSON.parse(localStorage.getItem('rafiqaReflects')||'{}');m[student.id]=answers.reflect;localStorage.setItem('rafiqaReflects',JSON.stringify(m));}catch(e){}}
+function localReflect(uid){try{const m=JSON.parse(localStorage.getItem('rafiqaReflects')||'{}');return m[uid]||{};}catch(e){return {};}}
 
 /* ════ Supervisor password gate ════ */
 const SUP_PASS='2323';
@@ -700,17 +762,41 @@ function supLogin(){askSupPass(function(){
 });}
 let sb=null;
 function initSB(){try{if(SB_CONFIG.url&&SB_CONFIG.key&&window.supabase){sb=window.supabase.createClient(SB_CONFIG.url,SB_CONFIG.key);console.log('✅ Supabase متصل');}}catch(e){}}
-async function sbStudent(){if(!sb||!student.id)return;try{await sb.from('students').upsert({uid:student.id,name:student.name,org:student.org,sup:student.sup,updated_at:new Date().toISOString()},{onConflict:'uid'});}catch(e){}}
-async function sbAnswers(){if(!sb||!student.id)return;
-  try{await sb.from('answers').upsert({uid:student.id,reflect:answers.reflect,progress:stateToJSON(),updated_at:new Date().toISOString()},{onConflict:'uid'});}catch(e){}}
-async function sbLoadProgress(){if(!sb||!student.id)return;try{const r=await sb.from('answers').select('*').eq('uid',student.id).maybeSingle();
-  if(r&&r.data){let ch=false;if(r.data.reflect){answers.reflect=r.data.reflect;ch=true;}if(r.data.progress){stateFromJSON(r.data.progress);ch=true;}
-    if(r.data.sup_note&&r.data.sup_note.text){applySupNote(r.data.sup_note);toast('💬 لديكِ ردّ من المشرفة الأكاديمية');}
-    if(ch){try{localStorage.setItem('rafiqaAnswers',JSON.stringify(answers));localStorage.setItem('rafiqaState',JSON.stringify(stateToJSON()));}catch(e){}refreshWeek();}}}catch(e){}}
-async function sbFetchAll(){if(!sb)return null;try{const [st,an]=await Promise.all([sb.from('students').select('*'),sb.from('answers').select('*')]);const am={},nm={};(an.data||[]).forEach(a=>{am[a.uid]=a.reflect||{};nm[a.uid]=a.sup_note||null;});return {students:st.data||[],answers:am,notes:nm};}catch(e){return null;}}
+async function sbStudent(){if(!student.id)return false;rosterAdd(student);if(!sb)return false;
+  try{const r=await sb.rpc(SB_RPC.saveStudent,{p_uid:student.id,p_name:student.name,p_org:student.org||'',p_sup:student.sup||''});
+    if(r&&r.error)throw r.error;rosterSynced(student.id,true);return true;}
+  catch(e){rosterSynced(student.id,false);console.warn('تعذّر حفظ اسم الطالبة مركزيًا — حُفظ محليًا وسيُعاد إرساله:',e&&e.message);return false;}}
+async function sbConsent(){if(!sb||!student.id)return;
+  try{await sb.rpc(SB_RPC.consent,{p_uid:student.id});}catch(e){console.warn('تعذّر تسجيل الموافقة مركزيًا:',e&&e.message);}}
+/* إعادة إرسال الأسماء التي لم تُحفظ في قاعدة البيانات بعد */
+async function sbFlushPending(){if(!sb)return;const list=rosterPending();
+  for(let i=0;i<list.length;i++){const r=list[i];
+    try{const q=await sb.rpc(SB_RPC.saveStudent,{p_uid:r.uid,p_name:r.name,p_org:r.org||'',p_sup:r.sup||''});
+      if(q&&q.error)throw q.error;rosterSynced(r.uid,true);
+      const lr=localReflect(r.uid);
+      if(lr&&Object.keys(lr).length){await sb.rpc(SB_RPC.saveAnswers,{p_uid:r.uid,p_reflect:lr,p_progress:null});}
+    }catch(e){}}}
+async function sbAnswers(){if(!student.id)return;saveLocalReflect();if(!sb)return;
+  try{const r=await sb.rpc(SB_RPC.saveAnswers,{p_uid:student.id,p_reflect:answers.reflect,p_progress:stateToJSON()});
+    if(r&&r.error)throw r.error;}catch(e){console.warn('تعذّر حفظ التأمّلات مركزيًا — حُفظت محليًا:',e&&e.message);}}
+async function sbLoadProgress(){if(!sb||!student.id)return;try{const r=await sb.rpc(SB_RPC.get,{p_uid:student.id});
+  if(r&&r.error)throw r.error;const d=(r&&r.data&&r.data.length)?r.data[0]:null;
+  if(d){let ch=false;
+    if(d.reflect&&Object.keys(d.reflect).length){answers.reflect=d.reflect;ch=true;}
+    if(d.progress&&Object.keys(d.progress).length){stateFromJSON(d.progress);ch=true;}
+    if(d.sup_note&&d.sup_note.text){applySupNote(d.sup_note);toast('💬 لديكِ ردّ من المشرفة الأكاديمية');}
+    if(ch){try{localStorage.setItem('rafiqaAnswers',JSON.stringify(answers));localStorage.setItem('rafiqaState',JSON.stringify(stateToJSON()));}catch(e){}saveLocalReflect();refreshWeek();}}}catch(e){console.warn('تعذّر جلب بيانات الطالبة:',e&&e.message);}}
+async function sbFetchAll(){if(!sb)return null;
+  try{const r=await sb.rpc(SB_RPC.list,{p_pass:SUP_PASS});
+    if(r&&r.error)throw r.error;
+    const rows=(r&&r.data)||[];const am={},nm={},pf={};
+    rows.forEach(a=>{am[a.uid]=a.reflect||{};nm[a.uid]=a.sup_note||null;});
+    try{const c=await sb.rpc(SB_RPC.proofCounts,{p_pass:SUP_PASS});((c&&c.data)||[]).forEach(x=>{pf[x.uid]=Number(x.n)||0;});}catch(e){}
+    return {students:rows.map(s=>({uid:s.uid,name:s.name,org:s.org,sup:s.sup,consent:s.consent_at||null,updated_at:s.updated_at})),answers:am,notes:nm,proofs:pf};}
+  catch(e){console.warn('تعذّر جلب بيانات الطالبات من قاعدة البيانات:',e&&e.message);return null;}}
 async function saveSupNote(uid){var inp=document.getElementById('supNoteIn');var v=(inp?inp.value:'').trim();var note={text:v,at:new Date().toISOString()};
   if(SUP_CACHE){if(!SUP_CACHE.notes)SUP_CACHE.notes={};SUP_CACHE.notes[uid]=note;}
-  if(sb){try{await sb.from('answers').upsert({uid:uid,sup_note:note},{onConflict:'uid'});toast('📨 تم إرسال الردّ — ستراه الطالبة عند دخولها');}catch(e){toast('⚠️ تعذّر الحفظ — تأكّدي من إضافة عمود sup_note');}}else{toast('📨 تم الحفظ محليًا');}}
+  if(sb){try{const r=await sb.rpc(SB_RPC.note,{p_pass:SUP_PASS,p_uid:uid,p_note:note});if(r&&r.error)throw r.error;toast('📨 تم إرسال الردّ — ستراه الطالبة عند دخولها');}catch(e){toast('⚠️ تعذّر إرسال الردّ — تحقّقي من الاتصال');}}else{toast('📨 تم الحفظ محليًا');}}
 function applySupNote(note){if(!note||!note.text)return;var el=document.getElementById('homeNotif');if(el)el.textContent='💬 من المشرفة: '+note.text;}
 
 /* ════ Audio system ════ */
@@ -770,6 +856,7 @@ function go(name,el){
   document.getElementById('pageTitle').textContent=T[name]||name;
   if(name==='supervisor')loadSupervisor();
   if(name==='indicators')loadIndicators();
+  if(name==='forms')loadProofs();
   closeSidebar();window.scrollTo({top:0,behavior:'smooth'});
 }
 function toggleSyl(){gate.readSyl=!gate.readSyl;saveGate();const c=document.getElementById('sylCheck'),t=document.getElementById('sylTask');
@@ -805,7 +892,7 @@ function refreshWeek(){try{buildPath();renderDay();updateHome();}catch(e){}}
 function loadAnswers(){try{const a=JSON.parse(localStorage.getItem('rafiqaAnswers'));if(a&&a.reflect)answers.reflect=a.reflect;}catch(e){}
   try{const st=JSON.parse(localStorage.getItem('rafiqaState'));if(st)stateFromJSON(st);}catch(e){}}
 let _pt=null;
-function persist(){try{localStorage.setItem('rafiqaAnswers',JSON.stringify(answers));localStorage.setItem('rafiqaState',JSON.stringify(stateToJSON()));}catch(e){}clearTimeout(_pt);_pt=setTimeout(sbAnswers,800);}
+function persist(){try{localStorage.setItem('rafiqaAnswers',JSON.stringify(answers));localStorage.setItem('rafiqaState',JSON.stringify(stateToJSON()));}catch(e){}saveLocalReflect();clearTimeout(_pt);_pt=setTimeout(sbAnswers,800);}
 function saveReflect(n,v){answers.reflect[n]=v;persist();}
 
 function buildPath(){const w=document.getElementById('daypath');w.innerHTML='';
@@ -942,16 +1029,21 @@ function computeInd(reflect){reflect=reflect||{};
 }
 let SUP_CACHE=null;
 async function refreshSup(){const d=await sbFetchAll();SUP_CACHE=d;return d;}
-function supRows(){ // unified data: from Supabase if available, else current device only
-  if(SUP_CACHE&&SUP_CACHE.students.length)
-    return SUP_CACHE.students.map(s=>({uid:s.uid,name:s.name||'طالبة',org:s.org||'—',reflect:SUP_CACHE.answers[s.uid]||{}}));
-  if(student.name)return [{uid:student.id,name:student.name,org:student.org||'—',reflect:answers.reflect}];
-  return [];
+function supRows(){ /* دمج: الدفتر المحلي الثابت + قاعدة البيانات (بيانات القاعدة تفوز) */
+  const map={};
+  Object.keys(ROSTER).forEach(k=>{const r=ROSTER[k];map[r.uid]={uid:r.uid,name:r.name||'طالبة',org:r.org||'—',reflect:localReflect(r.uid),synced:r.synced===true};});
+  if(SUP_CACHE&&SUP_CACHE.students)SUP_CACHE.students.forEach(s=>{const p=map[s.uid];
+    map[s.uid]={uid:s.uid,name:s.name||(p&&p.name)||'طالبة',org:s.org||(p&&p.org)||'—',
+      reflect:(SUP_CACHE.answers&&SUP_CACHE.answers[s.uid])||(p&&p.reflect)||{},consent:s.consent||null,synced:true};});
+  if(student.id&&student.name&&!map[student.id])map[student.id]={uid:student.id,name:student.name,org:student.org||'—',reflect:answers.reflect,synced:false};
+  return Object.keys(map).map(k=>map[k]).sort((a,b)=>(a.name||'').localeCompare(b.name||'','ar'));
 }
 function viewReflect(uid){
   var reflect={},name='الطالبة',org='';
-  if(SUP_CACHE&&SUP_CACHE.students.length){var s=SUP_CACHE.students.find(x=>x.uid===uid);if(s){name=s.name||'الطالبة';org=s.org||'';reflect=SUP_CACHE.answers[uid]||{};}}
-  else if(student.id===uid){name=student.name;org=student.org;reflect=answers.reflect;}
+  var lr=ROSTER[uid];if(lr){name=lr.name||'الطالبة';org=lr.org||'';reflect=localReflect(uid);}
+  if(SUP_CACHE&&SUP_CACHE.students&&SUP_CACHE.students.length){var s=SUP_CACHE.students.find(x=>x.uid===uid);
+    if(s){name=s.name||name;org=s.org||org;var rr=SUP_CACHE.answers&&SUP_CACHE.answers[uid];if(rr&&Object.keys(rr).length)reflect=rr;}}
+  if(!lr&&student.id===uid&&(!SUP_CACHE||!SUP_CACHE.students||!SUP_CACHE.students.length)){name=student.name;org=student.org;reflect=answers.reflect;}
   var labels=['اليوم الأول · الأحد','اليوم الثاني · الثلاثاء','اليوم الثالث · الخميس'];
   var html='<div style="font-size:13px;color:var(--muted);margin-bottom:14px">👩‍🎓 <b>'+name+'</b>'+(org?' · '+org:'')+' — للمتابعة والدعم، وليست للتقييم.</div>';
   [1,2,3].forEach(function(d,i){var t=(reflect[d]||'').toString().trim();
@@ -971,13 +1063,15 @@ async function deleteStudent(uid){
   if(!supUnlocked)return;
   var name=uid;if(SUP_CACHE&&SUP_CACHE.students){var s=SUP_CACHE.students.find(x=>x.uid===uid);if(s)name=s.name||uid;}
   if(!confirm('حذف الطالبة «'+name+'» نهائيًا من التطبيق؟\nسيُحذف اسمها وكل تأمّلاتها وتقدّمها، ولا يمكن التراجع.'))return;
-  if(sb){try{await sb.from('answers').delete().eq('uid',uid);await sb.from('students').delete().eq('uid',uid);}catch(e){toast('⚠️ تعذّر الحذف — حاولي مجددًا');return;}}
+  if(sb){try{const r=await sb.rpc(SB_RPC.del,{p_pass:SUP_PASS,p_uid:uid});if(r&&r.error)throw r.error;}catch(e){toast('⚠️ تعذّر الحذف — حاولي مجددًا');return;}}
   if(SUP_CACHE){SUP_CACHE.students=SUP_CACHE.students.filter(x=>x.uid!==uid);if(SUP_CACHE.answers)delete SUP_CACHE.answers[uid];if(SUP_CACHE.notes)delete SUP_CACHE.notes[uid];}
+  delete ROSTER[uid];saveRoster();
+  try{const m=JSON.parse(localStorage.getItem('rafiqaReflects')||'{}');delete m[uid];localStorage.setItem('rafiqaReflects',JSON.stringify(m));}catch(e){}
   renderSupTable();toast('🗑️ تم حذف الطالبة «'+name+'»');
 }
 function fillIndFilter(rows){const s=document.getElementById('indFilter');if(!s)return;const cur=s.value;
   s.innerHTML='<option value="">كل المؤسسات</option>'+ORGS.map(o=>`<option>${o}</option>`).join('');s.value=cur;}
-async function loadSupervisor(){await refreshSup();renderSupTable();}
+async function loadSupervisor(){await sbFlushPending();await refreshSup();renderSupTable();}
 function renderSupTable(){const rows=supRows();const tb=document.getElementById('supRows');
   const tot=rows.length;let reg=0,need=0;const chalCount={};
   let body='';
@@ -985,17 +1079,18 @@ function renderSupTable(){const rows=supRows();const tb=document.getElementById(
   rows.forEach(r=>{const ind=computeInd(r.reflect);if(ind.written>=2)reg++;if(ind.overall==='يحتاج دعمًا')need++;
     if(ind.chal>0)CHAL.filter(k=>Object.values(r.reflect).join(' ').includes(k)).forEach(k=>chalCount[k]=(chalCount[k]||0)+1);
     const wcls=ind.writeLvl==='منتظمة'?'high':ind.writeLvl==='جزئية'?'mid':'low';
-    body+=`<tr><td>${r.name}</td><td style="direction:ltr;text-align:right">${r.uid||'—'}</td><td>${r.org}</td><td>${ind.day?ar(ind.day):'—'}</td><td><span class="lvl ${wcls}">${ind.writeLvl}</span></td><td>${levelTag(ind.overall)}</td><td><button class="btn btn-ghost btn-sm" onclick="viewReflect('${r.uid}')">📖 تأمّلات</button> <button class="btn ${ind.overall==='يحتاج دعمًا'?'btn-pink':'btn-ghost'} btn-sm" onclick="go('indicators',null)">📊 المؤشرات</button> <button class="btn btn-sm" style="background:#FFE9E0;color:#E0593C;font-weight:800" onclick="deleteStudent('${r.uid}')" title="حذف الطالبة من التطبيق">🗑️</button></td></tr>`;});
+    body+=`<tr><td>${r.name}${r.consent?' <span title="وافقت على استخدام بياناتها في النسخة التجريبية" style="color:#2E7D68;font-weight:900">✓</span>':''}</td><td style="direction:ltr;text-align:right">${r.uid||'—'}</td><td>${r.org}</td><td>${ind.day?ar(ind.day):'—'}</td><td><span class="lvl ${wcls}">${ind.writeLvl}</span></td><td>${levelTag(ind.overall)}</td><td><button class="btn btn-ghost btn-sm" onclick="viewReflect('${r.uid}')">📖 تأمّلات</button> <button class="btn btn-ghost btn-sm" onclick="viewProofs('${r.uid}','${(r.name||'').replace(/'/g,'')}')" title="صور إثبات المباشرة">📸 ${ar((SUP_CACHE&&SUP_CACHE.proofs&&SUP_CACHE.proofs[r.uid])||0)}</button> <button class="btn ${ind.overall==='يحتاج دعمًا'?'btn-pink':'btn-ghost'} btn-sm" onclick="go('indicators',null)">📊 المؤشرات</button> <button class="btn btn-sm" style="background:#FFE9E0;color:#E0593C;font-weight:800" onclick="deleteStudent('${r.uid}')" title="حذف الطالبة من التطبيق">🗑️</button></td></tr>`;});
   tb.innerHTML=body;
   document.getElementById('supTot').textContent=ar(tot);
   document.getElementById('supReg').textContent=ar(reg);
   document.getElementById('supNeed').textContent=ar(need);
   const topChal=Object.entries(chalCount).sort((a,b)=>b[1]-a[1])[0];
   const dbDown=(sb&&SUP_CACHE===null);
+  const unsynced=rows.filter(r=>r.synced===false).length;
   document.getElementById('supSummary').innerHTML=dbDown
-    ?'<b style="color:#E0593C">⚠️ تعذّر الاتصال بقاعدة البيانات</b> — غالبًا دخلت وضع السكون (الخطة المجانية توقفها بعد أسبوع بلا استخدام). البيانات <b>ليست محذوفة</b>: ادخلي supabase.com/dashboard ← مشروعك ← اضغطي <b>Restore</b>، ثم اضغطي هنا زر 🔄 تحديث.'
-    :(tot?`<b>ملخّص:</b> ${ar(reg)} من ${ar(tot)} طالبة منتظمات في الكتابة.${topChal?` أبرز تحدٍّ متكرّر: <b>${topChal[0]}</b>.`:''} ${need?`<b>${ar(need)}</b> يحتجن دعمًا.`:'لا توجد حالات حرجة حاليًا.'}`:'<b>ملخّص:</b> لا توجد بيانات بعد — ستظهر تلقائيًا عند تسجيل الطالبات دخولهنّ.');
-  if(dbDown)tb.innerHTML='<tr><td colspan="7" style="text-align:center;color:#E0593C">⚠️ قاعدة البيانات في وضع السكون — فعّليها من supabase.com/dashboard (زر Restore) ثم اضغطي 🔄 تحديث.</td></tr>';
+    ?('<b style="color:#E0593C">⚠️ تعذّر الاتصال بقاعدة البيانات</b> — الأسماء الظاهرة محفوظة على هذا الجهاز ولن تُفقد، وستُرفع تلقائيًا عند عودة الاتصال.'+(tot?' <b>'+ar(tot)+'</b> طالبة محفوظة محليًا.':''))
+    :(tot?`<b>ملخّص:</b> ${ar(reg)} من ${ar(tot)} طالبة منتظمات في الكتابة.${topChal?` أبرز تحدٍّ متكرّر: <b>${topChal[0]}</b>.`:''} ${need?`<b>${ar(need)}</b> يحتجن دعمًا.`:'لا توجد حالات حرجة حاليًا.'}${unsynced?` <span style="color:#E0593C">⏳ ${ar(unsynced)} اسم محفوظ على هذا الجهاز ولم يُرفع للسحابة بعد — سيُرفع تلقائيًا عند عودة الاتصال.</span>`:''}`:'<b>ملخّص:</b> لا توجد بيانات بعد — ستظهر تلقائيًا عند تسجيل الطالبات دخولهنّ.');
+  if(dbDown&&!tot)tb.innerHTML='<tr><td colspan="7" style="text-align:center;color:#E0593C">⚠️ تعذّر الاتصال بقاعدة البيانات — ولا توجد أسماء محفوظة على هذا الجهاز بعد.</td></tr>';
 }
 /* ════ تصدير بيانات الطالبات إلى إكسل ════ */
 async function exportExcel(){
@@ -1105,29 +1200,27 @@ function applyStudent(){document.getElementById('sbName').textContent=student.na
 /* ════ Login animated background (interactive particle network) ════ */
 /* حركة أشعّة صفحة الدخول — تعمل فقط أثناء ظهور الصفحة وتتوقف تلقائيًا بعد الدخول */
 const _rays={raf:0,timer:null,sp:null,head:0,angle:0};
-function startLoginFX(){const r=document.getElementById('loginRays');if(!r)return;
-  if(!_rays.sp){_rays.sp=[];for(let i=0;i<50;i++){const s=document.createElement('span');s.style.setProperty('--i',i);r.appendChild(s);_rays.sp.push(s);}}
-  const shown=()=>document.getElementById('loginOv').classList.contains('show');
-  cancelAnimationFrame(_rays.raf);clearInterval(_rays.timer);
-  (function spin(){if(!shown())return;_rays.angle=(_rays.angle+0.15)%360;r.style.transform='translate(-50%,-50%) rotate('+_rays.angle+'deg)';_rays.raf=requestAnimationFrame(spin);})();
-  _rays.timer=setInterval(()=>{if(!shown()){clearInterval(_rays.timer);return;}
-    const sp=_rays.sp;sp.forEach(s=>s.classList.remove('hot'));
-    for(let k=0;k<3;k++)sp[(_rays.head+k)%sp.length].classList.add('hot');
-    _rays.head=(_rays.head+1)%sp.length;},90);}
+function startLoginFX(){/* أُوقف الشعاع الدوّار — لإعادته: استرجعي عنصر loginRays والنسخة السابقة من هذه الدالة من النسخة الاحتياطية */}
 function stopLoginFX(){cancelAnimationFrame(_rays.raf);clearInterval(_rays.timer);}
 
 function doLogin(){const name=document.getElementById('lName').value.trim(),id=document.getElementById('lId').value.trim(),org=document.getElementById('lOrg').value.trim(),sup=document.getElementById('lSup').value.trim();
   if(name.length<2||!/^[0-9]{6,}$/.test(id)||org.length<2){document.getElementById('lErr').style.display='block';return;}
+  document.getElementById('lErr').style.display='none';
+  var _cs=document.getElementById('lConsent');
+  if(_cs&&!_cs.checked){document.getElementById('cErr').style.display='block';return;}
+  document.getElementById('cErr').style.display='none';
   student.name=name;student.id=id;student.org=org;student.sup=sup;try{localStorage.setItem('rafiqaStudent',JSON.stringify(student));}catch(e){}
+  rosterAdd(student);
   /* طالبة مختلفة على نفس الجهاز؟ صفّري البيانات المحلية حتى لا تختلط ببيانات السابقة */
   try{const prevUid=localStorage.getItem('rafiqaUid');
     if(prevUid&&prevUid!==id){answers.reflect={};stateFromJSON({cur:1,done:{},quiz:{},fin:{}});
       localStorage.removeItem('rafiqaAnswers');localStorage.removeItem('rafiqaState');refreshWeek();}
     localStorage.setItem('rafiqaUid',id);}catch(e){}
   gate.readSyl=false;gate.seenMap=false;saveGate();var _sc=document.getElementById('sylCheck');if(_sc){_sc.classList.remove('done');_sc.textContent='';document.getElementById('sylTask').classList.remove('done');}
-  applyStudent();document.getElementById('loginOv').classList.remove('show');stopLoginFX();startIdle();sbStudent();sbLoadProgress();ac();
+  applyStudent();document.getElementById('loginOv').classList.remove('show');stopLoginFX();startIdle();sbStudent();sbConsent();sbLoadProgress();PROOFS=[];renderProofs();ac();
   toast('🌸 أهلاً بكِ '+name+'!');setTimeout(playWelcome,500);}
-(function restore(){try{const s=JSON.parse(localStorage.getItem('rafiqaStudent'));if(s&&s.name){Object.assign(student,s);applyStudent();document.getElementById('loginOv').classList.remove('show');stopLoginFX();startIdle();}}catch(e){}})();
+(function restore(){try{const s=JSON.parse(localStorage.getItem('rafiqaStudent'));if(s&&s.name){Object.assign(student,s);applyStudent();document.getElementById('loginOv').classList.remove('show');stopLoginFX();startIdle();
+  if(student.id){rosterAdd(student);setTimeout(function(){sbStudent();},600);}}}catch(e){}})();
 
 /* ════ Sessions: logout + idle warning ════ */
 let idleT=null,warnT=null,cdT=null;
@@ -1147,8 +1240,97 @@ function logout(auto){persist();savePosts();clearIdle();speechSynthesis.cancel()
 window.addEventListener('beforeunload',()=>{persist();savePosts();});
 document.addEventListener('click',e=>{if(!e.target.closest('#audioPop')&&!e.target.closest('[onclick*=toggleAudioPop]'))document.getElementById('audioPop').classList.remove('show');});
 
+/* ════ مراسلة المشرفة الأكاديمية ════ */
+const SUP_EMAIL='rabutarbush@qu.edu.qa';
+function sendSupMail(){
+  const t=document.getElementById('mailTopic'),b=document.getElementById('mailBody');
+  const topic=t?t.value:'استفسار عام',body=(b?b.value:'').trim();
+  if(body.length<5){toast('✍️ اكتبي نصّ رسالتك أولًا');if(b)b.focus();return;}
+  const subj='['+topic+'] التدريب الميداني — '+(student.name||'طالبة')+(student.id?' ('+student.id+')':'');
+  const lines=['تحية طيبة أستاذتي الفاضلة،','',body,'','—','الطالبة: '+(student.name||'—'),
+    'الرقم الجامعي: '+(student.id||'—'),'المؤسسة التدريبية: '+(student.org||'—')];
+  window.location.href='mailto:'+SUP_EMAIL+'?subject='+encodeURIComponent(subj)+'&body='+encodeURIComponent(lines.join('\n'));
+  toast('📧 يُفتح تطبيق البريد… إن لم يفتح فانسخي العنوان');
+}
+function copySupMail(){if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(SUP_EMAIL).then(function(){toast('📋 تم نسخ بريد المشرفة');},function(){toast('📋 '+SUP_EMAIL);});else toast('📋 '+SUP_EMAIL);}
+
+/* ════ إثبات المباشرة (صور) ════ */
+const PROOF_MAX=6,PROOF_DIM=1400;
+let PROOFS=[],SUP_PROOFS=[];
+function escH(t){return String(t==null?'':t).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+function proofMsg(t){const e=document.getElementById('proofMsg');if(e)e.textContent=t||'';}
+function shrinkImage(file){return new Promise(function(res,rej){
+  const fr=new FileReader();
+  fr.onerror=function(){rej(new Error('تعذّرت قراءة الملف'));};
+  fr.onload=function(){const img=new Image();
+    img.onerror=function(){rej(new Error('الملف ليس صورة صالحة'));};
+    img.onload=function(){let w=img.width,h=img.height;const m=Math.max(w,h);
+      if(m>PROOF_DIM){w=Math.round(w*PROOF_DIM/m);h=Math.round(h*PROOF_DIM/m);}
+      const c=document.createElement('canvas');c.width=w;c.height=h;
+      const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,w,h);x.drawImage(img,0,0,w,h);
+      let q=.72,out=c.toDataURL('image/jpeg',q);
+      while(out.length>860000&&q>.28){q-=.12;out=c.toDataURL('image/jpeg',q);}
+      if(out.length>880000){rej(new Error('الصورة كبيرة جدًا — جرّبي صورة أصغر'));return;}
+      res(out);};
+    img.src=fr.result;};
+  fr.readAsDataURL(file);});}
+async function proofPick(inp){const files=Array.prototype.slice.call(inp.files||[]);inp.value='';
+  if(!files.length)return;
+  if(supMode||!student.id){toast('⚠️ هذه الخاصية للطالبة بعد تسجيل الدخول');return;}
+  if(!sb){toast('⚠️ لا يوجد اتصال بقاعدة البيانات — حاولي لاحقًا');return;}
+  for(let i=0;i<files.length;i++){const f=files[i];
+    if(PROOFS.length>=PROOF_MAX){toast('⚠️ الحد الأقصى ٦ صور — احذفي صورة أولًا');break;}
+    if(!/^image\//.test(f.type)){toast('⚠️ يُقبل رفع الصور فقط');continue;}
+    proofMsg('⏳ جارٍ رفع «'+f.name+'»…');
+    try{const data=await shrinkImage(f);
+      const r=await sb.rpc(SB_RPC.addProof,{p_uid:student.id,p_name:f.name,p_data:data});
+      if(r&&r.error)throw r.error;
+      PROOFS.push({id:r.data,name:f.name,data:data,created_at:new Date().toISOString()});
+      renderProofs();toast('✅ تم رفع الصورة');}
+    catch(e){toast('⚠️ '+((e&&e.message)||'تعذّر الرفع'));}}
+  proofMsg('');}
+async function loadProofs(){const card=document.getElementById('proofCard');if(!card)return;
+  if(supMode){card.style.display='none';return;}
+  card.style.display='';
+  if(!student.id){PROOFS=[];renderProofs();proofMsg('سجّلي الدخول لرفع الإثبات');return;}
+  if(!sb){proofMsg('⚠️ تعذّر الاتصال بقاعدة البيانات');return;}
+  proofMsg('⏳ جارٍ التحميل…');
+  try{const r=await sb.rpc(SB_RPC.myProofs,{p_uid:student.id});if(r&&r.error)throw r.error;
+    PROOFS=r.data||[];proofMsg('');}
+  catch(e){proofMsg('⚠️ تعذّر تحميل الصور');}
+  renderProofs();}
+function renderProofs(){const g=document.getElementById('proofGrid');if(!g)return;
+  if(!PROOFS.length){g.innerHTML='<div style="color:var(--muted);font-size:13px">لا توجد صور مرفوعة بعد.</div>';return;}
+  g.innerHTML=PROOFS.map(function(p){return '<div style="position:relative;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#fff">'+
+    '<img src="'+p.data+'" alt="'+escH(p.name)+'" style="width:100%;height:120px;object-fit:cover;cursor:zoom-in" onclick="viewProof(&quot;'+p.id+'&quot;)">'+
+    '<div style="padding:6px 8px;font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+escH(p.name)+'</div>'+
+    '<button class="btn btn-sm" style="position:absolute;top:6px;left:6px;background:#FFE9E0;color:#E0593C;font-weight:800;padding:2px 8px" title="حذف الصورة" onclick="delProof(&quot;'+p.id+'&quot;)">🗑️</button></div>';}).join('');}
+async function delProof(id){if(!confirm('حذف هذه الصورة نهائيًا؟'))return;
+  try{const r=await sb.rpc(SB_RPC.delProof,{p_uid:student.id,p_id:id});if(r&&r.error)throw r.error;
+    PROOFS=PROOFS.filter(function(p){return p.id!==id;});renderProofs();toast('🗑️ تم حذف الصورة');}
+  catch(e){toast('⚠️ تعذّر الحذف — حاولي مجددًا');}}
+function viewProof(id){const p=PROOFS.filter(function(x){return x.id===id;})[0]||SUP_PROOFS.filter(function(x){return x.id===id;})[0];
+  if(!p)return;document.getElementById('proofViewImg').src=p.data;document.getElementById('proofViewOv').classList.add('show');}
+function closeProofView(){document.getElementById('proofViewOv').classList.remove('show');document.getElementById('proofViewImg').src='';}
+async function viewProofs(uid,name){if(!supUnlocked){askSupPass(function(){viewProofs(uid,name);});return;}
+  const ov=document.getElementById('supProofOv'),b=document.getElementById('supProofBody');
+  document.getElementById('supProofName').textContent=name||uid;
+  b.innerHTML='<div style="color:var(--muted)">⏳ جارٍ التحميل…</div>';ov.classList.add('show');
+  if(!sb){b.innerHTML='<div style="color:#E0593C">⚠️ لا يوجد اتصال بقاعدة البيانات</div>';return;}
+  try{const r=await sb.rpc(SB_RPC.proofsFor,{p_pass:SUP_PASS,p_uid:uid});if(r&&r.error)throw r.error;
+    SUP_PROOFS=r.data||[];
+    b.innerHTML=SUP_PROOFS.length?('<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px">'+
+      SUP_PROOFS.map(function(p){return '<div style="border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#fff">'+
+        '<img src="'+p.data+'" style="width:100%;height:130px;object-fit:cover;cursor:zoom-in" onclick="viewProof(&quot;'+p.id+'&quot;)">'+
+        '<div style="padding:6px 8px;font-size:11px;color:var(--muted)">'+new Date(p.created_at).toLocaleDateString('ar-EG')+'</div></div>';}).join('')+'</div>')
+      :'<div style="color:var(--muted)">لم ترفع الطالبة أي إثبات بعد.</div>';}
+  catch(e){b.innerHTML='<div style="color:#E0593C">⚠️ تعذّر تحميل الصور</div>';}}
+function closeSupProof(){document.getElementById('supProofOv').classList.remove('show');}
+
 /* ════ Init ════ */
-initSB();initAudio();loadGate();loadAnswers();loadPosts();
+initSB();loadRoster();initAudio();loadGate();loadAnswers();loadPosts();
+setTimeout(function(){sbFlushPending();},1500);
+window.addEventListener('online',function(){sbFlushPending();});
 (function(){if(gate.readSyl){const c=document.getElementById('sylCheck');if(c){c.classList.add('done');c.textContent='✓';document.getElementById('sylTask').classList.add('done');}}})();
 buildPath();renderDay();buildMap();buildFaq();updateHome();fillFilters();renderPosts();
 if(document.getElementById('loginOv').classList.contains('show'))startLoginFX();
