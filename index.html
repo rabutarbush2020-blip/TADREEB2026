@@ -517,7 +517,7 @@ input[type=checkbox]{accent-color:var(--teal);width:auto}
   .greet{gap:var(--s3)}
 }
 
-@media print{.sidebar,.topbar,.toast,.ov,.tabbar{display:none !important}.content{max-width:none;padding-bottom:0}}
+
 
 
 /* ═══════════ طبقة الحيوية البصرية ═══════════ */
@@ -743,6 +743,62 @@ textarea:focus,input:focus,select:focus{background:#fff;border-color:var(--teal-
   .card,.glass,.stat,.qa,.post,.tl li,.act li,.ms li,.login-card,.note,.topbar,.tabbar{background:rgba(255,255,255,.94)}
 }
 
+/* ══════════ وضوح الهاتف ══════════ */
+@media(max-width:880px){
+  /* أسطح أكثر تعتيمًا = نصّ أوضح على شاشة الجوّال */
+  .card,.glass,.stat,.qa,.post,.tl li,.act li,.ms li,.mbody,.tmpl,.note,.login-card{
+    background:rgba(255,255,255,.93);border-color:rgba(255,255,255,.98)}
+  .topbar{background:rgba(255,255,255,.96)}
+  .tabbar{background:rgba(255,255,255,.98)}
+  textarea,input,select{background:#fff}
+  :root{--muted:#4E6067}
+  .stat{min-height:82px}
+  .stat-v{font-size:22px}
+  .stat-l{font-size:12.5px;line-height:1.45}
+  .greet-sub{font-size:15px;color:var(--ink)}
+  .qa-s{font-size:13px}
+  .feature p{color:rgba(255,255,255,.9)}
+  .now-fact dt{color:rgba(255,255,255,.78)}
+}
+/* حجاب القائمة الجانبية */
+.nav-backdrop{display:none;position:fixed;inset:0;z-index:55;background:rgba(14,34,44,.45);
+  -webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
+.nav-backdrop.show{display:block;animation:enter .18s var(--ease)}
+@media(min-width:881px){.nav-backdrop{display:none !important}}
+
+/* ══════════ طبقة العمق ══════════ */
+.card,.glass,.stat,.qa,.post,.note,.tl li,.ms li{
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.9) inset,
+    0 1px 2px rgba(20,40,50,.05),
+    0 4px 10px -6px rgba(20,40,50,.14),
+    0 14px 30px -18px rgba(20,40,50,.22)}
+.stat:hover,.qa:hover,.card:hover{
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.95) inset,
+    0 2px 4px rgba(20,40,50,.06),
+    0 10px 20px -8px rgba(20,40,50,.18),
+    0 26px 46px -22px rgba(20,40,50,.3)}
+/* أيقونات ناتئة */
+.stat-ic,.qa-ic,.tl .tl-mark,.ms .ms-i,.note-av{
+  box-shadow:0 1px 0 rgba(255,255,255,.75) inset,0 3px 8px -3px rgba(20,40,50,.28)}
+/* دوائر الأيام بارزة */
+.dcirc{box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 4px 10px -4px rgba(20,40,50,.25)}
+.dnode.active .dcirc{box-shadow:0 2px 0 rgba(255,255,255,.18) inset,0 10px 20px -8px rgba(14,42,54,.75)}
+/* ميلان خفيف مع المؤشّر — على الأجهزة ذات الفأرة فقط */
+@media(hover:hover) and (pointer:fine){
+  .qa,.stat{transform-style:preserve-3d;transition:transform .25s var(--ease),box-shadow .25s var(--ease),background .2s}
+  .qa:hover{transform:translateY(-4px) rotateX(4deg) rotateY(-3deg)}
+  .stat:hover{transform:translateY(-3px) rotateX(3deg)}
+  .qa:active,.stat:active{transform:translateY(-1px)}
+}
+/* عمق بطاقة التقدّم */
+.feature{box-shadow:0 1px 0 rgba(255,255,255,.16) inset,0 10px 24px -12px rgba(12,40,52,.5),0 34px 60px -30px rgba(12,40,52,.65)}
+.feature-num span{filter:drop-shadow(0 4px 14px rgba(127,227,212,.35))}
+.btn-primary,.btn-pink{box-shadow:0 1px 0 rgba(255,255,255,.22) inset,0 8px 18px -8px rgba(20,40,50,.45)}
+.btn-primary:active,.btn-pink:active{box-shadow:0 1px 0 rgba(255,255,255,.15) inset,0 3px 8px -5px rgba(20,40,50,.5)}
+
+@media print{.sidebar,.topbar,.toast,.ov,.tabbar,.nav-backdrop{display:none !important}.content{max-width:none;padding-bottom:0}}
 </style>
 </head>
 <body>
@@ -817,7 +873,7 @@ textarea:focus,input:focus,select:focus{background:#fff;border-color:var(--teal-
   <!-- Main -->
   <div class="main">
     <div class="topbar">
-      <button class="menu-tg" aria-label="فتح القائمة" onclick="document.getElementById('sidebar').classList.toggle('open')"><svg viewBox="0 0 24 24"><use href="#ic-menu"/></svg></button>
+      <button class="menu-tg" aria-label="فتح القائمة" onclick="openMore()"><svg viewBox="0 0 24 24"><use href="#ic-menu"/></svg></button>
       <div style="position:relative">
         <button class="icon-btn" style="background:var(--sand);border-color:var(--line);color:var(--navy)" onclick="toggleAudioPop()" title="إعدادات الصوت" aria-label="إعدادات الصوت"><svg viewBox="0 0 24 24"><use href="#ic-sound"/></svg></button>
         <div class="audio-pop" id="audioPop">
@@ -1160,12 +1216,13 @@ textarea:focus,input:focus,select:focus{background:#fff;border-color:var(--teal-
   </div>
 </div>
 
+<div class="nav-backdrop" id="navBackdrop" onclick="closeSidebar()"></div>
 <nav class="tabbar" id="tabbar" aria-label="التنقل السريع">
   <button data-v="home" onclick="go('home',null)"><svg viewBox="0 0 24 24"><use href="#ic-home"/></svg>الرئيسية</button>
   <button data-v="week" onclick="go('week',null)"><svg viewBox="0 0 24 24"><use href="#ic-route"/></svg>مسار الأسبوع</button>
   <button data-v="guide" onclick="go('guide',null)"><svg viewBox="0 0 24 24"><use href="#ic-book"/></svg>الدليل</button>
   <button data-v="forms" onclick="go('forms',null)"><svg viewBox="0 0 24 24"><use href="#ic-doc"/></svg>النماذج</button>
-  <button data-v="community" onclick="go('community',null)"><svg viewBox="0 0 24 24"><use href="#ic-board"/></svg>التواصل</button>
+  <button data-v="more" onclick="openMore()" aria-label="كل الأقسام"><svg viewBox="0 0 24 24"><use href="#ic-menu"/></svg>المزيد</button>
 </nav>
 <div class="toast" id="toast"></div>
 
@@ -1174,7 +1231,7 @@ const ar=n=>Number(n).toLocaleString('ar-EG');
 let toastT;
 function toggleEye(id,btn){const i=document.getElementById(id);i.type=i.type==='password'?'text':'password';btn.textContent=i.type==='password'?'👁':'🔒';}
 function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),2700);}
-function closeSidebar(){document.getElementById('sidebar').classList.remove('open');}
+function closeSidebar(){document.getElementById('sidebar').classList.remove('open');var b=document.getElementById('navBackdrop');if(b)b.classList.remove('show');}
 
 /* ════ Supabase (central save — optional) ════ */
 const SB_CONFIG={url:'https://dzjharsysqfchgobifdk.supabase.co',key:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR6amhhcnN5c3FmY2hnb2JpZmRrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODcxMzY4NzEsImV4cCI6MjEwMjcxMjg3MX0.73uNnmS_e1xALIRbHIMSYLMYTWYb9H7DSzteP1PKZHI'};
@@ -1992,7 +2049,7 @@ function renderHome(){
   strip.innerHTML=
     statCard('ic-route','navy',ar(cd.n)+' من '+ar(days.length),'يومك التدريبي')+
     statCard('ic-check','',ar(st.dn)+' من '+ar(st.tot),'مهام الأسبوع')+
-    statCard('ic-pen','gold',ar(st.written)+' من '+ar(days.length),'أيام دوّنتِ ملاحظاتها')+
+    statCard('ic-pen','gold',ar(st.written)+' من '+ar(days.length),'أيام بملاحظات')+
     statCard('ic-flag',st.finished?'':'warn',ar(st.finished)+' من '+ar(days.length),'أيام أنهيتِها');
 
   /* بطاقة التقدّم */
@@ -2099,6 +2156,8 @@ function renderHomeSupervisor(){
 }
 
 /* شريط التنقل السفلي */
+function openMore(){const sb=document.getElementById('sidebar');if(sb)sb.classList.add('open');
+  const bd=document.getElementById('navBackdrop');if(bd)bd.classList.add('show');}
 function syncTabbar(name){const tb=document.getElementById('tabbar');if(!tb)return;
   Array.prototype.forEach.call(tb.querySelectorAll('button'),function(b){b.classList.toggle('on',b.dataset.v===name);});}
 
