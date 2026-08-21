@@ -533,6 +533,9 @@ label{font-weight:800;font-size:13px;display:block;margin-bottom:6px}
 
       <!-- ═══ FORMS ═══ -->
       <div class="view" id="v-forms">
+        <!-- ═══ أُزيلت بطاقة «إثبات المباشرة» بطلب المستخدمة (2026-08-21) ═══
+             لإعادتها: أزيلي تعليق الكتلة التالية، وأعيدي زرّ 📸 في جدول لوحة المتابعة.
+             دوال الصور وقاعدة بياناتها ما زالت موجودة وتعمل.
         <div class="card card-3d" id="proofCard" style="margin-bottom:14px">
           <div class="card-title">📸 إثبات المباشرة</div>
           <p style="margin:6px 0 12px;color:var(--muted);font-size:13px">ارفعي صورة خطاب المباشرة أو ما يثبت بدء تدريبك. تُصغَّر الصورة تلقائيًا وتُحفظ في قاعدة البيانات لتراها المشرفة الأكاديمية. الحد الأقصى ٦ صور، ويمكنكِ حذف أي صورة وإضافة غيرها في أي وقت.</p>
@@ -544,6 +547,7 @@ label{font-weight:800;font-size:13px;display:block;margin-bottom:6px}
           </div>
           <div id="proofGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-top:12px"></div>
         </div>
+        ═══ نهاية الكتلة المعطّلة ═══ -->
         <div class="grid g2">
           <div class="card card-3d"><div class="card-title">📄 نموذج التقرير اليومي</div>
             <div class="tmpl" id="tDaily" style="margin-top:10px"><button class="copy" onclick="cpy('tDaily')">📋 نسخ</button>📅 التاريخ: ______
@@ -704,8 +708,13 @@ label{font-weight:800;font-size:13px;display:block;margin-bottom:6px}
         <option>مدرسة آمنة بنت وهب الثانوية</option>
         <option>مدرسة الفلاح الابتدائية</option>
         <option>مدرسة حطين</option>
+        <option>نوفر</option>
       </select>
       <div class="lerr" id="lErr">الرجاء تعبئة الحقول المطلوبة (الرقم الجامعي ٦ أرقام على الأقل).</div></div>
+    <div class="lf"><label>📧 البريد الجامعي <span style="font-weight:400;color:var(--muted);font-size:11px">(اختياري)</span></label>
+      <input id="lEmail" type="email" dir="ltr" style="text-align:left" placeholder="example@qu.edu.qa" onkeydown="if(event.key==='Enter')doLogin()">
+      <div style="font-size:10.5px;color:var(--muted);margin-top:4px">إن كتبتِه وصلكِ إشعار على بريدك عند ردّ المشرفة على ملاحظاتك — ويمكنكِ تركه فارغًا ورؤية الردّ داخل التطبيق.</div>
+      <div class="lerr" id="eErr">الرجاء كتابة بريد إلكتروني صحيح.</div></div>
     <input type="hidden" id="lSup" value="">
     <label for="lConsent" style="display:flex;gap:9px;align-items:flex-start;text-align:right;background:rgba(86,66,184,.06);border:1.5px solid rgba(86,66,184,.2);border-radius:14px;padding:11px 12px;margin:4px 0 12px;cursor:pointer;font-size:11.5px;line-height:1.75;color:var(--ink)">
       <input type="checkbox" id="lConsent" style="width:17px;height:17px;min-width:17px;margin-top:2px;accent-color:#5642B8;cursor:pointer">
@@ -735,12 +744,12 @@ const SB_CONFIG={url:'https://dzjharsysqfchgobifdk.supabase.co',key:'eyJhbGciOiJ
 /* ════ سجل الأسماء المحلي (دفتر ثابت) ════
    يحفظ اسم كل طالبة دخلت من هذا الجهاز حفظًا دائمًا، ولا يُمسح عند الخروج
    ولا عند إغلاق المتصفح — حتى لو تعذّر الاتصال بقاعدة البيانات. */
-const SB_RPC={saveStudent:'guide_save_student',saveAnswers:'guide_save_answers',get:'guide_get',list:'guide_list',note:'guide_note',del:'guide_delete',addProof:'guide_add_proof',myProofs:'guide_my_proofs',delProof:'guide_del_proof',proofCounts:'guide_proof_counts',proofsFor:'guide_proofs_for',consent:'guide_consent'};
+const SB_RPC={saveStudent:'guide_save_student',saveAnswers:'guide_save_answers',get:'guide_get',list:'guide_list',note:'guide_note',del:'guide_delete',addProof:'guide_add_proof',myProofs:'guide_my_proofs',delProof:'guide_del_proof',proofCounts:'guide_proof_counts',proofsFor:'guide_proofs_for',consent:'guide_consent',reply:'guide_reply',seen:'guide_seen'};
 let ROSTER={};
 function loadRoster(){try{const r=JSON.parse(localStorage.getItem('rafiqaRoster'));if(r&&typeof r==='object')ROSTER=r;}catch(e){}}
 function saveRoster(){try{localStorage.setItem('rafiqaRoster',JSON.stringify(ROSTER));}catch(e){}}
 function rosterAdd(o){if(!o||!o.id)return;const p=ROSTER[o.id]||{};
-  ROSTER[o.id]={uid:o.id,name:o.name||p.name||'طالبة',org:o.org||p.org||'—',sup:o.sup||p.sup||'',at:new Date().toISOString(),synced:p.synced===true};saveRoster();}
+  ROSTER[o.id]={uid:o.id,name:o.name||p.name||'طالبة',org:o.org||p.org||'—',sup:o.sup||p.sup||'',email:o.email||p.email||'',at:new Date().toISOString(),synced:p.synced===true};saveRoster();}
 function rosterSynced(uid,ok){if(ROSTER[uid]){ROSTER[uid].synced=!!ok;saveRoster();}}
 function rosterPending(){return Object.keys(ROSTER).map(k=>ROSTER[k]).filter(r=>!r.synced);}
 /* أرشيف التأمّلات محليًا لكل رقم جامعي — لا يُمسح عند دخول طالبة أخرى */
@@ -763,7 +772,7 @@ function supLogin(){askSupPass(function(){
 let sb=null;
 function initSB(){try{if(SB_CONFIG.url&&SB_CONFIG.key&&window.supabase){sb=window.supabase.createClient(SB_CONFIG.url,SB_CONFIG.key);console.log('✅ Supabase متصل');}}catch(e){}}
 async function sbStudent(){if(!student.id)return false;rosterAdd(student);if(!sb)return false;
-  try{const r=await sb.rpc(SB_RPC.saveStudent,{p_uid:student.id,p_name:student.name,p_org:student.org||'',p_sup:student.sup||''});
+  try{const r=await sb.rpc(SB_RPC.saveStudent,{p_uid:student.id,p_name:student.name,p_org:student.org||'',p_sup:student.sup||'',p_email:student.email||''});
     if(r&&r.error)throw r.error;rosterSynced(student.id,true);return true;}
   catch(e){rosterSynced(student.id,false);console.warn('تعذّر حفظ اسم الطالبة مركزيًا — حُفظ محليًا وسيُعاد إرساله:',e&&e.message);return false;}}
 async function sbConsent(){if(!sb||!student.id)return;
@@ -771,7 +780,7 @@ async function sbConsent(){if(!sb||!student.id)return;
 /* إعادة إرسال الأسماء التي لم تُحفظ في قاعدة البيانات بعد */
 async function sbFlushPending(){if(!sb)return;const list=rosterPending();
   for(let i=0;i<list.length;i++){const r=list[i];
-    try{const q=await sb.rpc(SB_RPC.saveStudent,{p_uid:r.uid,p_name:r.name,p_org:r.org||'',p_sup:r.sup||''});
+    try{const q=await sb.rpc(SB_RPC.saveStudent,{p_uid:r.uid,p_name:r.name,p_org:r.org||'',p_sup:r.sup||'',p_email:r.email||''});
       if(q&&q.error)throw q.error;rosterSynced(r.uid,true);
       const lr=localReflect(r.uid);
       if(lr&&Object.keys(lr).length){await sb.rpc(SB_RPC.saveAnswers,{p_uid:r.uid,p_reflect:lr,p_progress:null});}
@@ -784,15 +793,20 @@ async function sbLoadProgress(){if(!sb||!student.id)return;try{const r=await sb.
   if(d){let ch=false;
     if(d.reflect&&Object.keys(d.reflect).length){answers.reflect=d.reflect;ch=true;}
     if(d.progress&&Object.keys(d.progress).length){stateFromJSON(d.progress);ch=true;}
-    if(d.sup_note&&d.sup_note.text){applySupNote(d.sup_note);toast('💬 لديكِ ردّ من المشرفة الأكاديمية');}
+    if(d.sup_note&&d.sup_note.text){applySupNote(d.sup_note);}
+    if(d.replies&&typeof d.replies==='object'){REPLIES=d.replies;ch=true;
+      var _un=Object.keys(REPLIES).filter(function(k){return REPLIES[k]&&REPLIES[k].text&&!REPLIES[k].seen;});
+      if(_un.length){toast('💬 لديكِ '+ar(_un.length)+' ردّ جديد من المشرفة على ملاحظاتك');
+        var _hn=document.getElementById('homeNotif');if(_hn)_hn.textContent='💬 ردّ جديد من المشرفة على ملاحظاتك';
+        sbSeen();}}
     if(ch){try{localStorage.setItem('rafiqaAnswers',JSON.stringify(answers));localStorage.setItem('rafiqaState',JSON.stringify(stateToJSON()));}catch(e){}saveLocalReflect();refreshWeek();}}}catch(e){console.warn('تعذّر جلب بيانات الطالبة:',e&&e.message);}}
 async function sbFetchAll(){if(!sb)return null;
   try{const r=await sb.rpc(SB_RPC.list,{p_pass:SUP_PASS});
     if(r&&r.error)throw r.error;
-    const rows=(r&&r.data)||[];const am={},nm={},pf={};
-    rows.forEach(a=>{am[a.uid]=a.reflect||{};nm[a.uid]=a.sup_note||null;});
+    const rows=(r&&r.data)||[];const am={},nm={},pf={},rpm={},emm={};
+    rows.forEach(a=>{am[a.uid]=a.reflect||{};nm[a.uid]=a.sup_note||null;rpm[a.uid]=a.replies||{};emm[a.uid]=a.email||'';});
     try{const c=await sb.rpc(SB_RPC.proofCounts,{p_pass:SUP_PASS});((c&&c.data)||[]).forEach(x=>{pf[x.uid]=Number(x.n)||0;});}catch(e){}
-    return {students:rows.map(s=>({uid:s.uid,name:s.name,org:s.org,sup:s.sup,consent:s.consent_at||null,updated_at:s.updated_at})),answers:am,notes:nm,proofs:pf};}
+    return {students:rows.map(s=>({uid:s.uid,name:s.name,org:s.org,sup:s.sup,consent:s.consent_at||null,updated_at:s.updated_at})),answers:am,notes:nm,proofs:pf,replies:rpm,emails:emm};}
   catch(e){console.warn('تعذّر جلب بيانات الطالبات من قاعدة البيانات:',e&&e.message);return null;}}
 async function saveSupNote(uid){var inp=document.getElementById('supNoteIn');var v=(inp?inp.value:'').trim();var note={text:v,at:new Date().toISOString()};
   if(SUP_CACHE){if(!SUP_CACHE.notes)SUP_CACHE.notes={};SUP_CACHE.notes[uid]=note;}
@@ -871,15 +885,15 @@ function toggleSyl(){gate.readSyl=!gate.readSyl;saveGate();const c=document.getE
 
 /* ════ Week data ════ */
 const days=[
- {n:1,name:'اليوم الأول',dow:'الأحد',sub:'التعارف والمباشرة · ٦ ساعات',
+ {n:1,name:'اليوم الأول',dow:'الأحد',date:'٣٠ أغسطس',sub:'التعارف والمباشرة · ٦ ساعات',
   tip:'يومك الأول للتعارف والمباشرة. عرّفي بنفسك، تعرّفي على المؤسسة ومشرفتك، واستكشفي بيئة العمل، وأثبتي مباشرتك.',
   tasks:[{t:'التعرّف إلى المؤسسة وأقسامها والفئة المستفيدة'},{t:'التعرّف إلى المشرف/ة الميداني/ة وتحديد دورك'},{t:'استكشاف بيئة العمل'},{t:'رفع نموذج الحضور / إثبات المباشرة',up:1}],
   reflect:'صفي بموضوعية ما لفت انتباهك في مؤسستك اليوم.'},
- {n:2,name:'اليوم الثاني',dow:'الثلاثاء',sub:'الملاحظة والأدوار · ٦ ساعات',
+ {n:2,name:'اليوم الثاني',dow:'الثلاثاء',date:'١ سبتمبر',sub:'الملاحظة والأدوار · ٦ ساعات',
   tip:'راقبي بيئة العمل بهدوء وسجّلي ملاحظاتك بموضوعية، واتفقي مع مشرفتك على دورك وحدوده، وابدئي خطة تعلّم شخصية.',
   tasks:[{t:'تسجيل الملاحظات الأولية بموضوعية'},{t:'الإجابة عن الأسئلة التأمّلية'},{t:'تحديد الأدوار والمسؤوليات مع المشرفة'},{t:'إعداد خطة تعلّم شخصية'}],
   reflect:'صفي بموضوعية موقفًا مهنيًا لاحظتِه اليوم وما تعلّمتِه منه.'},
- {n:3,name:'اليوم الثالث',dow:'الخميس',sub:'التقييم والتقرير · ٦ ساعات',
+ {n:3,name:'اليوم الثالث',dow:'الخميس',date:'٣ سبتمبر',sub:'التقييم والتقرير · ٦ ساعات',
   tip:'اختمي أسبوعك بتقييم التحديات وطلب الدعم، ثم اكتبي تقريرًا انعكاسيًا وجهّزي تقريرك الأسبوعي لبلاك بورد.',
   tasks:[{t:'تقييم التحديات الأولى وطلب الدعم'},{t:'كتابة تقرير انعكاسي قصير'},{t:'تعبئة نموذج التقرير الأسبوعي'},{t:'جدولة رفع التقرير في بلاك بورد (الخميس ١١:٥٥م)',up:1}],
   reflect:'بجملة موضوعية: كيف تصفين تجربة أسبوعك الأول؟'}
@@ -900,20 +914,20 @@ function buildPath(){const w=document.getElementById('daypath');w.innerHTML='';
     const node=document.createElement('div');const done=!!state.fin[d.n];
     node.className='dnode'+(d.n===state.cur?' active':'')+(done?' done':'');
     node.onclick=()=>{const prev=state.cur;state.cur=d.n;if(prev!==d.n){sfxMove();persist();}buildPath();renderDay();};
-    node.innerHTML=`<div class="dcirc">${done?'✓':ar(d.n)}</div><div class="dlbl">${d.dow}</div><div class="dsub">${d.name}</div>`;w.appendChild(node);});}
+    node.innerHTML=`<div class="dcirc">${done?'✓':ar(d.n)}</div><div class="dlbl">${d.dow}</div><div class="dsub">${d.date}</div>`;w.appendChild(node);});}
 function renderDay(){const d=days.find(x=>x.n===state.cur);const set=state.done[d.n]||(state.done[d.n]=new Set());
   let tasks='';d.tasks.forEach((t,i)=>{tasks+=`<div class="task${set.has(i)?' done':''}" onclick="toggleTask(${d.n},${i})"><div class="tcheck">${set.has(i)?'✓':''}</div><span class="tt">${t.t}</span>${t.up?`<span class="chip pink" onclick="event.stopPropagation();toast('📎 نافذة رفع الملف (تجريبي)')">📎 رفع</span>`:''}</div>`;});
   const faces=['😣','😕','🙂','😊','🤩'],labels=['صعب','مربك','مقبول','جيد','ممتاز'];
   let q='';['فهمي للمهام','اندماجي في البيئة','مستوى التحدي'].forEach((qq,qi)=>{let r='';faces.forEach((f,fi)=>{r+=`<div class="face${state.quiz[d.n+'-'+qi]===fi?' sel':''}" onclick="setQuiz(${d.n},${qi},${fi})">${f}<span>${labels[fi]}</span></div>`;});q+=`<div style="margin-bottom:12px"><div style="font-weight:700;font-size:13px;margin-bottom:7px">${qi+1}) ${qq}</div><div class="faces">${r}</div></div>`;});
   document.getElementById('dayPanel').innerHTML=`
    <div class="card card-3d" style="background:var(--purple-soft)">
-     <div><div style="font-weight:900;color:var(--purple-d);margin-bottom:3px">🧭 إرشاد اليوم</div><div style="font-size:13px">${d.tip}</div></div>
+     <div><div style="font-weight:900;color:var(--purple-d);margin-bottom:3px">🧭 إرشاد ${d.name} · ${d.dow} ${d.date}</div><div style="font-size:13px">${d.tip}</div></div>
    </div>
    <div class="grid g2">
-     <div class="card card-3d"><div class="card-title">✅ مهام ${d.name} · ${d.dow} <span style="font-size:11px;font-weight:400;color:var(--muted)">(اختيارية)</span></div><div style="margin-top:10px">${tasks}</div></div>
-     <div class="card card-3d"><div class="card-title">💭 تأمّل اليوم</div><div style="font-size:11px;color:var(--muted);margin:6px 0">لا توجد إجابة صحيحة أو خاطئة. المطلوب وصف تجربتك المهنية كما عشتها داخل المؤسسة التدريبية، بشكل مختصر. <b>الإجابة اختيارية</b>، ويمكنكِ الاكتفاء بالتقييم الذاتي أدناه دون الكتابة.</div><label>${d.reflect}</label><textarea rows="5" oninput="saveReflect(${d.n},this.value)" placeholder="اختياري — اكتبي بموضوعية واختصار...">${(answers.reflect[d.n]||'').replace(/</g,'&lt;')}</textarea><div style="font-size:11px;color:var(--purple-d);margin-top:5px">💾 يُحفظ تلقائيًا</div></div>
+     <div class="card card-3d"><div class="card-title">✅ مهام ${d.name} · ${d.dow} ${d.date} <span style="font-size:11px;font-weight:400;color:var(--muted)">(اختيارية)</span></div><div style="margin-top:10px">${tasks}</div></div>
+     <div class="card card-3d"><div class="card-title">📝 ملاحظات اليوم</div><div style="font-size:11px;color:var(--muted);margin:6px 0">اكتبي ملاحظاتك عن يومك التدريبي — ما لاحظتِه أو واجهتِه أو أردتِ سؤال المشرفة عنه. <b>الكتابة اختيارية</b>، وتطّلع عليها المشرفة الأكاديمية وقد تردّ عليكِ هنا.</div><label>${d.reflect}</label><textarea rows="5" oninput="saveReflect(${d.n},this.value)" placeholder="اختياري — اكتبي بموضوعية واختصار...">${(answers.reflect[d.n]||'').replace(/</g,'&lt;')}</textarea><div style="font-size:11px;color:var(--purple-d);margin-top:5px">💾 يُحفظ تلقائيًا</div>${replyBox(d.n)}</div>
    </div>
-   <div class="card card-3d"><div class="card-title">📊 التقييم الذاتي السريع — نهاية ${d.name} · ${d.dow}</div><div style="margin-top:12px">${q}</div>
+   <div class="card card-3d"><div class="card-title">📊 التقييم الذاتي السريع — نهاية ${d.name} · ${d.dow} ${d.date}</div><div style="margin-top:12px">${q}</div>
      <button class="btn btn-primary" onclick="finishDay(${d.n})">إنهاء اليوم</button></div>`;}
 function toggleTask(n,i){const set=state.done[n]||(state.done[n]=new Set());if(set.has(i))set.delete(i);else{set.add(i);sfxTask();toast('✅ أحسنتِ!');}renderDay();buildPath();updateHome();persist();}
 function setQuiz(n,qi,fi){state.quiz[n+'-'+qi]=fi;renderDay();persist();}
@@ -1010,7 +1024,7 @@ function updateNotif(){/* simple interaction counter (demo) */}
 /* ════ Indicators (qualitative, no scores) ════ */
 const POS=['تعلّمت','تعلمت','استفدت','تعاون','مبادرة','بادرت','ثقة','لاحظت','فهمت','أنجزت','هدف','خطة','تواصل','فريق','دور'];
 const CHAL=['صعوبة','صعب','تحدي','قلق','مرتبكة','خوف','غياب','مشكلة','حيرة','توتر','لم'];
-const ORGS=['مدرسة الإسراء','مدرسة النهضة','مدرسة هاجر','مدرسة خولة بنت الأزور','مؤسسة حمد','مدرسة هند بنت أبي سفيان','مدرسة آمنة بنت وهب الثانوية','مدرسة الفلاح الابتدائية','مدرسة حطين'];
+const ORGS=['مدرسة الإسراء','مدرسة النهضة','مدرسة هاجر','مدرسة خولة بنت الأزور','مؤسسة حمد','مدرسة هند بنت أبي سفيان','مدرسة آمنة بنت وهب الثانوية','مدرسة الفلاح الابتدائية','مدرسة حطين','نوفر'];
 function levelTag(v){return v==='مرتفع'?'<span class="lvl high">مرتفع</span>':v==='متوسط'?'<span class="lvl mid">متوسط</span>':'<span class="lvl low">يحتاج دعمًا</span>';}
 function computeInd(reflect){reflect=reflect||{};
   const txt=Object.values(reflect).join(' ');
@@ -1044,13 +1058,21 @@ function viewReflect(uid){
   if(SUP_CACHE&&SUP_CACHE.students&&SUP_CACHE.students.length){var s=SUP_CACHE.students.find(x=>x.uid===uid);
     if(s){name=s.name||name;org=s.org||org;var rr=SUP_CACHE.answers&&SUP_CACHE.answers[uid];if(rr&&Object.keys(rr).length)reflect=rr;}}
   if(!lr&&student.id===uid&&(!SUP_CACHE||!SUP_CACHE.students||!SUP_CACHE.students.length)){name=student.name;org=student.org;reflect=answers.reflect;}
-  var labels=['اليوم الأول · الأحد','اليوم الثاني · الثلاثاء','اليوم الثالث · الخميس'];
+  var labels=['اليوم الأول · الأحد ٣٠ أغسطس','اليوم الثاني · الثلاثاء ١ سبتمبر','اليوم الثالث · الخميس ٣ سبتمبر'];
   var html='<div style="font-size:13px;color:var(--muted);margin-bottom:14px">👩‍🎓 <b>'+name+'</b>'+(org?' · '+org:'')+' — للمتابعة والدعم، وليست للتقييم.</div>';
-  [1,2,3].forEach(function(d,i){var t=(reflect[d]||'').toString().trim();
-    html+='<div style="margin-bottom:12px"><div style="font-weight:800;color:var(--purple-d);font-size:13px;margin-bottom:5px">💭 '+labels[i]+'</div><div style="background:rgba(255,255,255,.6);border:1px solid var(--line);border-radius:12px;padding:11px 13px;font-size:13.5px;line-height:1.85;white-space:pre-wrap">'+(t?t.replace(/</g,'&lt;'):'<span style="color:var(--muted)">— لم تكتب الطالبة تأمّلها بعد —</span>')+'</div></div>';});
+  var _rp=(SUP_CACHE&&SUP_CACHE.replies&&SUP_CACHE.replies[uid])||{};
+  [1,2,3].forEach(function(d,i){var t=(reflect[d]||'').toString().trim();var rp=_rp[d]||null;
+    html+='<div style="margin-bottom:14px;border:1px solid var(--line);border-radius:14px;padding:11px 13px;background:rgba(255,255,255,.45)">'
+      +'<div style="font-weight:800;color:var(--purple-d);font-size:13px;margin-bottom:5px">📝 '+labels[i]+'</div>'
+      +'<div style="background:rgba(255,255,255,.75);border:1px solid var(--line);border-radius:12px;padding:11px 13px;font-size:13.5px;line-height:1.85;white-space:pre-wrap">'+(t?escH(t):'<span style="color:var(--muted)">— لم تكتب الطالبة ملاحظاتها بعد —</span>')+'</div>'
+      +'<textarea id="rp'+d+'" rows="2" style="margin-top:8px" placeholder="اكتبي ردّك على ملاحظات هذا اليوم…">'+(rp&&rp.text?escH(rp.text):'')+'</textarea>'
+      +'<div class="row" style="flex-wrap:wrap;align-items:center;margin-top:6px">'
+      +'<button class="btn btn-pink btn-sm" onclick="sendReply(\''+uid+'\','+d+')">📨 حفظ الردّ وإشعار الطالبة</button>'
+      +(rp&&rp.at?'<span style="font-size:10.5px;color:var(--muted)">آخر ردّ: '+new Date(rp.at).toLocaleString('ar-EG')+(rp.seen?' · قرأته الطالبة':' · لم تقرأه بعد')+'</span>':'')
+      +'</div></div>';});
   var note=(SUP_CACHE&&SUP_CACHE.notes&&SUP_CACHE.notes[uid])?SUP_CACHE.notes[uid]:null;
   html+='<div style="margin-top:14px;border-top:1px solid var(--line);padding-top:12px">'
-    +'<div style="font-weight:800;color:var(--rose);font-size:13px;margin-bottom:6px">✍️ ردّ سريع للطالبة (تشجيع ودعم)</div>'
+    +'<div style="font-weight:800;color:var(--rose);font-size:13px;margin-bottom:6px">✍️ ملاحظة عامة للطالبة (تظهر في صفحتها الرئيسية)</div>'
     +'<textarea id="supNoteIn" rows="2" placeholder="اكتبي ردًّا قصيرًا تراه الطالبة عند دخولها...">'+(note&&note.text?note.text.toString().replace(/</g,'&lt;'):'')+'</textarea>'
     +'<button class="btn btn-pink btn-sm" style="margin-top:8px" onclick="saveSupNote(\''+uid+'\')">📨 إرسال الردّ للطالبة</button>'
     +(note&&note.at?'<div style="font-size:10.5px;color:var(--muted);margin-top:5px">آخر ردّ: '+new Date(note.at).toLocaleString('ar-EG')+'</div>':'')
@@ -1079,7 +1101,7 @@ function renderSupTable(){const rows=supRows();const tb=document.getElementById(
   rows.forEach(r=>{const ind=computeInd(r.reflect);if(ind.written>=2)reg++;if(ind.overall==='يحتاج دعمًا')need++;
     if(ind.chal>0)CHAL.filter(k=>Object.values(r.reflect).join(' ').includes(k)).forEach(k=>chalCount[k]=(chalCount[k]||0)+1);
     const wcls=ind.writeLvl==='منتظمة'?'high':ind.writeLvl==='جزئية'?'mid':'low';
-    body+=`<tr><td>${r.name}${r.consent?' <span title="وافقت على استخدام بياناتها في النسخة التجريبية" style="color:#2E7D68;font-weight:900">✓</span>':''}</td><td style="direction:ltr;text-align:right">${r.uid||'—'}</td><td>${r.org}</td><td>${ind.day?ar(ind.day):'—'}</td><td><span class="lvl ${wcls}">${ind.writeLvl}</span></td><td>${levelTag(ind.overall)}</td><td><button class="btn btn-ghost btn-sm" onclick="viewReflect('${r.uid}')">📖 تأمّلات</button> <button class="btn btn-ghost btn-sm" onclick="viewProofs('${r.uid}','${(r.name||'').replace(/'/g,'')}')" title="صور إثبات المباشرة">📸 ${ar((SUP_CACHE&&SUP_CACHE.proofs&&SUP_CACHE.proofs[r.uid])||0)}</button> <button class="btn ${ind.overall==='يحتاج دعمًا'?'btn-pink':'btn-ghost'} btn-sm" onclick="go('indicators',null)">📊 المؤشرات</button> <button class="btn btn-sm" style="background:#FFE9E0;color:#E0593C;font-weight:800" onclick="deleteStudent('${r.uid}')" title="حذف الطالبة من التطبيق">🗑️</button></td></tr>`;});
+    body+=`<tr><td>${r.name}${r.consent?' <span title="وافقت على استخدام بياناتها في النسخة التجريبية" style="color:#2E7D68;font-weight:900">✓</span>':''}</td><td style="direction:ltr;text-align:right">${r.uid||'—'}</td><td>${r.org}</td><td>${ind.day?ar(ind.day):'—'}</td><td><span class="lvl ${wcls}">${ind.writeLvl}</span></td><td>${levelTag(ind.overall)}</td><td><button class="btn btn-ghost btn-sm" onclick="viewReflect('${r.uid}')">📖 تأمّلات</button> <button class="btn ${ind.overall==='يحتاج دعمًا'?'btn-pink':'btn-ghost'} btn-sm" onclick="go('indicators',null)">📊 المؤشرات</button> <button class="btn btn-sm" style="background:#FFE9E0;color:#E0593C;font-weight:800" onclick="deleteStudent('${r.uid}')" title="حذف الطالبة من التطبيق">🗑️</button></td></tr>`;});
   tb.innerHTML=body;
   document.getElementById('supTot').textContent=ar(tot);
   document.getElementById('supReg').textContent=ar(reg);
@@ -1102,9 +1124,9 @@ async function exportExcel(){
     'اسم الطالبة':r.name,'الرقم الجامعي':r.uid||'','المؤسسة التدريبية':r.org,
     'آخر يوم كُتب':ind.day?('اليوم '+ar(ind.day)):'لم تبدأ',
     'الكتابة التأمّلية':ind.writeLvl,'الدعم المهني':ind.overall,'التحديات':ind.challenges,
-    'تأمّل اليوم الأول (الأحد)':(r.reflect[1]||'').toString(),
-    'تأمّل اليوم الثاني (الثلاثاء)':(r.reflect[2]||'').toString(),
-    'تأمّل اليوم الثالث (الخميس)':(r.reflect[3]||'').toString(),
+    'ملاحظات اليوم الأول (الأحد ٣٠ أغسطس)':(r.reflect[1]||'').toString(),
+    'ملاحظات اليوم الثاني (الثلاثاء ١ سبتمبر)':(r.reflect[2]||'').toString(),
+    'ملاحظات اليوم الثالث (الخميس ٣ سبتمبر)':(r.reflect[3]||'').toString(),
     'ردّ المشرفة':noteOf(r.uid)};});
   const fname='متابعة-الطالبات-'+new Date().toISOString().slice(0,10);
   try{
@@ -1193,7 +1215,7 @@ function simSummary(){speechSynthesis.cancel();document.getElementById('simOv').
   <button class="btn btn-primary" style="width:100%;margin-top:6px" onclick="closeSim()">تم</button></div>`;sfxDay();}
 
 /* ════ Login + student ════ */
-const student={name:'',id:'',org:'',sup:''};
+const student={name:'',id:'',org:'',sup:'',email:''};
 function applyStudent(){document.getElementById('sbName').textContent=student.name||'طالبة';document.getElementById('sbId').textContent=student.org?'🏢 '+student.org:('الرقم: '+(student.id||'—'));
   document.getElementById('heroHi').textContent='أهلاً بكِ '+(student.name||'')+' 🌸';
   const m=document.getElementById('tMail');if(m)m.innerHTML=m.innerHTML.replace('(الاسم)',student.name||'(الاسم)').replace('(المؤسسة)',student.org||'(المؤسسة)');}
@@ -1203,13 +1225,15 @@ const _rays={raf:0,timer:null,sp:null,head:0,angle:0};
 function startLoginFX(){/* أُوقف الشعاع الدوّار — لإعادته: استرجعي عنصر loginRays والنسخة السابقة من هذه الدالة من النسخة الاحتياطية */}
 function stopLoginFX(){cancelAnimationFrame(_rays.raf);clearInterval(_rays.timer);}
 
-function doLogin(){const name=document.getElementById('lName').value.trim(),id=document.getElementById('lId').value.trim(),org=document.getElementById('lOrg').value.trim(),sup=document.getElementById('lSup').value.trim();
+function doLogin(){const name=document.getElementById('lName').value.trim(),id=document.getElementById('lId').value.trim(),org=document.getElementById('lOrg').value.trim(),sup=document.getElementById('lSup').value.trim(),email=document.getElementById('lEmail').value.trim();
   if(name.length<2||!/^[0-9]{6,}$/.test(id)||org.length<2){document.getElementById('lErr').style.display='block';return;}
   document.getElementById('lErr').style.display='none';
+  if(email&&!/^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(email)){document.getElementById('eErr').style.display='block';return;}
+  document.getElementById('eErr').style.display='none';
   var _cs=document.getElementById('lConsent');
   if(_cs&&!_cs.checked){document.getElementById('cErr').style.display='block';return;}
   document.getElementById('cErr').style.display='none';
-  student.name=name;student.id=id;student.org=org;student.sup=sup;try{localStorage.setItem('rafiqaStudent',JSON.stringify(student));}catch(e){}
+  student.name=name;student.id=id;student.org=org;student.sup=sup;student.email=email;try{localStorage.setItem('rafiqaStudent',JSON.stringify(student));}catch(e){}
   rosterAdd(student);
   /* طالبة مختلفة على نفس الجهاز؟ صفّري البيانات المحلية حتى لا تختلط ببيانات السابقة */
   try{const prevUid=localStorage.getItem('rafiqaUid');
@@ -1239,6 +1263,36 @@ function logout(auto){persist();savePosts();clearIdle();speechSynthesis.cancel()
 ['mousemove','keydown','click','touchstart','scroll'].forEach(ev=>document.addEventListener(ev,resetIdle,{passive:true}));
 window.addEventListener('beforeunload',()=>{persist();savePosts();});
 document.addEventListener('click',e=>{if(!e.target.closest('#audioPop')&&!e.target.closest('[onclick*=toggleAudioPop]'))document.getElementById('audioPop').classList.remove('show');});
+
+/* ════ ملاحظات الطالبة وردود المشرفة ════ */
+let REPLIES={};
+function replyBox(n){const r=REPLIES&&REPLIES[n];if(!r||!r.text)return '';
+  return '<div style="margin-top:11px;background:linear-gradient(135deg,rgba(224,89,60,.09),rgba(124,58,237,.09));border:1.5px solid rgba(224,89,60,.28);border-radius:14px;padding:11px 13px">'
+    +'<div style="font-weight:800;color:var(--rose);font-size:12px;margin-bottom:4px">💬 ردّ المشرفة الأكاديمية</div>'
+    +'<div style="font-size:13px;line-height:1.85;white-space:pre-wrap">'+escH(r.text)+'</div>'
+    +(r.at?'<div style="font-size:10.5px;color:var(--muted);margin-top:5px">'+new Date(r.at).toLocaleString('ar-EG')+'</div>':'')
+    +'</div>';}
+async function sbSeen(){if(!sb||!student.id)return;try{await sb.rpc(SB_RPC.seen,{p_uid:student.id});}catch(e){}}
+const DAY_LABELS=['اليوم الأول (الأحد ٣٠ أغسطس)','اليوم الثاني (الثلاثاء ١ سبتمبر)','اليوم الثالث (الخميس ٣ سبتمبر)'];
+async function sendReply(uid,day){
+  if(!supUnlocked)return;
+  const ta=document.getElementById('rp'+day);const txt=(ta?ta.value:'').trim();
+  if(!txt){toast('✍️ اكتبي نصّ الردّ أولًا');if(ta)ta.focus();return;}
+  if(!sb){toast('⚠️ لا يوجد اتصال بقاعدة البيانات');return;}
+  try{const r=await sb.rpc(SB_RPC.reply,{p_pass:SUP_PASS,p_uid:uid,p_day:String(day),p_text:txt});if(r&&r.error)throw r.error;}
+  catch(e){toast('⚠️ تعذّر حفظ الردّ — تحقّقي من الاتصال');return;}
+  if(SUP_CACHE){if(!SUP_CACHE.replies)SUP_CACHE.replies={};if(!SUP_CACHE.replies[uid])SUP_CACHE.replies[uid]={};
+    SUP_CACHE.replies[uid][day]={text:txt,at:new Date().toISOString(),seen:false};}
+  const em=(SUP_CACHE&&SUP_CACHE.emails&&SUP_CACHE.emails[uid])||'';
+  let nm='الطالبة';const st=(SUP_CACHE&&SUP_CACHE.students)?SUP_CACHE.students.filter(function(x){return x.uid===uid;})[0]:null;
+  if(st&&st.name)nm=st.name;
+  if(!em){toast('✅ حُفظ الردّ — لا يوجد بريد مسجّل لهذه الطالبة، ستراه داخل التطبيق فقط');return;}
+  toast('✅ حُفظ الردّ — يُفتح بريدك لإشعار الطالبة');
+  const subj='ردّ المشرفة الأكاديمية على ملاحظاتك — '+(DAY_LABELS[day-1]||'');
+  const lines=['عزيزتي الطالبة '+nm+'،','','بخصوص ملاحظاتك في '+(DAY_LABELS[day-1]||'')+':','',txt,'',
+    'يمكنكِ الاطّلاع على الردّ داخل التطبيق: https://tadreeb.assessment.work','','مع تحياتي،','مشرفة التدريب الميداني الأكاديمية'];
+  setTimeout(function(){window.location.href='mailto:'+em+'?subject='+encodeURIComponent(subj)+'&body='+encodeURIComponent(lines.join('\n'));},400);
+}
 
 /* ════ مراسلة المشرفة الأكاديمية ════ */
 const SUP_EMAIL='rabutarbush@qu.edu.qa';
