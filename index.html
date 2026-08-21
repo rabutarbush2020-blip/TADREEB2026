@@ -1182,7 +1182,7 @@ const SB_CONFIG={url:'https://dzjharsysqfchgobifdk.supabase.co',key:'eyJhbGciOiJ
 /* ════ سجل الأسماء المحلي (دفتر ثابت) ════
    يحفظ اسم كل طالبة دخلت من هذا الجهاز حفظًا دائمًا، ولا يُمسح عند الخروج
    ولا عند إغلاق المتصفح — حتى لو تعذّر الاتصال بقاعدة البيانات. */
-const SB_RPC={saveStudent:'guide_save_student',saveAnswers:'guide_save_answers',get:'guide_get',list:'guide_list',note:'guide_note',del:'guide_delete',addProof:'guide_add_proof',myProofs:'guide_my_proofs',delProof:'guide_del_proof',proofCounts:'guide_proof_counts',proofsFor:'guide_proofs_for',consent:'guide_consent',reply:'guide_reply',seen:'guide_seen'};
+const SB_RPC={saveStudent:'guide_save_student',saveAnswers:'guide_save_answers',get:'guide_get',list:'guide_list',note:'guide_note',del:'guide_delete',addProof:'guide_add_proof',myProofs:'guide_my_proofs',delProof:'guide_del_proof',proofCounts:'guide_proof_counts',proofsFor:'guide_proofs_for',consent:'guide_consent',reply:'guide_reply',seen:'guide_seen',visit:'guide_visit'};
 let ROSTER={};
 function loadRoster(){try{const r=JSON.parse(localStorage.getItem('rafiqaRoster'));if(r&&typeof r==='object')ROSTER=r;}catch(e){}}
 function saveRoster(){try{localStorage.setItem('rafiqaRoster',JSON.stringify(ROSTER));}catch(e){}}
@@ -1213,6 +1213,8 @@ async function sbStudent(){if(!student.id)return false;rosterAdd(student);if(!sb
   try{const r=await sb.rpc(SB_RPC.saveStudent,{p_uid:student.id,p_name:student.name,p_org:student.org||'',p_sup:student.sup||'',p_email:student.email||''});
     if(r&&r.error)throw r.error;rosterSynced(student.id,true);return true;}
   catch(e){rosterSynced(student.id,false);console.warn('تعذّر حفظ اسم الطالبة مركزيًا — حُفظ محليًا وسيُعاد إرساله:',e&&e.message);return false;}}
+async function sbVisit(){if(!sb||!student.id)return;
+  try{await sb.rpc(SB_RPC.visit,{p_uid:student.id,p_name:student.name||'',p_org:student.org||''});}catch(e){}}
 async function sbConsent(){if(!sb||!student.id)return;
   try{await sb.rpc(SB_RPC.consent,{p_uid:student.id});}catch(e){console.warn('تعذّر تسجيل الموافقة مركزيًا:',e&&e.message);}}
 /* إعادة إرسال الأسماء التي لم تُحفظ في قاعدة البيانات بعد */
@@ -1558,12 +1560,12 @@ function closeReflect(){document.getElementById('reflectOv').classList.remove('s
 async function deleteStudent(uid){
   if(!supUnlocked)return;
   var name=uid;if(SUP_CACHE&&SUP_CACHE.students){var s=SUP_CACHE.students.find(x=>x.uid===uid);if(s)name=s.name||uid;}
-  if(!confirm('حذف الطالبة «'+name+'» نهائيًا من التطبيق؟\nسيُحذف اسمها وكل ملاحظاتها وتقدّمها، ولا يمكن التراجع.'))return;
+  if(!confirm('أرشفة الطالبة «'+name+'»؟\nستختفي من لوحة المتابعة، لكن اسمها وملاحظاتها تبقى محفوظة في قاعدة البيانات ويمكن استرجاعها.'))return;
   if(sb){try{const r=await sb.rpc(SB_RPC.del,{p_pass:SUP_PASS,p_uid:uid});if(r&&r.error)throw r.error;}catch(e){toast('⚠️ تعذّر الحذف — حاولي مجددًا');return;}}
   if(SUP_CACHE){SUP_CACHE.students=SUP_CACHE.students.filter(x=>x.uid!==uid);if(SUP_CACHE.answers)delete SUP_CACHE.answers[uid];if(SUP_CACHE.notes)delete SUP_CACHE.notes[uid];}
   delete ROSTER[uid];saveRoster();
   try{const m=JSON.parse(localStorage.getItem('rafiqaReflects')||'{}');delete m[uid];localStorage.setItem('rafiqaReflects',JSON.stringify(m));}catch(e){}
-  renderSupTable();toast('🗑️ تم حذف الطالبة «'+name+'»');
+  renderSupTable();toast('تمّت أرشفة «'+name+'» — بياناتها محفوظة');
 }
 function fillIndFilter(rows){const s=document.getElementById('indFilter');if(!s)return;const cur=s.value;
   s.innerHTML='<option value="">كل المؤسسات</option>'+ORGS.map(o=>`<option>${o}</option>`).join('');s.value=cur;}
@@ -1575,7 +1577,7 @@ function renderSupTable(){const rows=supRows();const tb=document.getElementById(
   rows.forEach(r=>{const ind=computeInd(r.reflect);if(ind.written>=2)reg++;if(ind.overall==='يحتاج دعمًا')need++;
     if(ind.chal>0)CHAL.filter(k=>Object.values(r.reflect).join(' ').includes(k)).forEach(k=>chalCount[k]=(chalCount[k]||0)+1);
     const wcls=ind.writeLvl==='منتظمة'?'high':ind.writeLvl==='جزئية'?'mid':'low';
-    body+=`<tr><td data-l="الطالبة">${r.name}${r.consent?' <span title="وافقت على استخدام بياناتها في النسخة التجريبية" style="color:#2E7D68;font-weight:900">✓</span>':''}</td><td data-l="الرقم الجامعي" style="direction:ltr;text-align:start">${r.uid||'—'}</td><td data-l="المؤسسة">${r.org}</td><td data-l="اليوم">${ind.day?ar(ind.day):'—'}</td><td data-l="الملاحظات"><span class="lvl ${wcls}">${ind.writeLvl}</span></td><td data-l="الدعم المهني">${levelTag(ind.overall)}</td><td data-l="إجراءات"><button class="btn btn-ghost btn-sm" onclick="viewReflect('${r.uid}')">الملاحظات</button> <button class="btn ${ind.overall==='يحتاج دعمًا'?'btn-pink':'btn-ghost'} btn-sm" onclick="go('indicators',null)">المؤشرات</button> <button class="btn btn-sm btn-danger" onclick="deleteStudent('${r.uid}')" title="حذف الطالبة" aria-label="حذف الطالبة"><svg viewBox="0 0 24 24"><use href="#ic-trash"/></svg></button></td></tr>`;});
+    body+=`<tr><td data-l="الطالبة">${r.name}${r.consent?' <span title="وافقت على استخدام بياناتها في النسخة التجريبية" style="color:#2E7D68;font-weight:900">✓</span>':''}</td><td data-l="الرقم الجامعي" style="direction:ltr;text-align:start">${r.uid||'—'}</td><td data-l="المؤسسة">${r.org}</td><td data-l="اليوم">${ind.day?ar(ind.day):'—'}</td><td data-l="الملاحظات"><span class="lvl ${wcls}">${ind.writeLvl}</span></td><td data-l="الدعم المهني">${levelTag(ind.overall)}</td><td data-l="إجراءات"><button class="btn btn-ghost btn-sm" onclick="viewReflect('${r.uid}')">الملاحظات</button> <button class="btn ${ind.overall==='يحتاج دعمًا'?'btn-pink':'btn-ghost'} btn-sm" onclick="go('indicators',null)">المؤشرات</button> <button class="btn btn-sm btn-danger" onclick="deleteStudent('${r.uid}')" title="أرشفة الطالبة (البيانات تبقى محفوظة)" aria-label="أرشفة الطالبة"><svg viewBox="0 0 24 24"><use href="#ic-trash"/></svg></button></td></tr>`;});
   tb.innerHTML=body;
   document.getElementById('supTot').textContent=ar(tot);
   document.getElementById('supReg').textContent=ar(reg);
@@ -1590,27 +1592,51 @@ function renderSupTable(){const rows=supRows();const tb=document.getElementById(
 }
 /* ════ تصدير بيانات الطالبات إلى إكسل ════ */
 async function exportExcel(){
-  toast('⏳ جارٍ تجهيز الملف…');await refreshSup();
+  toast('جارٍ تجهيز الملف…');await refreshSup();
   const rows=supRows();
-  if(!rows.length){toast(sb&&SUP_CACHE===null?'⚠️ قاعدة البيانات نائمة — فعّليها أولًا (Restore)':'لا توجد بيانات لتنزيلها بعد');return;}
-  const noteOf=u=>(SUP_CACHE&&SUP_CACHE.notes&&SUP_CACHE.notes[u]&&SUP_CACHE.notes[u].text)?SUP_CACHE.notes[u].text:'';
-  const data=rows.map(r=>{const ind=computeInd(r.reflect);return {
-    'اسم الطالبة':r.name,'الرقم الجامعي':r.uid||'','المؤسسة التدريبية':r.org,
-    'آخر يوم كُتب':ind.day?('اليوم '+ar(ind.day)):'لم تبدأ',
-    'ملاحظات الطالبة على اليوم التدريبي':ind.writeLvl,'الدعم المهني':ind.overall,'التحديات':ind.challenges,
-    'ملاحظات اليوم الأول (الأحد ٣٠ أغسطس)':(r.reflect[1]||'').toString(),
-    'ملاحظات اليوم الثاني (الثلاثاء ١ سبتمبر)':(r.reflect[2]||'').toString(),
-    'ملاحظات اليوم الثالث (الخميس ٣ سبتمبر)':(r.reflect[3]||'').toString(),
-    'ردّ المشرفة':noteOf(r.uid)};});
+  if(!rows.length){toast(sb&&SUP_CACHE===null?'تعذّر الاتصال بقاعدة البيانات':'لا توجد بيانات لتنزيلها بعد');return;}
+  const C=SUP_CACHE||{};
+  const noteOf=function(u){return (C.notes&&C.notes[u]&&C.notes[u].text)?C.notes[u].text:'';};
+  const replyOf=function(u,d){const r=C.replies&&C.replies[u]&&C.replies[u][d];return (r&&r.text)?r.text:'';};
+  const replyAt=function(u,d){const r=C.replies&&C.replies[u]&&C.replies[u][d];
+    return (r&&r.at)?new Date(r.at).toLocaleDateString('ar-EG'):'';};
+  const emailOf=function(u){return (C.emails&&C.emails[u])?C.emails[u]:'';};
+  const stOf=function(u){return (C.students||[]).filter(function(x){return x.uid===u;})[0]||{};};
+  const DAYS=[{n:1,t:'اليوم الأول (الأحد ٣٠ أغسطس)'},{n:2,t:'اليوم الثاني (الثلاثاء ١ سبتمبر)'},{n:3,t:'اليوم الثالث (الخميس ٣ سبتمبر)'}];
+  const data=rows.map(function(r){
+    const ind=computeInd(r.reflect),st=stOf(r.uid);
+    const o={'اسم الطالبة':r.name||'','الرقم الجامعي':r.uid||'','المؤسسة التدريبية':r.org||'',
+      'البريد الإلكتروني':emailOf(r.uid),
+      'الموافقة على الاستخدام':(r.consent||st.consent)?'نعم':'لم تُسجَّل'};
+    DAYS.forEach(function(d){
+      const note=(r.reflect&&r.reflect[d.n])?(''+r.reflect[d.n]).trim():'';
+      o['ملاحظة '+d.t]=note||'— لم تكتب —';
+      const rp=replyOf(r.uid,d.n);
+      o['ردّك على '+d.t]=rp?(rp+(replyAt(r.uid,d.n)?'  ['+replyAt(r.uid,d.n)+']':'')):'— لم تردّي —';
+    });
+    o['عدد الأيام التي دوّنتها']=ar(ind.written);
+    o['انتظام الكتابة']=ind.writeLvl;
+    o['مؤشّر الدعم المهني']=ind.overall;
+    o['التحديات المتكرّرة']=ind.challenges;
+    o['ملاحظة عامة منكِ']=noteOf(r.uid)||'—';
+    o['آخر تحديث']=st.updated_at?new Date(st.updated_at).toLocaleString('ar-EG'):'';
+    return o;});
   const fname='متابعة-الطالبات-'+new Date().toISOString().slice(0,10);
   try{
     if(window.XLSX){
       const ws=XLSX.utils.json_to_sheet(data);
-      ws['!cols']=[{wch:20},{wch:14},{wch:22},{wch:12},{wch:14},{wch:14},{wch:24},{wch:45},{wch:45},{wch:45},{wch:30}];
+      ws['!cols']=[{wch:22},{wch:15},{wch:24},{wch:26},{wch:16},
+                   {wch:52},{wch:52},{wch:52},{wch:52},{wch:52},{wch:52},
+                   {wch:14},{wch:14},{wch:16},{wch:26},{wch:34},{wch:20}];
+      /* التفاف النصّ الطويل داخل الخلية ليكون مقروءًا */
+      Object.keys(ws).forEach(function(k){if(k[0]!=='!'&&ws[k].t==='s'){
+        ws[k].s={alignment:{wrapText:true,vertical:'top',readingOrder:2,horizontal:'right'}};}});
+      ws['!rows']=data.map(function(){return {hpt:56};});
       const wb=XLSX.utils.book_new();wb.Workbook={Views:[{RTL:true}]};
       XLSX.utils.book_append_sheet(wb,ws,'متابعة الطالبات');
-      XLSX.writeFile(wb,fname+'.xlsx');toast('📥 تم تنزيل ملف الإكسل ('+ar(rows.length)+' طالبة)');return;}
-  }catch(e){}
+      XLSX.writeFile(wb,fname+'.xlsx');
+      toast('تم تنزيل ملف الإكسل ('+ar(rows.length)+' طالبة)');return;}
+  }catch(e){console.warn('تعذّر إنشاء ملف إكسل، سيُصدَّر CSV:',e&&e.message);}
   /* بديل: CSV يفتح في إكسل (مع BOM لدعم العربية) */
   const heads=Object.keys(data[0]);
   const esc=v=>'"'+(v==null?'':(''+v)).replace(/"/g,'""')+'"';
@@ -1715,10 +1741,10 @@ function doLogin(){const name=document.getElementById('lName').value.trim(),id=d
       localStorage.removeItem('rafiqaAnswers');localStorage.removeItem('rafiqaState');refreshWeek();}
     localStorage.setItem('rafiqaUid',id);}catch(e){}
   gate.readSyl=false;gate.seenMap=false;saveGate();var _sc=document.getElementById('sylCheck');if(_sc){_sc.classList.remove('done');_sc.textContent='';document.getElementById('sylTask').classList.remove('done');}
-  applyStudent();document.getElementById('loginOv').classList.remove('show');stopLoginFX();startIdle();sbStudent();sbConsent();sbLoadProgress();PROOFS=[];renderProofs();ac();
+  applyStudent();document.getElementById('loginOv').classList.remove('show');stopLoginFX();startIdle();sbStudent();sbConsent();sbVisit();sbLoadProgress();PROOFS=[];renderProofs();ac();
   toast('🌸 أهلاً بكِ '+name+'!');setTimeout(playWelcome,500);}
 (function restore(){try{const s=JSON.parse(localStorage.getItem('rafiqaStudent'));if(s&&s.name){Object.assign(student,s);applyStudent();document.getElementById('loginOv').classList.remove('show');stopLoginFX();startIdle();
-  if(student.id){rosterAdd(student);setTimeout(function(){sbStudent();},600);}}}catch(e){}})();
+  if(student.id){rosterAdd(student);setTimeout(function(){sbStudent();sbVisit();},600);}}}catch(e){}})();
 
 /* ════ Sessions: logout + idle warning ════ */
 let idleT=null,warnT=null,cdT=null;
