@@ -1274,7 +1274,7 @@ function saveLocalReflect(){if(!student.id)return;try{const m=JSON.parse(localSt
 function localReflect(uid){try{const m=JSON.parse(localStorage.getItem('rafiqaReflects')||'{}');return m[uid]||{};}catch(e){return {};}}
 
 /* ════ Supervisor password gate ════ */
-const SUP_PASS='2323';
+const SUP_PASS='2026';
 let supUnlocked=false,_supAction=null;
 function askSupPass(action){_supAction=action;const i=document.getElementById('supPassIn');i.value='';document.getElementById('supPassErr').style.display='none';document.getElementById('supPassOv').classList.add('show');setTimeout(()=>i.focus(),120);}
 function submitSupPass(){const v=document.getElementById('supPassIn').value;if(v===SUP_PASS){supUnlocked=true;document.getElementById('supPassOv').classList.remove('show');const a=_supAction;_supAction=null;toast('🔓 تم فتح صلاحيات المشرفة');if(a)a();}else{document.getElementById('supPassErr').style.display='block';}}
