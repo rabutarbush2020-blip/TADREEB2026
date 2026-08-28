@@ -1966,6 +1966,8 @@ function doLogin(){const name=document.getElementById('lName').value.trim(),id=d
   if(_cs&&!_cs.checked){document.getElementById('cErr').style.display='block';return;}
   document.getElementById('cErr').style.display='none';
   student.name=name;student.id=id;student.org=org;student.sup=sup;student.email=email;try{localStorage.setItem('rafiqaStudent',JSON.stringify(student));}catch(e){}
+  /* سجلّ يبقى بعد الخروج — لتعبئة حقول الدخول تلقائيًا في المرة القادمة */
+  try{localStorage.setItem('rafiqaLast',JSON.stringify({name:name,id:id,org:org,email:email}));}catch(e){}
   rosterAdd(student);
   /* طالبة مختلفة على نفس الجهاز؟ صفّري البيانات المحلية حتى لا تختلط ببيانات السابقة */
   try{const prevUid=localStorage.getItem('rafiqaUid');
@@ -1988,10 +1990,25 @@ function resetIdle(){if(document.getElementById('idleOv').classList.contains('sh
 function showIdleWarn(){persist();let n=WARN_SEC;document.getElementById('idleCount').textContent=ar(n);document.getElementById('idleOv').classList.add('show');
   cdT=setInterval(()=>{n--;document.getElementById('idleCount').textContent=ar(n);if(n<=0){clearInterval(cdT);logout(true);}},1000);}
 function stayLoggedIn(){clearInterval(cdT);document.getElementById('idleOv').classList.remove('show');startIdle();toast('👍 أهلًا بعودتك');}
+/* تعبئة حقول الدخول من آخر طالبة دخلت على هذا الجهاز — فلا تعيد كتابتها كل مرة */
+function prefillLogin(){
+  try{
+    const l=JSON.parse(localStorage.getItem('rafiqaLast'));
+    if(!l||!l.id)return false;
+    const set=function(id,v){const el=document.getElementById(id);if(el&&v)el.value=v;};
+    set('lName',l.name);set('lId',l.id);set('lOrg',l.org);set('lEmail',l.email);
+    const c=document.getElementById('lConsent');if(c)c.checked=true;
+    return true;
+  }catch(e){return false;}
+}
+
 function logout(auto){persist();savePosts();clearIdle();speechSynthesis.cancel();supUnlocked=false;supMode=false;try{localStorage.removeItem('rafiqaStudent');}catch(e){}
   document.getElementById('idleOv').classList.remove('show');
-  ['lName','lId','lOrg','lSup'].forEach(id=>document.getElementById(id).value='');document.getElementById('lErr').style.display='none';
-  document.getElementById('loginOv').classList.add('show');startLoginFX();toast(auto?'⏱️ تم تسجيل الخروج تلقائيًا (تم حفظ بياناتك)':'🚪 تم تسجيل الخروج');}
+  ['lName','lId','lOrg','lSup','lEmail'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  const filled=prefillLogin();
+  document.getElementById('lErr').style.display='none';document.getElementById('eErr').style.display='none';document.getElementById('cErr').style.display='none';
+  document.getElementById('loginOv').classList.add('show');startLoginFX();
+  toast(auto?(filled?'⏱️ تم تسجيل الخروج تلقائيًا — بياناتك جاهزة، اضغطي «دخول»':'⏱️ تم تسجيل الخروج تلقائيًا (تم حفظ بياناتك)'):'🚪 تم تسجيل الخروج');}
 ['mousemove','keydown','click','touchstart','scroll'].forEach(ev=>document.addEventListener(ev,resetIdle,{passive:true}));
 window.addEventListener('beforeunload',()=>{persist();savePosts();});
 document.addEventListener('click',e=>{if(!e.target.closest('#audioPop')&&!e.target.closest('[onclick*=toggleAudioPop]'))document.getElementById('audioPop').classList.remove('show');});
@@ -2346,7 +2363,7 @@ setTimeout(function(){sbFlushPending();},1500);
 window.addEventListener('online',function(){sbFlushPending();});
 (function(){if(gate.readSyl){const c=document.getElementById('sylCheck');if(c){c.classList.add('done');c.textContent='✓';document.getElementById('sylTask').classList.add('done');}}})();
 buildPath();renderDay();buildMap();buildFaq();updateHome();fillFilters();renderPosts();
-if(document.getElementById('loginOv').classList.contains('show'))startLoginFX();
+if(document.getElementById('loginOv').classList.contains('show')){startLoginFX();prefillLogin();}
 if(student.id)sbLoadProgress();
 /* عدّاد أيام بدء التدريب — يبدأ ٢٣ أغسطس ٢٠٢٦ بتوقيت الدوحة (UTC+3) */
 function updateCountdown(){var el=document.getElementById('countdown');if(!el)return;
