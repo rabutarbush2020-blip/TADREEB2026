@@ -78,6 +78,8 @@ h1{font-size:1.5rem} h2{font-size:1.25rem} h3{font-size:1.0625rem}
 .nav-ic{width:18px;height:18px;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;opacity:.85}
 .nav-ic svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
 .nav-item.active .nav-ic{opacity:1;color:var(--teal-2)}
+.nav-tx{display:flex;flex-direction:column;line-height:1.3}
+.nav-tx small{font-size:10.5px;opacity:.62;font-weight:400;margin-top:1px}
 .nav-item .bdg{margin-inline-start:auto;background:rgba(42,138,128,.28);color:#B8E6E0;font-size:10.5px;font-weight:600;
   padding:1px 8px;border-radius:99px;border:1px solid rgba(42,138,128,.4)}
 .side-user{display:flex;align-items:center;gap:var(--s2);background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);
@@ -885,7 +887,7 @@ textarea:focus,input:focus,select:focus{background:#fff;border-color:var(--teal-
       <div class="nav-sec">الطالبة</div>
       <div class="nav-item active" data-v="home" onclick="go('home',this)"><span class="nav-ic"><svg viewBox="0 0 24 24"><use href="#ic-home"/></svg></span> الرئيسية</div>
       <div class="nav-item" data-v="guide" onclick="go('guide',this)"><span class="nav-ic"><svg viewBox="0 0 24 24"><use href="#ic-book"/></svg></span> دليل التدريب</div>
-      <div class="nav-item" data-v="map" onclick="go('map',this)"><span class="nav-ic"><svg viewBox="0 0 24 24"><use href="#ic-map"/></svg></span> خريطة الإجراءات</div>
+      <div class="nav-item" data-v="map" onclick="go('map',this)"><span class="nav-ic"><svg viewBox="0 0 24 24"><use href="#ic-map"/></svg></span> <span class="nav-tx">خريطة الإجراءات<small>إجراءات الدوام بالمؤسسة التدريبية</small></span></div>
       <div class="nav-item" data-v="week" onclick="go('week',this)"><span class="nav-ic"><svg viewBox="0 0 24 24"><use href="#ic-route"/></svg></span> مسار الأسبوع <span class="bdg">٣ أيام</span></div>
       <div class="nav-item" data-v="assistant" onclick="go('assistant',this)"><span class="nav-ic"><svg viewBox="0 0 24 24"><use href="#ic-help"/></svg></span> المساعد الذكي</div>
       <div class="nav-item" data-v="forms" onclick="go('forms',this)"><span class="nav-ic"><svg viewBox="0 0 24 24"><use href="#ic-doc"/></svg></span> النماذج</div>
