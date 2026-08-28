@@ -8,7 +8,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<!-- مكتبة إكسل (٢٦٩ ك.ب) لم تعد تُحمَّل مع الصفحة — تُجلب عند الطلب فقط
+     داخل exportExcel() عبر ensureXLSX()، فلا تحمّلها الطالبات بلا فائدة. -->
 <style>
 /* ═══════════════════════════════════════════════════════════
    نظام تصميم «التدريب الميداني» — جامعي، هادئ، عربي أولًا
@@ -994,16 +995,19 @@ textarea:focus,input:focus,select:focus{background:#fff;border-color:var(--teal-
       <div class="view" id="v-guide">
         <div class="banner"><div class="bic">📅</div><div><b>جدول التدريب الميداني:</b> يبدأ <b>٢٣ أغسطس</b> وينتهي <b>٣ ديسمبر ٢٠٢٦</b> في جميع المؤسسات · <b>٦ ساعات</b> يوميًا · أيام <b>الأحد والثلاثاء والخميس</b>.</div></div>
 
+        <!-- ═══ أُزيلت بطاقة «إعلان تمهيدي» بطلب المستخدمة (2026-08-24) ═══
+             لإعادتها: أزيلي تعليق الكتلة التالية — وملف intro.mp4 ما زال في المجلد.
         <div class="card card-3d">
           <div class="card-title">إعلان تمهيدي</div>
           <p style="font-size:13px;color:var(--muted);margin:6px 0 12px">شاهدي الإعلان التمهيدي للتعرّف على التدريب الميداني وخطواته قبل البدء.</p>
           <video id="vidIntro" controls playsinline preload="metadata" src="intro.mp4" style="width:100%;border-radius:14px;background:#2E2A45"></video>
         </div>
+        ═══ نهاية الكتلة المعطّلة ═══ -->
 
         <section class="notice"><h3>قبل النزول للميدان</h3><p>ابحثي عن مؤسستك التدريبية عبر <b>موقعها الإلكتروني</b> و<b>وسائل التواصل الاجتماعي</b>: نشاطها، وأهدافها، وأقسامها، والفئة المستفيدة منها.</p></section>
 
         <div class="card card-3d">
-          <div class="card-title">كلمة مشرفة التدريب · الفصل الأول ٢٠٢٦</div>
+          <div class="card-title">كلمة مشرفة التدريب</div>
           <div class="row" style="flex-wrap:wrap;margin:10px 0">
             <button class="btn btn-ghost btn-sm" onclick="playWelcome()">الكلمة الافتتاحية (صوت)</button>
             <!-- <button class="btn btn-ghost btn-sm" onclick="loadVid('supervisor.mp4','كلمة المشرفة')">فيديو المشرفة</button> -->
@@ -1404,7 +1408,7 @@ function loadVoices(){const vs=speechSynthesis.getVoices();
 if('speechSynthesis'in window){loadVoices();speechSynthesis.onvoiceschanged=loadVoices;}
 let _utter=null;
 function speak(text){return false;/* الصوت الآلي مُعطّل — العرض نصّي فقط */}
-const WELCOME_TEXT='أهلاً وسهلاً بكِ طالبتي العزيزة في دليل التدريب الميداني. حيث سيتم مرافقتك خطوة بخطوة خلال أسبوعك التدريبي الأول.';
+const WELCOME_TEXT='أهلاً وسهلاً بكِ طالبتي العزيزة في دليل التدريب الميداني. سأرافقكِ خطوة بخطوة في أسبوعكِ التدريبي، وما لا يكتمل فيه يمتد إلى ما بعده — وهذا طبيعي.';
 function playWelcome(){document.getElementById('welcomeText').textContent=WELCOME_TEXT;document.getElementById('welcomeOv').classList.add('show');}
 function closeWelcome(){if('speechSynthesis'in window)speechSynthesis.cancel();document.getElementById('welcomeOv').classList.remove('show');}
 
@@ -1502,7 +1506,7 @@ function toggleTask(n,i){const set=state.done[n]||(state.done[n]=new Set());if(s
 function setQuiz(n,qi,fi){state.quiz[n+'-'+qi]=fi;renderDay();persist();}
 function finishDay(n){state.fin[n]=true;sfxDay();
   if(n<days.length){state.cur=n+1;sfxMove();buildPath();renderDay();toast('🎉 أنهيتِ '+days.find(d=>d.n===n).name+'!');speak('أحسنتِ! أنهيتِ يومك بنجاح. لننتقل لليوم التالي بخطى واثقة.');}
-  else{buildPath();toast('🏆 مبروك! أكملتِ أسبوعك التدريبي الأول');speak('مبروك! أكملتِ أسبوعك التدريبي الأول. أنا فخورة بكِ.');}
+  else{buildPath();toast('🏆 مبروك! أكملتِ مهام أسبوعكِ التدريبي');speak('مبروك! أكملتِ مهام أسبوعكِ التدريبي. أنا فخورة بكِ.');}
   updateHome();persist();}
 function updateHome(){let tot=0,dn=0;days.forEach(d=>{tot+=d.tasks.length;dn+=(state.done[d.n]?state.done[d.n].size:0);});
   const pct=tot?Math.round(dn/tot*100):0;
@@ -1800,8 +1804,26 @@ function renderSupTable(){const rows=supRows();const tb=document.getElementById(
   if(dbDown&&!tot)tb.innerHTML='<tr><td colspan="7" style="text-align:center;color:#A3392C">⚠️ تعذّر الاتصال بقاعدة البيانات — ولا توجد أسماء محفوظة على هذا الجهاز بعد.</td></tr>';
 }
 /* ════ تصدير بيانات الطالبات إلى إكسل ════ */
+/* تُجلب مكتبة إكسل عند أول تصدير فقط — لا مع تحميل الصفحة.
+   تُرجع true إن جهزت، وfalse فيُصدَّر CSV بديلًا (يفتح في إكسل أيضًا). */
+let _xlsxPromise=null;
+function ensureXLSX(){
+  if(window.XLSX)return Promise.resolve(true);
+  if(_xlsxPromise)return _xlsxPromise;
+  _xlsxPromise=new Promise(function(resolve){
+    const sc=document.createElement('script');
+    sc.src='https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js';
+    sc.onload=function(){resolve(!!window.XLSX);};
+    sc.onerror=function(){_xlsxPromise=null;resolve(false);};
+    document.head.appendChild(sc);
+  });
+  return _xlsxPromise;
+}
+
 async function exportExcel(){
-  toast('جارٍ تجهيز الملف…');await refreshSup();
+  toast('جارٍ تجهيز الملف…');
+  await ensureXLSX();
+  await refreshSup();
   const rows=supRows();
   if(!rows.length){toast(sb&&SUP_CACHE===null?'تعذّر الاتصال بقاعدة البيانات':'لا توجد بيانات لتنزيلها بعد');return;}
   const C=SUP_CACHE||{};
