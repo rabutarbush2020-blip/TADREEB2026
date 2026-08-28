@@ -1409,7 +1409,7 @@ function loadVoices(){const vs=speechSynthesis.getVoices();
 if('speechSynthesis'in window){loadVoices();speechSynthesis.onvoiceschanged=loadVoices;}
 let _utter=null;
 function speak(text){return false;/* الصوت الآلي مُعطّل — العرض نصّي فقط */}
-const WELCOME_TEXT='أهلاً وسهلاً بكِ طالبتي العزيزة في دليل التدريب الميداني. سأرافقكِ خطوة بخطوة في أسبوعكِ التدريبي، وما لا يكتمل فيه يمتد إلى ما بعده — وهذا طبيعي.';
+const WELCOME_TEXT='أهلاً وسهلاً بكِ طالبتي العزيزة في دليل التدريب الميداني. سأرافقكِ خطوة بخطوة في أسبوعكِ التدريبي.';
 function playWelcome(){document.getElementById('welcomeText').textContent=WELCOME_TEXT;document.getElementById('welcomeOv').classList.add('show');}
 function closeWelcome(){if('speechSynthesis'in window)speechSynthesis.cancel();document.getElementById('welcomeOv').classList.remove('show');}
 
