@@ -1011,10 +1011,10 @@ textarea:focus,input:focus,select:focus{background:#fff;border-color:var(--teal-
         <div class="card card-3d">
           <div class="card-title">كلمة مشرفة التدريب</div>
           <div class="row" style="flex-wrap:wrap;margin:10px 0">
-            <button class="btn btn-ghost btn-sm" onclick="playWelcome()">الكلمة الافتتاحية (صوت)</button>
-            <!-- <button class="btn btn-ghost btn-sm" onclick="loadVid('supervisor.mp4','كلمة المشرفة')">فيديو المشرفة</button> -->
+            <button class="btn btn-primary btn-sm" onclick="loadVid('supervisor.mp4','كلمة مشرفة التدريب')">▶️ تشغيل كلمة المشرفة</button>
+            <button class="btn btn-ghost btn-sm" onclick="playWelcome()">كلمة ترحيب</button>
           </div>
-          <video id="vid" controls playsinline style="width:100%;border-radius:14px;background:#2E2A45;display:none"></video>
+          <video id="vid" controls playsinline controlsList="nodownload noplaybackrate" disablePictureInPicture oncontextmenu="return false" style="width:100%;border-radius:14px;background:#2E2A45;display:none"></video>
           <a class="padlet-link" href="https://padlet.com/rabutarbush2020/padlet-hkvdrms57eqcuyvw" target="_blank" rel="noopener"><span class="qa-ic gold"><svg viewBox="0 0 24 24"><use href="#ic-board"/></svg></span><span class="pl-b"><span class="pl-t">لوحة Padlet للتدريب</span><span class="pl-s">رسائل وتجارب من طالبات سابقات — للاطّلاع فقط</span></span></a>
         </div>
 
