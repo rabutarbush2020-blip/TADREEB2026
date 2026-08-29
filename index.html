@@ -1254,7 +1254,7 @@ textarea:focus,input:focus,select:focus{background:#fff;border-color:var(--teal-
     <div class="lf"><label for="lOrg">اسم المؤسسة التدريبية <span class="req">*</span></label>
       <select id="lOrg" onkeydown="if(event.key==='Enter')doLogin()">
         <option value="">اختاري المؤسسة التدريبية</option>
-        <option>مدرسة الإسراء</option>
+        <option>مدرسة رقية الإعدادية</option>
         <option>مدرسة النهضة</option>
         <option>مدرسة هاجر</option>
         <option>مدرسة خولة بنت الأزور</option>
@@ -1287,9 +1287,9 @@ textarea:focus,input:focus,select:focus{background:#fff;border-color:var(--teal-
 <div class="nav-backdrop" id="navBackdrop" onclick="closeSidebar()"></div>
 <nav class="tabbar" id="tabbar" aria-label="التنقل السريع">
   <button data-v="home" onclick="go('home',null)"><svg viewBox="0 0 24 24"><use href="#ic-home"/></svg>الرئيسية</button>
-  <button data-v="week" onclick="go('week',null)"><svg viewBox="0 0 24 24"><use href="#ic-route"/></svg>مسار الأسبوع</button>
   <button data-v="guide" onclick="go('guide',null)"><svg viewBox="0 0 24 24"><use href="#ic-book"/></svg>الدليل</button>
-  <button data-v="forms" onclick="go('forms',null)"><svg viewBox="0 0 24 24"><use href="#ic-doc"/></svg>النماذج</button>
+  <button data-v="map" onclick="go('map',null)"><svg viewBox="0 0 24 24"><use href="#ic-map"/></svg>الإجراءات</button>
+  <button data-v="week" onclick="go('week',null)"><svg viewBox="0 0 24 24"><use href="#ic-route"/></svg>مسار الأسبوع</button>
   <button data-v="more" onclick="openMore()" aria-label="كل الأقسام"><svg viewBox="0 0 24 24"><use href="#ic-menu"/></svg>المزيد</button>
 </nav>
 <div class="toast" id="toast"></div>
@@ -1715,7 +1715,7 @@ const POS=['تعلّمت','تعلمت','استفدت','تعاون','مبادرة
 /* ملاحظة: تُطابَق الكلمات بالاحتواء، فتجنّبي الكلمات القصيرة جدًا.
    أُزيلت 'لم' لأنها تُطابِق داخل 'تعلمت' و'معلمة' و'كلمة' فتُحتسب تحديًا خطأً. */
 const CHAL=['صعوبة','تحدي','قلق','مرتبكة','خوف','غياب','مشكلة','حيرة','توتر','لم أعرف','لم أفهم','لم أستطع','لم أتمكن','لم يوضح','لم يتم'];
-const ORGS=['مدرسة الإسراء','مدرسة النهضة','مدرسة هاجر','مدرسة خولة بنت الأزور','مؤسسة حمد','مدرسة هند بنت أبي سفيان','مدرسة آمنة بنت وهب الثانوية','مدرسة الفلاح الابتدائية','مدرسة حطين','نوفر'];
+const ORGS=['مدرسة رقية الإعدادية','مدرسة النهضة','مدرسة هاجر','مدرسة خولة بنت الأزور','مؤسسة حمد','مدرسة هند بنت أبي سفيان','مدرسة آمنة بنت وهب الثانوية','مدرسة الفلاح الابتدائية','مدرسة حطين','نوفر'];
 function levelTag(v){return v==='مرتفع'?'<span class="lvl high">مرتفع</span>':v==='متوسط'?'<span class="lvl mid">متوسط</span>':'<span class="lvl low">يحتاج دعمًا</span>';}
 function computeInd(reflect){reflect=reflect||{};
   const txt=Object.values(reflect).join(' ');
