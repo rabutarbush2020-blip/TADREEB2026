@@ -464,6 +464,7 @@ input[type=checkbox]{accent-color:var(--teal);width:auto}
 .qa-ic.clay{background:var(--clay-soft);color:var(--clay)}
 .qa-ic.navy{background:#E7EDF0;color:var(--navy)}
 .qa-ic.sand{background:var(--sand);color:var(--ink-2)}
+.qa-ic.teal{background:var(--teal-soft);color:var(--teal)}
 .qa-t{font-size:14.5px;font-weight:700;color:var(--navy)}
 .qa-s{font-size:12.5px;color:var(--muted);line-height:1.6}
 .qa .badge{position:absolute;inset-block-start:var(--s3);inset-inline-start:var(--s3);background:var(--clay);color:#fff;
@@ -701,6 +702,7 @@ textarea:focus,input:focus,select:focus{background:#fff;border-color:var(--teal-
 .qa-ic.gold{background:linear-gradient(140deg,#FBF0DA,#F2E0B8);color:#8A6118}
 .qa-ic.navy{background:linear-gradient(140deg,#E4EDF1,#CBDCE4);color:#123443}
 .qa-ic.sand{background:linear-gradient(140deg,#F5EFE3,#E7DCC7);color:#6A5B41}
+  .qa-ic.teal{background:linear-gradient(140deg,#DCF1EE,#C2E5DE);color:#0E6C63}
 .stat-ic{background:linear-gradient(140deg,#DCF1EE,#C6EAE4);color:#0E6C63}
 .stat-ic.clay{background:linear-gradient(140deg,#FDEDE3,#F8DACA);color:#A9481F}
 .stat-ic.gold{background:linear-gradient(140deg,#FBF0DA,#F3E2BE);color:#8A6118}
@@ -889,6 +891,9 @@ textarea:focus,input:focus,select:focus{background:#fff;border-color:var(--teal-
       <div class="nav-item" data-v="guide" onclick="go('guide',this)"><span class="nav-ic"><svg viewBox="0 0 24 24"><use href="#ic-book"/></svg></span> دليل التدريب</div>
       <div class="nav-item" data-v="map" onclick="go('map',this)"><span class="nav-ic"><svg viewBox="0 0 24 24"><use href="#ic-map"/></svg></span> <span class="nav-tx">خريطة الإجراءات<small>إجراءات الدوام بالمؤسسة التدريبية</small></span></div>
       <div class="nav-item" data-v="week" onclick="go('week',this)"><span class="nav-ic"><svg viewBox="0 0 24 24"><use href="#ic-route"/></svg></span> مسار الأسبوع <span class="bdg">٣ أيام</span></div>
+      <!-- أُزيل عنصر «تدريب على مواقف محتملة» بطلب المستخدمة (2026-08-29) — الميزة محفوظة بالكود (openSim).
+      <div class="nav-item" onclick="closeSidebar();openSim()"><span class="nav-ic"><svg viewBox="0 0 24 24"><use href="#ic-help"/></svg></span> <span class="nav-tx">تدريب على مواقف محتملة<small>مواقف واقعية — بلا تقييم</small></span></div>
+      -->
       <div class="nav-item" data-v="assistant" onclick="go('assistant',this)"><span class="nav-ic"><svg viewBox="0 0 24 24"><use href="#ic-help"/></svg></span> المساعد الذكي</div>
       <div class="nav-item" data-v="forms" onclick="go('forms',this)"><span class="nav-ic"><svg viewBox="0 0 24 24"><use href="#ic-doc"/></svg></span> النماذج</div>
       <div class="nav-item" data-v="community" onclick="go('community',this)"><span class="nav-ic"><svg viewBox="0 0 24 24"><use href="#ic-board"/></svg></span> لوحة الإعلانات</div>
@@ -1369,10 +1374,10 @@ async function sbLoadProgress(){if(!sb||!student.id)return;try{const r=await sb.
 async function sbFetchAll(){if(!sb)return null;
   try{const r=await sb.rpc(SB_RPC.list,{p_pass:SUP_PASS});
     if(r&&r.error)throw r.error;
-    const rows=(r&&r.data)||[];const am={},nm={},pf={},rpm={},emm={};
-    rows.forEach(a=>{am[a.uid]=a.reflect||{};nm[a.uid]=a.sup_note||null;rpm[a.uid]=a.replies||{};emm[a.uid]=a.email||'';});
+    const rows=(r&&r.data)||[];const am={},nm={},pf={},rpm={},emm={},pg={};
+    rows.forEach(a=>{am[a.uid]=a.reflect||{};nm[a.uid]=a.sup_note||null;rpm[a.uid]=a.replies||{};emm[a.uid]=a.email||'';pg[a.uid]=a.progress||{};});
     /* أُوقف عدّ صور الإثبات — الميزة مُزالة من الواجهة */
-    return {students:rows.map(s=>({uid:s.uid,name:s.name,org:s.org,sup:s.sup,consent:s.consent_at||null,updated_at:s.updated_at})),answers:am,notes:nm,proofs:pf,replies:rpm,emails:emm};}
+    return {students:rows.map(s=>({uid:s.uid,name:s.name,org:s.org,sup:s.sup,consent:s.consent_at||null,updated_at:s.updated_at})),answers:am,notes:nm,proofs:pf,replies:rpm,emails:emm,progress:pg};}
   catch(e){console.warn('تعذّر جلب بيانات الطالبات من قاعدة البيانات:',e&&e.message);return null;}}
 async function saveSupNote(uid){var inp=document.getElementById('supNoteIn');var v=(inp?inp.value:'').trim();var note={text:v,at:new Date().toISOString()};
   if(SUP_CACHE){if(!SUP_CACHE.notes)SUP_CACHE.notes={};SUP_CACHE.notes[uid]=note;}
@@ -1740,10 +1745,34 @@ function supRows(){ /* دمج: الدفتر المحلي الثابت + قاعد
   Object.keys(ROSTER).forEach(k=>{const r=ROSTER[k];map[r.uid]={uid:r.uid,name:r.name||'طالبة',org:r.org||'—',reflect:localReflect(r.uid),synced:r.synced===true};});
   if(SUP_CACHE&&SUP_CACHE.students)SUP_CACHE.students.forEach(s=>{const p=map[s.uid];
     map[s.uid]={uid:s.uid,name:s.name||(p&&p.name)||'طالبة',org:s.org||(p&&p.org)||'—',
-      reflect:(SUP_CACHE.answers&&SUP_CACHE.answers[s.uid])||(p&&p.reflect)||{},consent:s.consent||null,synced:true};});
-  if(student.id&&student.name&&!map[student.id])map[student.id]={uid:student.id,name:student.name,org:student.org||'—',reflect:answers.reflect,synced:false};
+      reflect:(SUP_CACHE.answers&&SUP_CACHE.answers[s.uid])||(p&&p.reflect)||{},progress:(SUP_CACHE.progress&&SUP_CACHE.progress[s.uid])||{},consent:s.consent||null,synced:true};});
+  if(student.id&&student.name&&!map[student.id])map[student.id]={uid:student.id,name:student.name,org:student.org||'—',reflect:answers.reflect,progress:stateToJSON?stateToJSON():{},synced:false};
   return Object.keys(map).map(k=>map[k]).sort((a,b)=>(a.name||'').localeCompare(b.name||'','ar'));
 }
+/* ════ التقييم الذاتي السريع — عرضه للمشرفة ════
+   يُحفظ في progress.quiz بصيغة "اليوم-رقمالسؤال" = 0..4 */
+const QZ_LBL=['صعب','مربك','مقبول','جيد','ممتاز'];
+const QZ_Q=['فهم المهام','الاندماج في البيئة','مستوى التحدي'];
+function quizVal(prog,day,qi){
+  try{const q=(prog&&prog.quiz)||{};const v=q[day+'-'+qi];
+    return (v===undefined||v===null||v==='')?null:Number(v);}catch(e){return null;}
+}
+function quizWord(prog,day,qi){const v=quizVal(prog,day,qi);return v===null?'—':(QZ_LBL[v]||'—');}
+function quizCls(v){return v===null?'':(v>=3?'high':v>=2?'mid':'low');}
+/* ملخّص صغير يظهر تحت اسم الطالبة في اللوحة */
+function quizChips(prog){
+  let out='',any=false;
+  [1,2,3].forEach(function(d){
+    let inner='';
+    QZ_Q.forEach(function(q,qi){
+      const v=quizVal(prog,d,qi);
+      if(v!==null){any=true;inner+='<span class="lvl '+quizCls(v)+'" style="margin-inline-end:4px">'+q+': '+QZ_LBL[v]+'</span>';}
+    });
+    if(inner)out+='<div style="margin-top:3px"><b style="font-size:10.5px;color:var(--muted)">ي'+ar(d)+'</b> '+inner+'</div>';
+  });
+  return any?'<div style="margin-top:5px;font-size:10.5px">'+out+'</div>':'';
+}
+
 function viewReflect(uid){
   var reflect={},name='الطالبة',org='';
   var lr=ROSTER[uid];if(lr){name=lr.name||'الطالبة';org=lr.org||'';reflect=localReflect(uid);}
@@ -1793,7 +1822,7 @@ function renderSupTable(){const rows=supRows();const tb=document.getElementById(
   rows.forEach(r=>{const ind=computeInd(r.reflect);if(ind.written>=2)reg++;if(ind.overall==='يحتاج دعمًا')need++;
     if(ind.chal>0)CHAL.filter(k=>Object.values(r.reflect).join(' ').includes(k)).forEach(k=>chalCount[k]=(chalCount[k]||0)+1);
     const wcls=ind.writeLvl==='منتظمة'?'high':ind.writeLvl==='جزئية'?'mid':'low';
-    body+=`<tr><td data-l="الطالبة">${r.name}${r.consent?' <span title="وافقت على استخدام بياناتها في النسخة التجريبية" style="color:#2E7D68;font-weight:900">✓</span>':''}</td><td data-l="الرقم الجامعي" style="direction:ltr;text-align:start">${r.uid||'—'}</td><td data-l="المؤسسة">${r.org}</td><td data-l="اليوم">${ind.day?ar(ind.day):'—'}</td><td data-l="الملاحظات"><span class="lvl ${wcls}">${ind.writeLvl}</span></td><td data-l="الدعم المهني">${levelTag(ind.overall)}</td><td data-l="إجراءات"><button class="btn btn-ghost btn-sm" onclick="viewReflect('${r.uid}')">الملاحظات</button> <button class="btn ${ind.overall==='يحتاج دعمًا'?'btn-pink':'btn-ghost'} btn-sm" onclick="go('indicators',null)">المؤشرات</button> <button class="btn btn-sm btn-danger" onclick="deleteStudent('${r.uid}')" title="أرشفة الطالبة (البيانات تبقى محفوظة)" aria-label="أرشفة الطالبة"><svg viewBox="0 0 24 24"><use href="#ic-trash"/></svg></button></td></tr>`;});
+    body+=`<tr><td data-l="الطالبة">${r.name}${r.consent?' <span title="وافقت على استخدام بياناتها في النسخة التجريبية" style="color:#2E7D68;font-weight:900">✓</span>':''}${quizChips(r.progress)}</td><td data-l="الرقم الجامعي" style="direction:ltr;text-align:start">${r.uid||'—'}</td><td data-l="المؤسسة">${r.org}</td><td data-l="اليوم">${ind.day?ar(ind.day):'—'}</td><td data-l="الملاحظات"><span class="lvl ${wcls}">${ind.writeLvl}</span></td><td data-l="الدعم المهني">${levelTag(ind.overall)}</td><td data-l="إجراءات"><button class="btn btn-ghost btn-sm" onclick="viewReflect('${r.uid}')">الملاحظات</button> <button class="btn ${ind.overall==='يحتاج دعمًا'?'btn-pink':'btn-ghost'} btn-sm" onclick="go('indicators',null)">المؤشرات</button> <button class="btn btn-sm btn-danger" onclick="deleteStudent('${r.uid}')" title="أرشفة الطالبة (البيانات تبقى محفوظة)" aria-label="أرشفة الطالبة"><svg viewBox="0 0 24 24"><use href="#ic-trash"/></svg></button></td></tr>`;});
   tb.innerHTML=body;
   document.getElementById('supTot').textContent=ar(tot);
   document.getElementById('supReg').textContent=ar(reg);
@@ -1848,6 +1877,10 @@ async function exportExcel(){
       const rp=replyOf(r.uid,d.n);
       o['ردّك على '+d.t]=rp?(rp+(replyAt(r.uid,d.n)?'  ['+replyAt(r.uid,d.n)+']':'')):'— لم تردّي —';
     });
+    /* التقييم الذاتي السريع — ٣ أسئلة × ٣ أيام */
+    [1,2,3].forEach(function(dn){
+      QZ_Q.forEach(function(q,qi){ o['ي'+ar(dn)+' — '+q]=quizWord(r.progress,dn,qi); });
+    });
     o['عدد الأيام التي دوّنتها']=ar(ind.written);
     o['انتظام الكتابة']=ind.writeLvl;
     o['مؤشّر الدعم المهني']=ind.overall;
@@ -1899,11 +1932,17 @@ function filterSup(q){q=(q||'').trim();document.querySelectorAll('#supRows tr').
 /* ════ Scenario (reflective, no correct answers, shuffled) ════ */
 const NO_RIGHT='لا توجد إجابة صحيحة أو خاطئة. المطلوب وصف تجربتك المهنية كما عشتها داخل المؤسسة التدريبية.';
 const sim=[
- {loc:'البداية',line:'أهلاً بكِ في سيناريو يوم تدريبي. سأضعك في مواقف واقعية قد تواجهك. '+NO_RIGHT,info:1},
+ {loc:'البداية',line:'أهلاً بكِ. سأضعك في مواقف واقعية قد تواجهك خلال تدريبك. '+NO_RIGHT,info:1},
  {loc:'المشرفة غائبة',line:'حضرتِ في موعدك، لكن قيل لكِ إن المشرفة الميدانية في إجازة أو اجتماع خارجي اليوم. ماذا تفعلين؟',
   ch:[{t:'أعرّف بنفسي للاستقبال بهدوء، وأسأل عمّن يوجّهني، وأستفيد من الوقت في الملاحظة وأتابع مع المشرفة لاحقًا.',r:'المبادرة والاستفادة من الوقت روح المتدربة الناجحة.'},
       {t:'أتصل بالمشرفة الأكاديمية وأخبرها أنني سأغادر اليوم لعدم وجود من يتابعني.',r:'التواصل جيد، لكن يمكنك الاستفادة من اليوم بالملاحظة قبل المغادرة.'},
       {t:'أنتظر بأدب في الاستقبال حتى تحضر المشرفة دون أن أشغل أحدًا.',r:'التهذيب جميل، لكن المبادرة بالتعريف بنفسك أفضل من الانتظار السلبي.'}]},
+ {loc:'دعم المشرفة الأكاديمية',line:'اليوم كان مربكًا — غياب وتأخّر ترتيبات ومهام غير واضحة، وكله طبيعي. ماذا تفعلين؟',
+  ch:[{t:'أتعامل بمرونة وصبر، وأراسل المشرفة الأكاديمية برسالة واضحة، وأتابع بلاك بورد.',r:'المرونة + التواصل الصحيح = متدربة ناجحة.'},
+      {t:'أنتظر حتى تنتظم الأمور قبل أن أزعج المشرفة الأكاديمية.',r:'تقديرك لوقتها جميل، لكن الاستفسار المبكر يحلّ المشكلة أسرع.'},
+      {t:'أسأل زميلاتي المتدربات فقط لأن تجربتهنّ أقرب لي.',r:'تبادل الخبرات مفيد، لكنه لا يغني عن المرجع الرسمي.'}]}
+/* أُبقي موقفان فقط (الأول والأخير) بطلب المستخدمة (2026-08-29). الموقفان التاليان محفوظان —
+   لإعادة أيٍّ منهما: انقليه من التعليق أدناه إلى داخل المصفوفة، وافصل بينه وبين سابقه بفاصلة.
  {loc:'لا تعريف بالفريق',line:'مرّ اليوم دون اجتماع ترحيبي ودون أن يعرّفك أحد بفريق العمل. كيف تتصرّفين؟',
   ch:[{t:'أبادر بالتعريف عن نفسي بلطف، وأطلب من المشرفة تعريفي بالزملاء حين تتاح الفرصة.',r:'مبادرتك اللطيفة تترك انطباعًا مهنيًا جميلًا.'},
       {t:'أنتظر حتى تبادر المشرفة بتعريفي بالفريق رسميًا فهذا من مهامها.',r:'التعريف الرسمي جيد، لكن انتظاره فقط يؤخّر اندماجك.'},
@@ -1911,15 +1950,12 @@ const sim=[
  {loc:'إسناد مهام',line:'في أول أيامك طُلب منك القيام بمهام تبدو غامضة أو أكبر من المتوقع. ما تصرّفك؟',
   ch:[{t:'أتقبّل المهمة بإيجابية، وأستفسر بأدب عن حدودها، وأتأكد أنها ضمن دوري وبعلم المشرفة.',r:'الإيجابية مع الاستفسار عن الحدود تصرّف متوازن.'},
       {t:'أعتذر بلطف لأنني ما زلت متدربة جديدة وأفضّل الملاحظة هذا الأسبوع.',r:'التواضع جيد، لكن المشاركة المنظّمة جزء من التعلّم.'},
-      {t:'أنفّذ المهمة بسرعة دون أسئلة حتى أترك انطباعًا جيدًا.',r:'الحماس جميل، لكن الاستفسار عن الحدود أهم من السرعة.'}]},
- {loc:'دعم المشرف الأكاديمي',line:'اليوم كان مربكًا — غياب وتأخّر ترتيبات ومهام غير واضحة، وكله طبيعي. إذا كان لديك استفسار لم يُحَلّ، ما تصرّفك؟',
-  ch:[{t:'أتعامل بمرونة وصبر، وأرسل إيميلًا واضحًا للمشرف الأكاديمي، وأتابع بلاك بورد.',r:'المرونة + التواصل الصحيح = متدربة ناجحة.'},
-      {t:'أنتظر حتى تنتظم الأمور قبل أن أزعج المشرف الأكاديمي.',r:'تقديرك لوقت المشرف جميل، لكن الاستفسار المبكر يحلّ المشكلة أسرع.'},
-      {t:'أسأل زميلاتي المتدربات فقط لأن تجربتهنّ أقرب لي.',r:'تبادل الخبرات مفيد، لكنه لا يغني عن المرجع الرسمي.'}]}
+      {t:'أنفّذ المهمة بسرعة دون أسئلة حتى أترك انطباعًا جيدًا.',r:'الحماس جميل، لكن الاستفسار عن الحدود أهم من السرعة.'}]}
+═══ نهاية الموقفين المحفوظين ═══ */
 ];
 let si=0;
 function openSim(){
-  if(!gate.readSyl){toast('📖 السيناريو متاح بعد تأكيد قراءة التوصيف في «دليل التدريب»');closeSidebar();go('guide',null);return;}
+  if(!gate.readSyl){toast('📖 هذا التدريب متاح بعد تأكيد قراءة التوصيف في «دليل التدريب»');closeSidebar();go('guide',null);return;}
   if(!gate.seenMap){toast('🧭 اطّلعي على «خريطة الإجراءات» أولًا');closeSidebar();go('map',null);return;}
   si=0;sim.forEach(s=>delete s._o);renderSim();document.getElementById('simOv').classList.add('show');}
 function closeSim(){speechSynthesis.cancel();document.getElementById('simOv').classList.remove('show');}
@@ -1931,11 +1967,11 @@ function renderSim(){const s=sim[si];const ov=document.getElementById('simOv');
     body=`<div style="font-size:11px;color:var(--muted);margin-bottom:10px">${NO_RIGHT}</div><div style="font-size:14px;font-weight:700;margin-bottom:12px">${s.line}</div>${ch}<div id="simFb" style="display:none;margin-top:12px" class="banner"></div><button class="btn btn-primary" id="simNextBtn" style="margin-top:14px;width:100%;display:none" onclick="simNext()">${si===sim.length-1?'إنهاء':'التالي ←'}</button>`;}
   ov.innerHTML=`<div class="login-card" style="max-width:560px;text-align:right">
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
-    <div style="flex:1"><div style="font-weight:900">سيناريو يوم تدريبي</div><div style="font-size:11px;color:var(--muted)">${s.loc} · تدريب تأمّلي ليس للتقييم</div></div>
+    <div style="flex:1"><div style="font-weight:900">تدريب على مواقف محتملة</div><div style="font-size:11px;color:var(--muted)">${s.loc} · تدريب تأمّلي ليس للتقييم</div></div>
     <button class="icon-btn" aria-label="إغلاق" onclick="closeSim()"><svg viewBox="0 0 24 24"><use href="#ic-close"/></svg></button></div>${body}</div>`;
   if(!s.info)setTimeout(()=>speak(s.line),350);}
 function simPick(el,reply){el.parentElement.querySelectorAll('.task').forEach(t=>{t.style.pointerEvents='none';t.style.opacity='.6';});el.style.opacity='1';el.classList.add('done');
-  const fb=document.getElementById('simFb');fb.style.display='flex';fb.innerHTML=`<div class="bic">💬</div><div><b>تأمّل المُرشدة:</b> ${reply}</div>`;
+  const fb=document.getElementById('simFb');fb.style.display='flex';fb.innerHTML=`<div class="bic">💬</div><div><b>تأمّل:</b> ${reply}</div>`;
   document.getElementById('simNextBtn').style.display='block';speak(reply);sfxTask();}
 function simNext(){if(si<sim.length-1){si++;sfxMove();renderSim();}else{simSummary();}}
 function simSummary(){speechSynthesis.cancel();document.getElementById('simOv').innerHTML=`<div class="login-card" style="max-width:500px">
@@ -1943,9 +1979,7 @@ function simSummary(){speechSynthesis.cancel();document.getElementById('simOv').
   <div class="ls">${NO_RIGHT}</div>
   <div style="text-align:right;margin-top:10px">
    <div class="banner"><div class="bic">🪑</div><div>غياب المشرفة وارد — عرّفي بنفسك واستفيدي من وقتك.</div></div>
-   <div class="banner"><div class="bic">🤝</div><div>قد لا يُعقَد اجتماع — بادري بالتعريف بلطف.</div></div>
-   <div class="banner"><div class="bic">📋</div><div>عند إسناد مهام: استفسري عن حدودها وبعلم المشرفة.</div></div>
-   <div class="banner pink"><div class="bic">📧</div><div>المشرف الأكاديمي موجود لدعمك عبر الإيميل.</div></div></div>
+   <div class="banner pink"><div class="bic">📧</div><div>وإن احتجتِ دعمًا — راسليني عبر التطبيق أو احضري الساعات المكتبية.</div></div></div>
   <button class="btn btn-primary" style="width:100%;margin-top:6px" onclick="closeSim()">تم</button></div>`;sfxDay();}
 
 /* ════ Login + student ════ */
@@ -2265,6 +2299,9 @@ function renderHome(){
     qaCard('ic-pen','gold','ملاحظات اليوم',(answers.reflect[cd.n]&&(''+answers.reflect[cd.n]).trim())?'مسجّلة — يمكنك تعديلها':'لم تُسجّل بعد',"go('week',null)")+
     qaCard('ic-mail','clay','مراسلة المشرفة','استفسار أو ظرف طارئ',"go('home',null);setTimeout(function(){var m=document.getElementById('mailCard');if(m)m.scrollIntoView({block:'center'});},120)")+
     qaCard('ic-book','sand','دليل التدريب','الضوابط والجدول والفيديوهات',"go('guide',null)");
+    /* بطاقة «تدريب على مواقف محتملة» أُزيلت بطلب المستخدمة (2026-08-29) — الميزة نفسها محفوظة بالكود.
+       لإعادتها: أضيفي بعد السطر أعلاه:
+       + qaCard('ic-help','teal','تدريب على مواقف محتملة','مواقف واقعية — تدريب تأمّلي بلا تقييم',"openSim()") */
 
   /* بطاقة التدريب */
   document.getElementById('traineeCard').innerHTML=
