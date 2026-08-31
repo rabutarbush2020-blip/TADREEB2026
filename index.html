@@ -465,6 +465,13 @@ input[type=checkbox]{accent-color:var(--teal);width:auto}
 .qa-ic.navy{background:#E7EDF0;color:var(--navy)}
 .qa-ic.sand{background:var(--sand);color:var(--ink-2)}
 .qa-ic.teal{background:var(--teal-soft);color:var(--teal)}
+.seen-btn{font-size:10px;font-weight:700;padding:2px 8px;border-radius:99px;cursor:pointer;
+  border:1px solid var(--line);background:transparent;color:var(--muted);line-height:1.6;white-space:nowrap}
+.seen-btn:hover{border-color:var(--teal-2);color:var(--teal)}
+.seen-btn.on{background:var(--teal-soft);border-color:transparent;color:var(--teal)}
+.seen-note{display:flex;align-items:center;gap:8px;margin-top:10px;padding:8px 11px;border-radius:10px;
+  background:var(--teal-soft);color:var(--teal);font-size:12.5px;line-height:1.6}
+.seen-note span{font-weight:900;font-size:15px}
 .qa-t{font-size:14.5px;font-weight:700;color:var(--navy)}
 .qa-s{font-size:12.5px;color:var(--muted);line-height:1.6}
 .qa .badge{position:absolute;inset-block-start:var(--s3);inset-inline-start:var(--s3);background:var(--clay);color:#fff;
@@ -1313,7 +1320,7 @@ const SB_CONFIG={url:'https://dzjharsysqfchgobifdk.supabase.co',key:'eyJhbGciOiJ
 /* ════ سجل الأسماء المحلي (دفتر ثابت) ════
    يحفظ اسم كل طالبة دخلت من هذا الجهاز حفظًا دائمًا، ولا يُمسح عند الخروج
    ولا عند إغلاق المتصفح — حتى لو تعذّر الاتصال بقاعدة البيانات. */
-const SB_RPC={saveStudent:'guide_save_student',saveAnswers:'guide_save_answers',get:'guide_get',list:'guide_list',note:'guide_note',del:'guide_delete',addProof:'guide_add_proof',myProofs:'guide_my_proofs',delProof:'guide_del_proof',proofCounts:'guide_proof_counts',proofsFor:'guide_proofs_for',consent:'guide_consent',reply:'guide_reply',seen:'guide_seen',visit:'guide_visit',annList:'guide_ann_list',annAdd:'guide_ann_add',annDel:'guide_ann_del',annPin:'guide_ann_pin'};
+const SB_RPC={saveStudent:'guide_save_student',saveAnswers:'guide_save_answers',get:'guide_get',list:'guide_list',note:'guide_note',del:'guide_delete',addProof:'guide_add_proof',myProofs:'guide_my_proofs',delProof:'guide_del_proof',proofCounts:'guide_proof_counts',proofsFor:'guide_proofs_for',consent:'guide_consent',reply:'guide_reply',seen:'guide_seen',visit:'guide_visit',annList:'guide_ann_list',annAdd:'guide_ann_add',annDel:'guide_ann_del',annPin:'guide_ann_pin',supSeen:'guide_sup_seen'};
 let ROSTER={};
 function loadRoster(){try{const r=JSON.parse(localStorage.getItem('rafiqaRoster'));if(r&&typeof r==='object')ROSTER=r;}catch(e){}}
 function saveRoster(){try{localStorage.setItem('rafiqaRoster',JSON.stringify(ROSTER));}catch(e){}}
@@ -1365,6 +1372,7 @@ async function sbLoadProgress(){if(!sb||!student.id)return;try{const r=await sb.
     if(d.reflect&&Object.keys(d.reflect).length){answers.reflect=d.reflect;ch=true;}
     if(d.progress&&Object.keys(d.progress).length){stateFromJSON(d.progress);ch=true;}
     if(d.sup_note&&d.sup_note.text){applySupNote(d.sup_note);}
+    if(d.sup_seen&&typeof d.sup_seen==='object'){SUP_SEEN=d.sup_seen;ch=true;}
     if(d.replies&&typeof d.replies==='object'){REPLIES=d.replies;ch=true;
       var _un=Object.keys(REPLIES).filter(function(k){return REPLIES[k]&&REPLIES[k].text&&!REPLIES[k].seen;});
       if(_un.length){toast('💬 لديكِ '+ar(_un.length)+' ردّ جديد من المشرفة على ملاحظاتك');
@@ -1374,10 +1382,10 @@ async function sbLoadProgress(){if(!sb||!student.id)return;try{const r=await sb.
 async function sbFetchAll(){if(!sb)return null;
   try{const r=await sb.rpc(SB_RPC.list,{p_pass:SUP_PASS});
     if(r&&r.error)throw r.error;
-    const rows=(r&&r.data)||[];const am={},nm={},pf={},rpm={},emm={},pg={};
-    rows.forEach(a=>{am[a.uid]=a.reflect||{};nm[a.uid]=a.sup_note||null;rpm[a.uid]=a.replies||{};emm[a.uid]=a.email||'';pg[a.uid]=a.progress||{};});
+    const rows=(r&&r.data)||[];const am={},nm={},pf={},rpm={},emm={},pg={},sn={};
+    rows.forEach(a=>{am[a.uid]=a.reflect||{};nm[a.uid]=a.sup_note||null;rpm[a.uid]=a.replies||{};emm[a.uid]=a.email||'';pg[a.uid]=a.progress||{};sn[a.uid]=a.sup_seen||{};});
     /* أُوقف عدّ صور الإثبات — الميزة مُزالة من الواجهة */
-    return {students:rows.map(s=>({uid:s.uid,name:s.name,org:s.org,sup:s.sup,consent:s.consent_at||null,updated_at:s.updated_at})),answers:am,notes:nm,proofs:pf,replies:rpm,emails:emm,progress:pg};}
+    return {students:rows.map(s=>({uid:s.uid,name:s.name,org:s.org,sup:s.sup,consent:s.consent_at||null,updated_at:s.updated_at})),answers:am,notes:nm,proofs:pf,replies:rpm,emails:emm,progress:pg,seen:sn};}
   catch(e){console.warn('تعذّر جلب بيانات الطالبات من قاعدة البيانات:',e&&e.message);return null;}}
 async function saveSupNote(uid){var inp=document.getElementById('supNoteIn');var v=(inp?inp.value:'').trim();var note={text:v,at:new Date().toISOString()};
   if(SUP_CACHE){if(!SUP_CACHE.notes)SUP_CACHE.notes={};SUP_CACHE.notes[uid]=note;}
@@ -1507,7 +1515,7 @@ function renderDay(){const d=days.find(x=>x.n===state.cur);const set=state.done[
      ${studentNotesCard(d)}
    </div>
    ${supDayPanel(d)}
-   <div class="card card-3d"><div class="card-title">التقييم الذاتي السريع — نهاية ${d.name} · ${d.dow} ${d.date}</div><div style="margin-top:12px">${q}</div>
+   <div class="card card-3d"><div class="card-title">التقييم الذاتي السريع — نهاية ${d.name} · ${d.dow} ${d.date}</div>${supSeenBadge(d.n)}<div style="margin-top:12px">${q}</div>
      <button class="btn btn-primary" onclick="finishDay(${d.n})">إنهاء ${d.name}</button></div>`;afterRenderDay(d);}
 function afterRenderDay(d){if(supMode&&document.getElementById('dayNotesList'))renderSupDay(d.n);}
 function toggleTask(n,i){const set=state.done[n]||(state.done[n]=new Set());if(set.has(i))set.delete(i);else{set.add(i);sfxTask();toast('✅ أحسنتِ!');}renderDay();buildPath();updateHome();persist();}
@@ -1605,37 +1613,104 @@ function downloadWeekly(){
 }
 
 /* تنزيل مؤشرات الدعم المهني — للمشرفة الأكاديمية فقط */
-function downloadIndicators(){
+/* المؤشرات كملف إكسل: ورقة مقروءة بأشرطة + ورقة أرقام جاهزة للرسم البياني */
+const IND_NUM={'مرتفع':3,'متوسط':2,'يحتاج دعمًا':1};
+function indBar(level){
+  const v=IND_NUM[level]||0;
+  return '█'.repeat(v*3)+'░'.repeat((3-v)*3)+'  '+level;
+}
+async function downloadIndicators(){
   if(!supUnlocked){askSupPass(()=>downloadIndicators());return;}
   const fEl=document.getElementById('indFilter');const f=(fEl&&fEl.value)||'';
   const rows=supRows().filter(r=>!f||r.org===f);
   if(!rows.length){toast('لا توجد بيانات لتنزيلها');return;}
-  const line='='.repeat(46);
-  let t='مؤشرات الدعم المهني — التدريب الميداني\n'+line+'\n';
-  t+='تاريخ التنزيل: '+new Date().toLocaleString('ar-EG')+'\n';
-  t+='النطاق: '+(f||'كل المؤسسات')+'\n';
-  t+='عدد الطالبات: '+rows.length+'\n\n';
-  t+='⚠️ مؤشرات نوعية للدعم فقط — بلا درجات ولا تقييم رقمي، ولا تُستخدم في التقييم الأكاديمي.\n';
-  t+='هذا الملف يحتوي بيانات طالبات؛ يُحفظ في مكان آمن ولا يُشارك خارج فريق الإشراف.\n\n';
-  rows.forEach(function(r,i){
+  toast('جارٍ تجهيز الملف…');
+  await ensureXLSX();
+  const fname='مؤشرات-الدعم-'+new Date().toISOString().slice(0,10);
+
+  /* ورقة ١ — مقروءة بأشرطة بصرية */
+  const visual=rows.map(function(r){
     const ind=computeInd(r.reflect);
-    t+=line+'\n'+(i+1)+'. '+(r.name||'—')+(r.org&&r.org!=='—'?' · '+r.org:'')+'\n'+line+'\n';
-    t+='  مستوى التكيّف مع المؤسسة : '+ind.adapt+'\n';
-    t+='  الثقة المهنية            : '+ind.conf+'\n';
-    t+='  التواصل مع الفريق        : '+ind.comm+'\n';
-    t+='  الوعي بالأدوار المهنية   : '+ind.roles+'\n';
-    t+='  انتظام التدوين           : '+ind.writeLvl+' ('+ind.written+' من ٣ أيام)\n';
-    t+='  التحديات المتكررة        : '+ind.challenges+'\n';
-    t+='  اقتراح الدعم             : '+((ind.chal>ind.pos&&ind.chal>0)?'جلسة دعم فردية ومتابعة قريبة':(ind.written?'ملاحظات متوازنة — استمري في التشجيع والمتابعة':'لم تُسجّل ملاحظات بعد — يُنصح بتذكير الطالبة بالكتابة'))+'\n\n';
-  });
-  const b=new Blob([t],{type:'text/plain;charset=utf-8'});const a=document.createElement('a');
-  a.href=URL.createObjectURL(b);
-  a.download='مؤشرات-الدعم-'+new Date().toISOString().slice(0,10)+'.txt';a.click();
-  toast('⬇️ تم تنزيل المؤشرات ('+rows.length+' طالبة)');
+    return {
+      'الطالبة': r.name||'—',
+      'المؤسسة': (r.org&&r.org!=='—')?r.org:'—',
+      'التكيّف مع المؤسسة': indBar(ind.adapt),
+      'الثقة المهنية': indBar(ind.conf),
+      'التواصل مع الفريق': indBar(ind.comm),
+      'الوعي بالأدوار المهنية': indBar(ind.roles),
+      'انتظام التدوين': ind.writeLvl+' ('+ind.written+' من ٣)',
+      'التحديات المتكرّرة': ind.challenges,
+      'المؤشر العام': ind.overall,
+      'اقتراح الدعم': (ind.chal>ind.pos&&ind.chal>0)?'جلسة دعم فردية ومتابعة قريبة'
+                      :(ind.written?'ملاحظات متوازنة — استمري في التشجيع'
+                                   :'لم تُسجّل ملاحظات بعد — يُنصح بتذكيرها')
+    };});
+
+  /* ورقة ٢ — أرقام فقط (١ إلى ٣) جاهزة لإدراج رسم بياني في إكسل */
+  const numeric=rows.map(function(r){
+    const ind=computeInd(r.reflect);
+    return {
+      'الطالبة': r.name||'—',
+      'التكيّف': IND_NUM[ind.adapt]||0,
+      'الثقة المهنية': IND_NUM[ind.conf]||0,
+      'التواصل': IND_NUM[ind.comm]||0,
+      'الوعي بالأدوار': IND_NUM[ind.roles]||0,
+      'أيام التدوين': ind.written
+    };});
+
+  try{
+    if(window.XLSX){
+      const wb=XLSX.utils.book_new(); wb.Workbook={Views:[{RTL:true}]};
+
+      const ws1=XLSX.utils.json_to_sheet(visual);
+      ws1['!cols']=[{wch:26},{wch:24},{wch:22},{wch:22},{wch:22},{wch:24},{wch:20},{wch:30},{wch:14},{wch:36}];
+      XLSX.utils.book_append_sheet(wb,ws1,'المؤشرات');
+
+      const ws2=XLSX.utils.json_to_sheet(numeric);
+      ws2['!cols']=[{wch:26},{wch:12},{wch:14},{wch:12},{wch:14},{wch:12}];
+      XLSX.utils.book_append_sheet(wb,ws2,'أرقام للرسم البياني');
+
+      /* ورقة ٣ — إرشاد سريع */
+      const guideRows=[
+        {'البيان':'المقياس','التفصيل':'٣ = مرتفع · ٢ = متوسط · ١ = يحتاج دعمًا'},
+        {'البيان':'الأشرطة','التفصيل':'كل ▉▉▉ = درجة واحدة — كلما طال الشريط ارتفع المؤشر'},
+        {'البيان':'لإنشاء رسم بياني','التفصيل':'افتحي ورقة «أرقام للرسم البياني» ← حدّدي الجدول ← إدراج ← مخطط أعمدة'},
+        {'البيان':'تنبيه','التفصيل':'مؤشرات نوعية للدعم فقط — بلا درجات، ولا تُستخدم في التقييم الأكاديمي'},
+        {'البيان':'خصوصية','التفصيل':'يحتوي بيانات طالبات — يُحفظ في مكان آمن ولا يُشارك خارج فريق الإشراف'},
+        {'البيان':'النطاق','التفصيل':f||'كل المؤسسات'},
+        {'البيان':'عدد الطالبات','التفصيل':String(rows.length)},
+        {'البيان':'تاريخ التنزيل','التفصيل':new Date().toLocaleString('ar-EG')}
+      ];
+      const ws3=XLSX.utils.json_to_sheet(guideRows);
+      ws3['!cols']=[{wch:20},{wch:80}];
+      XLSX.utils.book_append_sheet(wb,ws3,'دليل القراءة');
+
+      XLSX.writeFile(wb,fname+'.xlsx');
+      toast('📊 تم تنزيل المؤشرات بصيغة إكسل ('+ar(rows.length)+' طالبة)');return;
+    }
+  }catch(e){console.warn('تعذّر إنشاء إكسل للمؤشرات:',e&&e.message);}
+
+  /* بديل: CSV يفتح في إكسل (مع BOM لدعم العربية) */
+  const heads=Object.keys(visual[0]);
+  const esc=v=>'"'+(v==null?'':(''+v)).replace(/"/g,'""')+'"';
+  const csv='\ufeff'+heads.map(esc).join(',')+'\n'+visual.map(row=>heads.map(h=>esc(row[h])).join(',')).join('\n');
+  const b=new Blob([csv],{type:'text/csv;charset=utf-8'});const a=document.createElement('a');
+  a.href=URL.createObjectURL(b);a.download=fname+'.csv';a.click();
+  toast('📥 تم التنزيل بصيغة CSV (يفتح في إكسل)');
 }
 
 /* ════ Community (real) ════ */
 let posts=[],supMode=false,notif=0,annLoaded=false;
+/* متى اطّلعت المشرفة على تقييم كل يوم — تصل من قاعدة البيانات */
+let SUP_SEEN={};
+function supSeenAt(day){try{return SUP_SEEN[String(day)]||null;}catch(e){return null;}}
+function supSeenBadge(day){
+  const at=supSeenAt(day);
+  if(!at)return '';
+  let when='';
+  try{when=new Date(at).toLocaleDateString('ar-EG',{day:'numeric',month:'long'});}catch(e){}
+  return '<div class="seen-note"><span>✓</span><div>اطّلعت <b>المشرفة الأكاديمية</b> على تقييمك لهذا اليوم'+(when?' — '+when:'')+'</div></div>';
+}
 const annFmt=t=>{try{return new Date(t).toLocaleDateString('ar-EG',{day:'numeric',month:'long',hour:'2-digit',minute:'2-digit'});}catch(e){return '';}};
 const annEsc=v=>(v==null?'':(''+v)).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
@@ -1745,7 +1820,7 @@ function supRows(){ /* دمج: الدفتر المحلي الثابت + قاعد
   Object.keys(ROSTER).forEach(k=>{const r=ROSTER[k];map[r.uid]={uid:r.uid,name:r.name||'طالبة',org:r.org||'—',reflect:localReflect(r.uid),synced:r.synced===true};});
   if(SUP_CACHE&&SUP_CACHE.students)SUP_CACHE.students.forEach(s=>{const p=map[s.uid];
     map[s.uid]={uid:s.uid,name:s.name||(p&&p.name)||'طالبة',org:s.org||(p&&p.org)||'—',
-      reflect:(SUP_CACHE.answers&&SUP_CACHE.answers[s.uid])||(p&&p.reflect)||{},progress:(SUP_CACHE.progress&&SUP_CACHE.progress[s.uid])||{},consent:s.consent||null,synced:true};});
+      reflect:(SUP_CACHE.answers&&SUP_CACHE.answers[s.uid])||(p&&p.reflect)||{},progress:(SUP_CACHE.progress&&SUP_CACHE.progress[s.uid])||{},seen:(SUP_CACHE.seen&&SUP_CACHE.seen[s.uid])||{},consent:s.consent||null,synced:true};});
   if(student.id&&student.name&&!map[student.id])map[student.id]={uid:student.id,name:student.name,org:student.org||'—',reflect:answers.reflect,progress:stateToJSON?stateToJSON():{},synced:false};
   return Object.keys(map).map(k=>map[k]).sort((a,b)=>(a.name||'').localeCompare(b.name||'','ar'));
 }
@@ -1759,8 +1834,28 @@ function quizVal(prog,day,qi){
 }
 function quizWord(prog,day,qi){const v=quizVal(prog,day,qi);return v===null?'—':(QZ_LBL[v]||'—');}
 function quizCls(v){return v===null?'':(v>=3?'high':v>=2?'mid':'low');}
+/* ════ علامة «اطّلعتُ» — لكل طالبة ولكل يوم ════ */
+function seenAt(seen,day){try{return (seen&&seen[String(day)])||null;}catch(e){return null;}}
+function seenFmt(t){try{return new Date(t).toLocaleDateString('ar-EG',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});}catch(e){return '';}}
+async function toggleSeen(uid,day,btn){
+  if(!supUnlocked){askSupPass(function(){toggleSeen(uid,day,btn);});return;}
+  const on=btn.getAttribute('data-on')==='1';
+  const next=!on;
+  btn.setAttribute('data-on',next?'1':'0');
+  btn.innerHTML=next?'✓ اطّلعت':'اطّلعت؟';
+  btn.className='seen-btn'+(next?' on':'');
+  /* حدّثي الذاكرة فورًا حتى لا تُفقد العلامة عند إعادة الرسم */
+  try{if(SUP_CACHE&&SUP_CACHE.seen){if(!SUP_CACHE.seen[uid])SUP_CACHE.seen[uid]={};
+    if(next)SUP_CACHE.seen[uid][String(day)]=new Date().toISOString(); else delete SUP_CACHE.seen[uid][String(day)];}}catch(e){}
+  if(!sb){toast('⚠️ لا يوجد اتصال — لم تُحفظ العلامة');return;}
+  try{const r=await sb.rpc(SB_RPC.supSeen,{p_pass:SUP_PASS,p_uid:uid,p_day:String(day),p_seen:next});
+    if(r&&r.error)throw r.error;
+    toast(next?'✓ سُجّل اطّلاعك على اليوم '+ar(day):'أُزيلت علامة الاطّلاع');}
+  catch(e){toast('⚠️ تعذّر حفظ العلامة — حاولي مجددًا');}
+}
+
 /* ملخّص صغير يظهر تحت اسم الطالبة في اللوحة */
-function quizChips(prog){
+function quizChips(prog,seen,uid){
   let out='',any=false;
   [1,2,3].forEach(function(d){
     let inner='';
@@ -1768,7 +1863,11 @@ function quizChips(prog){
       const v=quizVal(prog,d,qi);
       if(v!==null){any=true;inner+='<span class="lvl '+quizCls(v)+'" style="margin-inline-end:4px">'+q+': '+QZ_LBL[v]+'</span>';}
     });
-    if(inner)out+='<div style="margin-top:3px"><b style="font-size:10.5px;color:var(--muted)">ي'+ar(d)+'</b> '+inner+'</div>';
+    if(inner){
+      const at=seenAt(seen,d);
+      const btn='<button class="seen-btn'+(at?' on':'')+'" data-on="'+(at?'1':'0')+'" title="'+(at?'اطّلعتِ في '+seenFmt(at):'اضغطي لتسجيل اطّلاعك')+'" onclick="event.stopPropagation();toggleSeen(\''+uid+'\','+d+',this)">'+(at?'✓ اطّلعت':'اطّلعت؟')+'</button>';
+      out+='<div style="margin-top:3px;display:flex;align-items:center;gap:5px;flex-wrap:wrap"><b style="font-size:10.5px;color:var(--muted)">ي'+ar(d)+'</b> '+inner+btn+'</div>';
+    }
   });
   return any?'<div style="margin-top:5px;font-size:10.5px">'+out+'</div>':'';
 }
@@ -1822,7 +1921,7 @@ function renderSupTable(){const rows=supRows();const tb=document.getElementById(
   rows.forEach(r=>{const ind=computeInd(r.reflect);if(ind.written>=2)reg++;if(ind.overall==='يحتاج دعمًا')need++;
     if(ind.chal>0)CHAL.filter(k=>Object.values(r.reflect).join(' ').includes(k)).forEach(k=>chalCount[k]=(chalCount[k]||0)+1);
     const wcls=ind.writeLvl==='منتظمة'?'high':ind.writeLvl==='جزئية'?'mid':'low';
-    body+=`<tr><td data-l="الطالبة">${r.name}${r.consent?' <span title="وافقت على استخدام بياناتها في النسخة التجريبية" style="color:#2E7D68;font-weight:900">✓</span>':''}${quizChips(r.progress)}</td><td data-l="الرقم الجامعي" style="direction:ltr;text-align:start">${r.uid||'—'}</td><td data-l="المؤسسة">${r.org}</td><td data-l="اليوم">${ind.day?ar(ind.day):'—'}</td><td data-l="الملاحظات"><span class="lvl ${wcls}">${ind.writeLvl}</span></td><td data-l="الدعم المهني">${levelTag(ind.overall)}</td><td data-l="إجراءات"><button class="btn btn-ghost btn-sm" onclick="viewReflect('${r.uid}')">الملاحظات</button> <button class="btn ${ind.overall==='يحتاج دعمًا'?'btn-pink':'btn-ghost'} btn-sm" onclick="go('indicators',null)">المؤشرات</button> <button class="btn btn-sm btn-danger" onclick="deleteStudent('${r.uid}')" title="أرشفة الطالبة (البيانات تبقى محفوظة)" aria-label="أرشفة الطالبة"><svg viewBox="0 0 24 24"><use href="#ic-trash"/></svg></button></td></tr>`;});
+    body+=`<tr><td data-l="الطالبة">${r.name}${r.consent?' <span title="وافقت على استخدام بياناتها في النسخة التجريبية" style="color:#2E7D68;font-weight:900">✓</span>':''}${quizChips(r.progress,r.seen,r.uid)}</td><td data-l="الرقم الجامعي" style="direction:ltr;text-align:start">${r.uid||'—'}</td><td data-l="المؤسسة">${r.org}</td><td data-l="اليوم">${ind.day?ar(ind.day):'—'}</td><td data-l="الملاحظات"><span class="lvl ${wcls}">${ind.writeLvl}</span></td><td data-l="الدعم المهني">${levelTag(ind.overall)}</td><td data-l="إجراءات"><button class="btn btn-ghost btn-sm" onclick="viewReflect('${r.uid}')">الملاحظات</button> <button class="btn ${ind.overall==='يحتاج دعمًا'?'btn-pink':'btn-ghost'} btn-sm" onclick="go('indicators',null)">المؤشرات</button> <button class="btn btn-sm btn-danger" onclick="deleteStudent('${r.uid}')" title="أرشفة الطالبة (البيانات تبقى محفوظة)" aria-label="أرشفة الطالبة"><svg viewBox="0 0 24 24"><use href="#ic-trash"/></svg></button></td></tr>`;});
   tb.innerHTML=body;
   document.getElementById('supTot').textContent=ar(tot);
   document.getElementById('supReg').textContent=ar(reg);
@@ -1881,6 +1980,7 @@ async function exportExcel(){
     [1,2,3].forEach(function(dn){
       QZ_Q.forEach(function(q,qi){ o['ي'+ar(dn)+' — '+q]=quizWord(r.progress,dn,qi); });
     });
+    [1,2,3].forEach(function(dn){ const at=seenAt(r.seen,dn); o['اطّلعتِ على ي'+ar(dn)]=at?seenFmt(at):'—'; });
     o['عدد الأيام التي دوّنتها']=ar(ind.written);
     o['انتظام الكتابة']=ind.writeLvl;
     o['مؤشّر الدعم المهني']=ind.overall;
