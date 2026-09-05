@@ -472,6 +472,15 @@ input[type=checkbox]{accent-color:var(--teal);width:auto}
 .seen-note{display:flex;align-items:center;gap:8px;margin-top:10px;padding:8px 11px;border-radius:10px;
   background:var(--teal-soft);color:var(--teal);font-size:12.5px;line-height:1.6}
 .seen-note span{font-weight:900;font-size:15px}
+.wk-tabs{display:flex;gap:8px;margin:12px 0 4px;flex-wrap:wrap}
+.wk-tab{flex:1;min-width:150px;display:flex;flex-direction:column;align-items:flex-start;gap:1px;
+  padding:9px 13px;border-radius:12px;cursor:pointer;text-align:start;line-height:1.35;
+  border:1.5px solid var(--line);background:var(--paper);color:var(--ink-2);
+  font-size:13.5px;font-weight:700;transition:all var(--dur)}
+.wk-tab small{font-size:10.5px;font-weight:400;opacity:.7}
+.wk-tab:hover{border-color:var(--teal-2)}
+.wk-tab.on{background:var(--navy);border-color:transparent;color:#fff}
+.wk-tab.on small{opacity:.85}
 .qa-t{font-size:14.5px;font-weight:700;color:var(--navy)}
 .qa-s{font-size:12.5px;color:var(--muted);line-height:1.6}
 .qa .badge{position:absolute;inset-block-start:var(--s3);inset-inline-start:var(--s3);background:var(--clay);color:#fff;
@@ -890,7 +899,7 @@ textarea:focus,input:focus,select:focus{background:#fff;border-color:var(--teal-
         <path d="M16 4 27 11v10L16 28 5 21V11z" fill="none" stroke="#2A8A80" stroke-width="1.6" stroke-linejoin="round"/>
         <path d="M16 10.5 21.5 14v5L16 22.5 10.5 19v-5z" fill="#2A8A80" opacity=".85"/>
       </svg></div>
-      <div><div class="logo-title">التدريب الميداني</div><div class="logo-sub">الأسبوع التدريبي الثاني</div></div>
+      <div><div class="logo-title">التدريب الميداني</div><div class="logo-sub" id="sbWeek">الأسبوع التدريبي الثاني</div></div>
     </div>
     <nav class="nav">
       <div class="nav-sec">الطالبة</div>
@@ -1058,8 +1067,9 @@ textarea:focus,input:focus,select:focus{background:#fff;border-color:var(--teal-
       <div class="view" id="v-week">
         <div class="banner"><div class="bic">🗺️</div><div>أرافقكِ يومًا بيوم. المهام <b>اختيارية</b> — أكملي ما ينطبق. إجاباتك تُحفظ تلقائيًا.</div></div>
         <div class="banner pink"><div class="bic">ℹ️</div><div><b>ملاحظة مهمة:</b> ليس بالضرورة أن تُنجَز جميع هذه المهام خلال هذا الأسبوع، وقد يكون لدى <b>الأخصائية الاجتماعية في المؤسسة</b> ترتيب آخر لها بحسب طبيعة العمل وظروف المؤسسة. اتّبعي توجيهها، ودوّني ما أنجزتِه فعلًا.</div></div>
-        <div class="card card-3d"><div class="card-head"><div class="card-title">الأسبوع التدريبي الثاني</div>
-            <span class="chip">٣٠ أغسطس — ٣ سبتمبر</span></div>
+        <div class="card card-3d"><div class="card-head"><div class="card-title" id="weekTitle">الأسبوع التدريبي الثاني</div>
+            <span class="chip" id="weekChip">٣٠ أغسطس — ٣ سبتمبر</span></div>
+            <div class="wk-tabs" id="weekTabs"></div>
             <div class="daypath" id="daypath"></div></div>
         <div id="dayPanel"></div>
       </div>
@@ -1255,7 +1265,7 @@ textarea:focus,input:focus,select:focus{background:#fff;border-color:var(--teal-
     <div style="display:inline-block;background:rgba(86,66,184,.1);color:var(--navy);font-size:11px;font-weight:800;padding:4px 12px;border-radius:99px;margin-bottom:8px">نسخة تجريبية</div>
     <h1 style="margin-top:0">التدريب الميداني</h1>
     <div class="ls" style="margin-bottom:6px">لطالبات التدريب الميداني · <b>خدمة اجتماعية</b><br>بإشراف الأستاذة <b style="color:var(--navy)">ربى أبوطربوش</b></div>
-    <div class="ls">دعم الأسبوع التدريبي الثاني</div>
+    <div class="ls">دليل أسبوعك التدريبي</div>
     <!-- أُزيلت خانة عدّاد اليوم التدريبي بطلب المستخدمة (2026-08-24).
          لإعادتها: أعيدي السطر التالي وأزيلي تعليق استدعاء updateCountdown في نهاية الملف.
     <div id="countdown" class="cd-chip"></div> -->
@@ -1467,21 +1477,75 @@ function toggleSyl(){gate.readSyl=!gate.readSyl;saveGate();const c=document.getE
 
 /* ════ Week data ════ */
 const days=[
- {n:1,name:'اليوم الأول',dow:'الأحد',date:'٣٠ أغسطس',sub:'التعارف والمباشرة · ٦ ساعات',
+ {n:1,wk:2,name:'اليوم الأول',dow:'الأحد',date:'٣٠ أغسطس',sub:'التعارف والمباشرة · ٦ ساعات',
   tip:'يومك الأول للتعارف والمباشرة. عرّفي بنفسك للأخصائيات الاجتماعيات في المؤسسة، وتعرّفي على مشرفتك الميدانية، واتفقوا على مهام كل طرف، ولا تنسي توقيع نموذج الحضور والغياب.',
   tasks:[{t:'التعارف مع الأخصائيات الاجتماعيات في المؤسسة'},{t:'التعرّف إلى المشرفة الميدانية والاتفاق على مهام كل طرف'},{t:'مراجعة توصيف التدريب الميداني ومعايير التقييم في بلاك بورد'},{t:'توقيع نموذج الحضور والغياب'}],
   reflect:'من التقيتِ بهنّ اليوم من الأخصائيات؟ وما الذي عرفتِه عن دورهنّ في المؤسسة؟'},
- {n:2,name:'اليوم الثاني',dow:'الثلاثاء',date:'١ سبتمبر',sub:'المؤسسة والمستفيدون · ٦ ساعات',
+ {n:2,wk:2,name:'اليوم الثاني',dow:'الثلاثاء',date:'١ سبتمبر',sub:'المؤسسة والمستفيدون · ٦ ساعات',
   tip:'يومك للتعرّف على المؤسسة من الداخل: رؤيتها ورسالتها، وأقسامها وسير العمل فيها، وبرامجها وأنشطتها، وخصائص المستفيدين وآلية وصولهم إلى الخدمة. سجّلي ملاحظاتك بموضوعية.',
   tasks:[{t:'الاطّلاع على رؤية المؤسسة ورسالتها وأهدافها'},{t:'التعرّف إلى المؤسسة وأقسامها وسير العمل فيها'},{t:'التعرّف إلى أنشطة المؤسسة وبرامجها'},{t:'الاطّلاع عن قرب على أحد أنشطة المؤسسة أو برامجها'},{t:'التعرّف إلى خصائص المستفيدين (العملاء)'},{t:'التعرّف إلى آلية وصول المستفيد إلى الخدمة وشروط الالتحاق بها'},{t:'تسجيل الملاحظات الأولية بموضوعية'},{t:'توقيع نموذج الحضور والغياب'}],
   reflect:''},
- {n:3,name:'اليوم الثالث',dow:'الخميس',date:'٣ سبتمبر',sub:'فريق العمل والتقرير · ٦ ساعات',
+ {n:3,wk:2,name:'اليوم الثالث',dow:'الخميس',date:'٣ سبتمبر',sub:'فريق العمل والتقرير · ٦ ساعات',
   tip:'اختمي أسبوعك بالتعرّف على فريق العمل وتخصصاته والهيكل التنظيمي للمؤسسة، وإجراءات العمل وآلية إحالة الحالات، ودور الأخصائي الاجتماعي ضمن هذا الفريق ووصفه الوظيفي والسجلات التي يستخدمها.',
   note:'<b>تذكير:</b> جهّزي تقريرك الأسبوعي — يُرفع في خانة <b>«التقرير الأسبوعي»</b> في بلاك بورد <b>يوم السبت قبل الساعة ٦:٠٠ صباحًا</b>. نموذج الوورد الرسمي في صفحة <b>النماذج</b>، وملاحظاتك اليومية تجدينها بزر <b>«تنزيل ملاحظاتي»</b>.<div style="margin-top:10px"><a href="https://elearning.qu.edu.qa/" target="_blank" rel="noopener" class="btn btn-primary btn-sm">🔗 فتح بلاك بورد</a></div>',
   note2:'<b>واجهتكِ صعوبة هذا الأسبوع؟</b> راسلي المشرفة الأكاديمية من بطاقة «مراسلة المشرفة الأكاديمية» في الصفحة الرئيسية، أو احضري الساعات المكتبية. طلب الدعم جزء من التدريب المهني، لا ضعفًا فيه.<br><span style="font-size:12px">🕐 <b>الاثنين</b> ١١:٠٠–١٢:٠٠ · مكتب 128-C03 (المكتبة القديمة) &nbsp;|&nbsp; <b>الأربعاء</b> ٨:٣٠–٩:٣٠ · مكتب 237 · مبنى البنات C04</span>',
   tasks:[{t:'التعرّف إلى فريق العمل بالمؤسسة وإجراءاتها'},{t:'الاطّلاع على الهيكل التنظيمي وموقع الخدمة الاجتماعية فيه'},{t:'التعرّف إلى تخصصات أعضاء الفريق ودور كل منهم'},{t:'التعرّف إلى دور الأخصائي الاجتماعي ضمن الفريق'},{t:'الاطّلاع على الوصف الوظيفي للأخصائي الاجتماعي في المؤسسة'},{t:'ملاحظة آلية إحالة الحالات وتسلسل الإجراءات داخل المؤسسة'},{t:'الاطّلاع على السجلات والنماذج التي يستخدمها الأخصائي الاجتماعي'},{t:'توقيع نموذج الحضور والغياب'}],
-  reflect:'بجملة موضوعية: كيف تصفين تجربة أسبوعك الأول في المؤسسة؟'}
+  reflect:'بجملة موضوعية: كيف تصفين تجربة أسبوعك الأول في المؤسسة؟'},
+
+ /* ═══ الأسبوع التدريبي الثالث · ٦ – ١٠ سبتمبر ═══
+    الهدف: مناقشة وتحليل بعض التقارير المرتبطة بالحالات والخطط التي تُطبَّق. */
+ {n:4,wk:3,name:'اليوم الأول',dow:'الأحد',date:'٦ سبتمبر',sub:'تقارير الحالات · ٦ ساعات',
+  tip:'يومك للاطّلاع على تقارير الحالات في المؤسسة: كيف تُوثَّق الحالة، وما البيانات التي يرصدها الأخصائي، وكيف يُصاغ التقرير بأسلوب مهني. اطّلعي بإذن مشرفتك ومع حفظ السرّية التامة.',
+  tasks:[{t:'الاطّلاع على نماذج التقارير المعتمدة في المؤسسة'},
+         {t:'التعرّف إلى طريقة توثيق الحالة في سجلات المؤسسة'},
+         {t:'قراءة تقرير حالة بإذن المشرفة ومع حفظ السرّية'},
+         {t:'تمييز عناصر التقرير: البيانات الأساسية · وصف المشكلة · التدخل · المتابعة'},
+         {t:'مناقشة المشرفة الميدانية حول ما ورد في التقرير'},
+         {t:'توقيع نموذج الحضور والغياب'}],
+  reflect:'ما الذي لاحظتِه في طريقة كتابة التقرير؟ وما الفرق بين الوصف الموضوعي والرأي الشخصي فيه؟'},
+
+ {n:5,wk:3,name:'اليوم الثاني',dow:'الثلاثاء',date:'٨ سبتمبر',sub:'تحليل خطط التدخل · ٦ ساعات',
+  tip:'يومك لتحليل خطة تدخّل مطبّقة فعلًا: كيف قُدِّرت المشكلة، وما الأهداف التي وُضعت، وما التدخل المختار ولماذا، وكيف تُقاس النتائج.',
+  tasks:[{t:'الاطّلاع على خطة تدخّل مطبّقة في المؤسسة'},
+         {t:'تحليل خطوات الخطة: تقدير المشكلة – وضع الأهداف – التدخل – التقييم'},
+         {t:'التعرّف إلى أسباب اختيار هذا التدخل دون غيره'},
+         {t:'ملاحظة كيف تُقاس نتائج الخطة ومتى تُعدَّل'},
+         {t:'مناقشة المشرفة الميدانية حول التحديات في تطبيق الخطة'},
+         {t:'توقيع نموذج الحضور والغياب'}],
+  reflect:'صفي بموضوعية خطة تدخّل اطّلعتِ عليها: ما هدفها، وما الخطوة التي رأيتِها الأهم فيها؟'},
+
+ {n:6,wk:3,name:'اليوم الثالث',dow:'الخميس',date:'١٠ سبتمبر',sub:'المناقشة والخطة الأسبوعية · ٦ ساعات',
+  tip:'اختمي أسبوعك بالمناقشة والتحليل، ثم ابدئي كتابة خطتك الأسبوعية التنفيذية واعرضيها على مشرفتك في المؤسسة وعليّ للاطّلاع والملاحظات.',
+  note:'<b>تذكير:</b> جهّزي تقريرك الأسبوعي — يُرفع في خانة <b>«التقرير الأسبوعي»</b> في بلاك بورد <b>يوم السبت قبل الساعة ٦:٠٠ صباحًا</b>. نموذج الوورد الرسمي في صفحة <b>النماذج</b>، وملاحظاتك اليومية تجدينها بزر <b>«تنزيل ملاحظاتي»</b>.<div style="margin-top:10px"><a href="https://elearning.qu.edu.qa/" target="_blank" rel="noopener" class="btn btn-primary btn-sm">🔗 فتح بلاك بورد</a></div>',
+  note2:'<b>واجهتكِ صعوبة هذا الأسبوع؟</b> راسلي المشرفة الأكاديمية من بطاقة «مراسلة المشرفة الأكاديمية» في الصفحة الرئيسية، أو احضري الساعات المكتبية. طلب الدعم جزء من التدريب المهني، لا ضعفًا فيه.<br><span style="font-size:12px">🕐 <b>الاثنين</b> ١١:٠٠–١٢:٠٠ · مكتب 128-C03 (المكتبة القديمة) &nbsp;|&nbsp; <b>الأربعاء</b> ٨:٣٠–٩:٣٠ · مكتب 237 · مبنى البنات C04</span>',
+  tasks:[{t:'المشاركة في مناقشة حالة مع المشرفة الميدانية أو فريق العمل'},
+         {t:'المقارنة بين تقريرين أو خطتين والوقوف على أوجه الاختلاف'},
+         {t:'تمييز ما يُكتب بموضوعية عمّا هو رأي شخصي في التقارير'},
+         {t:'الاستفسار عمّا لم يتضح لكِ في التقارير أو الخطط'},
+         {t:'تدوين خلاصة تحليلية لما اطّلعتِ عليه هذا الأسبوع'},
+         {t:'البدء بكتابة الخطة الأسبوعية التنفيذية'},
+         {t:'عرض الخطة على المشرفة الميدانية والاستفادة من ملاحظاتها'},
+         {t:'إطلاع المشرفة الأكاديمية على الخطة'},
+         {t:'توقيع نموذج الحضور والغياب'}],
+  reflect:'ما أهم ما تعلّمتِه هذا الأسبوع عن كتابة التقارير وتحليل الخطط؟ وما الذي ما زال غامضًا لديكِ؟'}
 ];
+/* أرقام الأيام — مشتقّة من المصفوفة أعلاه حتى لا تُنسى عند إضافة أسبوع جديد */
+function dayNums(){return days.map(function(d){return d.n;});}
+function weekOf(n){const d=days.find(x=>x.n===n);return d&&d.wk?d.wk:2;}
+function weekDays(w){return days.filter(d=>(d.wk||2)===w);}
+function weekLabel(w){return w===3?'الأسبوع التدريبي الثالث':'الأسبوع التدريبي الثاني';}
+function weekRange(w){const a=weekDays(w);return a.length?(a[0].date+' — '+a[a.length-1].date):'';}
+function dayIndexInWeek(n){const w=weekOf(n);return weekDays(w).findIndex(d=>d.n===n)+1;}
+/* اسم الأسبوع يتبع اليوم المفتوح — يُستدعى عند كل رسم */
+function syncWeekLabels(){
+  try{
+    const w=weekOf(state.cur), lbl=weekLabel(w);
+    const sbw=document.getElementById('sbWeek'); if(sbw)sbw.textContent=lbl;
+    const gk=document.getElementById('greetKicker'); if(gk)gk.textContent=lbl;
+    const wt=document.getElementById('weekTitle'); if(wt)wt.textContent=lbl;
+    const wc=document.getElementById('weekChip'); if(wc)wc.textContent=weekRange(w);
+  }catch(e){}
+}
 const state={cur:1,done:{},quiz:{},fin:{}};
 const answers={reflect:{}};
 function stateToJSON(){var d={};for(var k in state.done){d[k]=Array.from(state.done[k]);}return {cur:state.cur,done:d,quiz:state.quiz,fin:state.fin};}
@@ -1493,13 +1557,39 @@ let _pt=null;
 function persist(){try{localStorage.setItem('rafiqaAnswers',JSON.stringify(answers));localStorage.setItem('rafiqaState',JSON.stringify(stateToJSON()));}catch(e){}saveLocalReflect();clearTimeout(_pt);_pt=setTimeout(sbAnswers,800);}
 function saveReflect(n,v){answers.reflect[n]=v;persist();}
 
+/* الأسابيع المتاحة، بترتيبها */
+function allWeeks(){const o=[];days.forEach(function(d){const w=d.wk||2;if(o.indexOf(w)<0)o.push(w);});return o;}
+/* الانتقال إلى أسبوع: تفتح أول يوم لم يُنجَز فيه، وإلا أوّله */
+function goWeek(w){
+  const list=weekDays(w); if(!list.length)return;
+  const next=list.find(function(d){return !state.fin[d.n];})||list[0];
+  const prev=state.cur; state.cur=next.n;
+  if(prev!==next.n){sfxMove();persist();}
+  buildPath();renderDay();
+  try{document.getElementById('weekTabs').scrollIntoView({block:'nearest'});}catch(e){}
+}
+function buildWeekTabs(){
+  const host=document.getElementById('weekTabs'); if(!host)return;
+  const ws=allWeeks(); if(ws.length<2){host.innerHTML='';host.style.display='none';return;}
+  host.style.display='flex';
+  const cur=weekOf(state.cur);
+  host.innerHTML=ws.map(function(w){
+    const list=weekDays(w);
+    const fin=list.filter(function(d){return state.fin[d.n];}).length;
+    return '<button class="wk-tab'+(w===cur?' on':'')+'" onclick="goWeek('+w+')">'+
+      weekLabel(w)+'<small>'+weekRange(w)+(fin?' · '+ar(fin)+' من '+ar(list.length)+' ✓':'')+'</small></button>';
+  }).join('');
+}
 function buildPath(){const w=document.getElementById('daypath');w.innerHTML='';
-  days.forEach((d,i)=>{if(i>0){const l=document.createElement('div');l.className='dline'+(state.fin[days[i-1].n]?' done':'');w.appendChild(l);}
+  buildWeekTabs();
+  const shown=weekDays(weekOf(state.cur));
+  shown.forEach((d,i)=>{if(i>0){const l=document.createElement('div');l.className='dline'+(state.fin[shown[i-1].n]?' done':'');w.appendChild(l);}
     const node=document.createElement('div');const done=!!state.fin[d.n];
     node.className='dnode'+(d.n===state.cur?' active':'')+(done?' done':'');
     node.onclick=()=>{const prev=state.cur;state.cur=d.n;if(prev!==d.n){sfxMove();persist();}buildPath();renderDay();};
-    node.innerHTML=`<div class="dcirc">${done?'✓':ar(d.n)}</div><div class="dlbl">${d.dow}</div><div class="dsub">${d.date}</div>`;w.appendChild(node);});}
+    node.innerHTML=`<div class="dcirc">${done?'✓':ar(dayIndexInWeek(d.n))}</div><div class="dlbl">${d.dow}</div><div class="dsub">${d.date}</div>`;w.appendChild(node);});}
 function renderDay(){const d=days.find(x=>x.n===state.cur);const set=state.done[d.n]||(state.done[d.n]=new Set());
+  syncWeekLabels();
   let tasks='';d.tasks.forEach((t,i)=>{tasks+=`<div class="task${set.has(i)?' done':''}" onclick="toggleTask(${d.n},${i})"><div class="tcheck">${set.has(i)?'✓':''}</div><span class="tt">${t.t}</span>${t.up?`<span class="chip pink" onclick="event.stopPropagation();toast('📎 نافذة رفع الملف (تجريبي)')">📎 رفع</span>`:''}</div>`;});
   const faces=['😣','😕','🙂','😊','🤩'],labels=['صعب','مربك','مقبول','جيد','ممتاز'];
   let q='';['فهمي للمهام','اندماجي في البيئة','مستوى التحدي'].forEach((qq,qi)=>{let r='';faces.forEach((f,fi)=>{r+=`<div class="face${state.quiz[d.n+'-'+qi]===fi?' sel':''}" onclick="setQuiz(${d.n},${qi},${fi})">${f}<span>${labels[fi]}</span></div>`;});q+=`<div style="margin-bottom:12px"><div style="font-weight:700;font-size:13px;margin-bottom:7px">${qi+1}) ${qq}</div><div class="faces">${r}</div></div>`;});
@@ -1524,7 +1614,7 @@ function finishDay(n){state.fin[n]=true;sfxDay();
   if(n<days.length){state.cur=n+1;sfxMove();buildPath();renderDay();toast('🎉 أنهيتِ '+days.find(d=>d.n===n).name+'!');speak('أحسنتِ! أنهيتِ يومك بنجاح. لننتقل لليوم التالي بخطى واثقة.');}
   else{buildPath();toast('🏆 مبروك! أكملتِ مهام أسبوعكِ التدريبي');speak('مبروك! أكملتِ مهام أسبوعكِ التدريبي. أنا فخورة بكِ.');}
   updateHome();persist();}
-function updateHome(){let tot=0,dn=0;days.forEach(d=>{tot+=d.tasks.length;dn+=(state.done[d.n]?state.done[d.n].size:0);});
+function updateHome(){syncWeekLabels();let tot=0,dn=0;days.forEach(d=>{tot+=d.tasks.length;dn+=(state.done[d.n]?state.done[d.n].size:0);});
   const pct=tot?Math.round(dn/tot*100):0;
   const bar=document.getElementById('homeBar');if(bar)bar.style.width=pct+'%';
   const cd=days.find(d=>d.n===state.cur);
@@ -1591,7 +1681,7 @@ function cpy(id){const t=document.getElementById(id).innerText.replace('📋 ن�
 function loadVid(src,label){const v=document.getElementById('vid');v.style.display='block';v.src=src;v.play().catch(()=>{});toast('🎥 '+label);}
 function downloadNotes(){const L=['اليوم الأول','اليوم الثاني','اليوم الثالث'];let t='ملاحظات التدريب الميداني\n========================\n';
   t+='الطالبة: '+(student.name||'—')+'\nالرقم: '+(student.id||'—')+'\nالمؤسسة: '+(student.org||'—')+'\nالتاريخ: '+new Date().toLocaleString('ar-EG')+'\n\n';
-  [1,2,3].forEach((n,i)=>{t+=L[i]+':\n'+(answers.reflect[n]||'(لم تُكتب)')+'\n\n';});
+  days.forEach(function(d){t+=d.name+' · '+d.dow+' '+d.date+':\n'+(answers.reflect[d.n]||'(لم تُكتب)')+'\n\n';});
   t+='ملاحظة: التقرير الأسبوعي يُرفع في بلاك بورد كل سبت قبل ٦:٠٠ صباحًا، بأسلوب موضوعي.';
   const b=new Blob([t],{type:'text/plain;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='ملاحظات-'+(student.name||'طالبة').replace(/\s+/g,'_')+'.txt';a.click();toast('⬇️ تم تنزيل ملاحظاتك');}
 
@@ -1803,7 +1893,7 @@ function computeInd(reflect){reflect=reflect||{};
   const written=Object.values(reflect).filter(x=>x&&(''+x).trim()).length;
   const pos=POS.filter(k=>txt.includes(k)).length, chal=CHAL.filter(k=>txt.includes(k)).length;
   const lvl=g=>g>=2?'مرتفع':g>=1?'متوسط':'يحتاج دعمًا';
-  const day=[1,2,3].filter(d=>reflect[d]&&(''+reflect[d]).trim()).pop()||0;
+  const day=dayNums().filter(d=>reflect[d]&&(''+reflect[d]).trim()).pop()||0;
   return {written,pos,chal,day,
     adapt: written>=2?(chal<=pos?'مرتفع':'متوسط'):'يحتاج دعمًا',
     conf: lvl(pos),
@@ -1857,7 +1947,7 @@ async function toggleSeen(uid,day,btn){
 /* ملخّص صغير يظهر تحت اسم الطالبة في اللوحة */
 function quizChips(prog,seen,uid){
   let out='',any=false;
-  [1,2,3].forEach(function(d){
+  dayNums().forEach(function(d){
     let inner='';
     QZ_Q.forEach(function(q,qi){
       const v=quizVal(prog,d,qi);
@@ -1977,10 +2067,10 @@ async function exportExcel(){
       o['ردّك على '+d.t]=rp?(rp+(replyAt(r.uid,d.n)?'  ['+replyAt(r.uid,d.n)+']':'')):'— لم تردّي —';
     });
     /* التقييم الذاتي السريع — ٣ أسئلة × ٣ أيام */
-    [1,2,3].forEach(function(dn){
+    dayNums().forEach(function(dn){
       QZ_Q.forEach(function(q,qi){ o['ي'+ar(dn)+' — '+q]=quizWord(r.progress,dn,qi); });
     });
-    [1,2,3].forEach(function(dn){ const at=seenAt(r.seen,dn); o['اطّلعتِ على ي'+ar(dn)]=at?seenFmt(at):'—'; });
+    dayNums().forEach(function(dn){ const at=seenAt(r.seen,dn); o['اطّلعتِ على ي'+ar(dn)]=at?seenFmt(at):'—'; });
     o['عدد الأيام التي دوّنتها']=ar(ind.written);
     o['انتظام الكتابة']=ind.writeLvl;
     o['مؤشّر الدعم المهني']=ind.overall;
@@ -2158,7 +2248,7 @@ function replyBox(n){const r=REPLIES&&REPLIES[n];if(!r||!r.text)return '';
     +(r.at?'<div style="font-size:10.5px;color:var(--muted);margin-top:5px">'+new Date(r.at).toLocaleString('ar-EG')+'</div>':'')
     +'</div>';}
 async function sbSeen(){if(!sb||!student.id)return;try{await sb.rpc(SB_RPC.seen,{p_uid:student.id});}catch(e){}}
-const DAY_LABELS=['اليوم الأول (الأحد ٣٠ أغسطس)','اليوم الثاني (الثلاثاء ١ سبتمبر)','اليوم الثالث (الخميس ٣ سبتمبر)'];
+const DAY_LABELS=days.map(function(d){return d.name+' ('+d.dow+' '+d.date+')';});
 async function sendReply(uid,day){
   if(!supUnlocked)return;
   const ta=document.getElementById('rp'+day);const txt=(ta?ta.value:'').trim();
@@ -2366,8 +2456,8 @@ function qaCard(icon,tone,title,sub,fn,badge){
 /* عدّادات مشتقّة من الحالة */
 function homeStats(){
   let tot=0,dn=0;days.forEach(d=>{tot+=d.tasks.length;dn+=(state.done[d.n]?state.done[d.n].size:0);});
-  const written=[1,2,3].filter(d=>answers.reflect[d]&&(''+answers.reflect[d]).trim()).length;
-  const finished=[1,2,3].filter(d=>state.fin[d]).length;
+  const written=dayNums().filter(d=>answers.reflect[d]&&(''+answers.reflect[d]).trim()).length;
+  const finished=dayNums().filter(d=>state.fin[d]).length;
   const replies=Object.keys(REPLIES||{}).filter(k=>REPLIES[k]&&REPLIES[k].text).length;
   return {tot:tot,dn:dn,pct:tot?Math.round(dn/tot*100):0,written:written,finished:finished,replies:replies};
 }
@@ -2390,7 +2480,7 @@ function renderHome(){
   document.getElementById('featUnit').textContent='مهمة منجزة · '+ar(st.pct)+'٪';
   const bar=document.getElementById('homeBar');if(bar)bar.style.width=st.pct+'%';
   document.getElementById('featSub').textContent=
-    st.pct===100?'أكملتِ مهام الأسبوع التدريبي الثاني.':
+    st.pct===100?('أكملتِ مهام '+weekLabel(weekOf(state.cur))+'.'):
     'المتبقّي '+ar(st.tot-st.dn)+' مهمة موزّعة على أيامك التدريبية الثلاثة.';
 
   /* الإجراءات السريعة */
