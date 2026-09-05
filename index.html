@@ -1041,10 +1041,12 @@ textarea:focus,input:focus,select:focus{background:#fff;border-color:var(--teal-
         </div>
 
         <div class="card card-3d" style="border:1.5px solid var(--clay)">
-          <div class="card-title">خطوة إلزامية: قراءة التوصيف</div>
-          <p style="font-size:13px;color:var(--muted);margin:6px 0 12px">على جميع الطالبات قراءة <b>توصيف مقرر التدريب الميداني</b> قبل الانتقال لبقية الأقسام. نزّليه من الزر أدناه واحتفظي به.</p>
-          <a href="syllabus.docx" download="توصيف-التدريب-الميداني.docx" class="btn btn-primary btn-sm" style="margin-bottom:12px">⬇️ تنزيل توصيف المقرر</a>
-          <div class="task" id="sylTask" onclick="toggleSyl()"><div class="tcheck" id="sylCheck"></div><span class="tt">أقرّ بأنني قرأتُ توصيف المقرر في بلاك بورد (إلزامي)</span></div>
+          <div class="card-title">خطوة مهمة: قراءة التوصيف</div>
+          <p style="font-size:13px;color:var(--muted);margin:6px 0 12px">على جميع الطالبات قراءة <b>توصيف مقرر التدريب الميداني</b> والاطّلاع على معايير التقييم فيه. نزّليه من الزر أدناه واحتفظي به.</p>
+          <a href="syllabus.docx" download="توصيف-التدريب-الميداني.docx" class="btn btn-primary btn-sm">⬇️ تنزيل توصيف المقرر</a>
+          <!-- أُلغي إقرار «قرأتُ التوصيف» بطلب المستخدمة (2026-09-05) — كان يمنع الوصول لبقية الأقسام.
+          <div class="task" id="sylTask" onclick="toggleSyl()"><div class="tcheck" id="sylCheck"></div><span class="tt">أقرّ بأنني قرأتُ توصيف المقرر في بلاك بورد</span></div>
+          -->
         </div>
 
         <div class="card card-3d">
@@ -1443,13 +1445,12 @@ const OPEN=['home','guide','map'];
 const gate={seenMap:false,readSyl:false};
 function loadGate(){try{const g=JSON.parse(localStorage.getItem('rafiqaGate'));if(g){gate.seenMap=!!g.seenMap;gate.readSyl=!!g.readSyl;}}catch(e){}}
 function saveGate(){try{localStorage.setItem('rafiqaGate',JSON.stringify(gate));}catch(e){}}
-function gateOk(){return gate.seenMap&&gate.readSyl;}
+/* أُلغيت البوّابة كاملةً (2026-09-05): إقرار التوصيف ثم شرط خريطة الإجراءات.
+   كانت تمنع الطالبة من فتح بقية الأقسام، فتسبّبت في توقّف نصف الفوج قبل الوصول للمهام.
+   لإعادتها: return gate.seenMap&&gate.readSyl; وأعيدي كتلة التوجيه في go(). */
+function gateOk(){return true;}
 function go(name,el){
   if((name==='supervisor'||name==='indicators')&&!supUnlocked){askSupPass(()=>go(name,el));return;}
-  if(!OPEN.includes(name)&&name!=='supervisor'&&name!=='indicators'&&!supMode&&!gateOk()){
-    if(!gate.readSyl){toast('📖 أولًا أكّدي قراءة التوصيف في «دليل التدريب»');return go('guide',null);}
-    if(!gate.seenMap){toast('🧭 اطّلعي على «خريطة الإجراءات» أولًا');return go('map',null);}
-  }
   if(name==='map'){gate.seenMap=true;saveGate();}
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   const v=document.getElementById('v-'+name);if(v)v.classList.add('active');
@@ -1495,6 +1496,8 @@ const days=[
  /* ═══ الأسبوع التدريبي الثالث · ٦ – ١٠ سبتمبر ═══
     الهدف: مناقشة وتحليل بعض التقارير المرتبطة بالحالات والخطط التي تُطبَّق. */
  {n:4,wk:3,name:'اليوم الأول',dow:'الأحد',date:'٦ سبتمبر',sub:'تقارير الحالات · ٦ ساعات',
+  video:{src:'weekly-plan-guide.mp4',title:'دليل التقرير الأسبوعي والخطة التنفيذية',
+         desc:'شاهدي هذا الشرح في بداية الأسبوع التدريبي الثالث — يوضّح كيف تُكتب التقارير وتُحلَّل الخطط، وكيف تُعدّين خطتك الأسبوعية التنفيذية قبل عرضها على مشرفتك.'},
   tip:'يومك للاطّلاع على تقارير الحالات في المؤسسة: كيف تُوثَّق الحالة، وما البيانات التي يرصدها الأخصائي، وكيف يُصاغ التقرير بأسلوب مهني. اطّلعي بإذن مشرفتك ومع حفظ السرّية التامة.',
   tasks:[{t:'الاطّلاع على نماذج التقارير المعتمدة في المؤسسة'},
          {t:'التعرّف إلى طريقة توثيق الحالة في سجلات المؤسسة'},
@@ -1588,6 +1591,18 @@ function buildPath(){const w=document.getElementById('daypath');w.innerHTML='';
     node.className='dnode'+(d.n===state.cur?' active':'')+(done?' done':'');
     node.onclick=()=>{const prev=state.cur;state.cur=d.n;if(prev!==d.n){sfxMove();persist();}buildPath();renderDay();};
     node.innerHTML=`<div class="dcirc">${done?'✓':ar(dayIndexInWeek(d.n))}</div><div class="dlbl">${d.dow}</div><div class="dsub">${d.date}</div>`;w.appendChild(node);});}
+/* فيديو اليوم — للمشاهدة داخل المنصة فقط (زر التنزيل وقائمة الزر الأيمن معطّلان) */
+function dayVideo(d){
+  if(!d.video||!d.video.src)return '';
+  return `<div class="card card-3d">
+     <div class="card-title">🎬 ${d.video.title||'فيديو اليوم'}</div>
+     ${d.video.desc?`<p style="font-size:13px;color:var(--muted);margin:6px 0 12px">${d.video.desc}</p>`:''}
+     <video src="${d.video.src}" controls playsinline preload="metadata"
+       controlsList="nodownload noplaybackrate noremoteplayback" disablePictureInPicture disableRemotePlayback
+       oncontextmenu="return false" style="width:100%;border-radius:14px;background:#2E2A45"></video>
+     <p style="font-size:12px;color:var(--muted);margin:8px 0 0">للمشاهدة داخل المنصة فقط — يُرجى عدم تنزيل الفيديو أو إعادة نشره.</p>
+   </div>`;
+}
 function renderDay(){const d=days.find(x=>x.n===state.cur);const set=state.done[d.n]||(state.done[d.n]=new Set());
   syncWeekLabels();
   let tasks='';d.tasks.forEach((t,i)=>{tasks+=`<div class="task${set.has(i)?' done':''}" onclick="toggleTask(${d.n},${i})"><div class="tcheck">${set.has(i)?'✓':''}</div><span class="tt">${t.t}</span>${t.up?`<span class="chip pink" onclick="event.stopPropagation();toast('📎 نافذة رفع الملف (تجريبي)')">📎 رفع</span>`:''}</div>`;});
@@ -1597,6 +1612,7 @@ function renderDay(){const d=days.find(x=>x.n===state.cur);const set=state.done[
    <div class="card card-3d" style="background:var(--sand)">
      <div><div style="font-weight:900;color:var(--navy);margin-bottom:3px">🧭 إرشاد ${d.name} · ${d.dow} ${d.date}</div><div style="font-size:13px">${d.tip}</div></div>
    </div>
+   ${dayVideo(d)}
    ${d.note?`<div class="banner pink"><div class="bic">📌</div><div>${d.note}</div></div>`:''}
    ${d.note2?`<div class="banner"><div class="bic">🤝</div><div>${d.note2}</div></div>`:''}
    ${dayLinks(d)}
@@ -1628,10 +1644,6 @@ function updateNextAction(cd){
     (supMode?'وضع المشرفة الأكاديمية':(student.org||'التدريب الميداني'))+'</span>';
   if(supMode){t.textContent='لوحة المتابعة تعرض ملاحظات الطالبات وردودك عليها.';
     b.textContent='افتحي لوحة المتابعة';b.onclick=function(){go('supervisor',null);};syncHeroAlt('supervisor');return;}
-  if(!gate.readSyl){t.textContent='قبل البدء: أكّدي قراءة توصيف المقرر في دليل التدريب.';
-    b.textContent='افتحي دليل التدريب';b.onclick=function(){go('guide',null);};syncHeroAlt('guide');return;}
-  if(!gate.seenMap){t.textContent='اطّلعي على خريطة الإجراءات لتعرفي خطوات يومك الأول.';
-    b.textContent='افتحي خريطة الإجراءات';b.onclick=function(){go('map',null);};syncHeroAlt('map');return;}
   const done=state.done[cd.n]||new Set();
   const rest=cd.tasks.length-done.size;
   const wrote=!!(answers.reflect[cd.n]&&(''+answers.reflect[cd.n]).trim());
@@ -2145,8 +2157,6 @@ const sim=[
 ];
 let si=0;
 function openSim(){
-  if(!gate.readSyl){toast('📖 هذا التدريب متاح بعد تأكيد قراءة التوصيف في «دليل التدريب»');closeSidebar();go('guide',null);return;}
-  if(!gate.seenMap){toast('🧭 اطّلعي على «خريطة الإجراءات» أولًا');closeSidebar();go('map',null);return;}
   si=0;sim.forEach(s=>delete s._o);renderSim();document.getElementById('simOv').classList.add('show');}
 function closeSim(){speechSynthesis.cancel();document.getElementById('simOv').classList.remove('show');}
 function renderSim(){const s=sim[si];const ov=document.getElementById('simOv');
@@ -2374,7 +2384,25 @@ function studentNotesCard(d){
 }
 
 /* ════════ ردّ المشرفة على ملاحظات اليوم — داخل صفحة المهام ════════ */
+/* فيديو الخطة والتقرير الأسبوعي — داخل مسار الأسبوع الثالث.
+   مشغّل مستقل عن مشغّل «كلمة مشرفة التدريب» الذي يبقى في صفحة دليل التدريب. */
+function playWeekVid(){
+  const v=document.getElementById('vidWk'); if(!v)return;
+  if(!v.getAttribute('src'))v.setAttribute('src','weekly-plan-guide.mp4');
+  v.style.display='block'; v.play().catch(function(){});
+  setTimeout(function(){v.scrollIntoView({block:'center'});},150);
+  toast('🎥 الخطة الأسبوعية والتقرير الأسبوعي');
+}
 function dayLinks(d){
+  /* الأسبوع الثالث: شرح الخطة الأسبوعية والتقرير الأسبوعي — في أيامه الثلاثة */
+  if(weekOf(d.n)===3){
+    return '<section class="card daylinks">'+
+      '<div class="card-title">الخطة الأسبوعية والتقرير الأسبوعي</div>'+
+      '<p style="font-size:13px;color:var(--muted);margin:4px 0 12px">شرح مسجّل من المشرفة الأكاديمية عن كيفية إعداد الخطة الأسبوعية وكتابة التقرير الأسبوعي.</p>'+
+      '<button class="btn btn-primary btn-sm" onclick="playWeekVid()">▶️ تشغيل الشرح</button>'+
+      '<video id="vidWk" controls playsinline controlsList="nodownload noplaybackrate" disablePictureInPicture oncontextmenu="return false" style="width:100%;border-radius:14px;background:#2E2A45;display:none;margin-top:12px"></video>'+
+    '</section>';
+  }
   if(d.n!==1)return '';
   return '<section class="card daylinks">'+
     '<div class="card-title">ما تحتاجينه في أول يوم تدريبي</div>'+
@@ -2511,7 +2539,6 @@ function renderHome(){
 
   /* مراحل التدريب */
   const ms=[
-    {t:'قراءة التوصيف',on:gate.readSyl},
     {t:'خريطة الإجراءات',on:gate.seenMap},
     {t:'مباشرة اليوم الأول',on:!!state.fin[1]},
     {t:'تدوين الملاحظات',on:st.written>0},
