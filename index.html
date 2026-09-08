@@ -1980,12 +1980,16 @@ function viewReflect(uid){
   if(SUP_CACHE&&SUP_CACHE.students&&SUP_CACHE.students.length){var s=SUP_CACHE.students.find(x=>x.uid===uid);
     if(s){name=s.name||name;org=s.org||org;var rr=SUP_CACHE.answers&&SUP_CACHE.answers[uid];if(rr&&Object.keys(rr).length)reflect=rr;}}
   if(!lr&&student.id===uid&&(!SUP_CACHE||!SUP_CACHE.students||!SUP_CACHE.students.length)){name=student.name;org=student.org;reflect=answers.reflect;}
-  var labels=['اليوم الأول · الأحد ٣٠ أغسطس','اليوم الثاني · الثلاثاء ١ سبتمبر','اليوم الثالث · الخميس ٣ سبتمبر'];
+  /* العناوين مشتقّة من مصفوفة الأيام — تشمل كل الأسابيع تلقائيًا */
   var html='<div style="font-size:13px;color:var(--muted);margin-bottom:14px">👩‍🎓 <b>'+name+'</b>'+(org?' · '+org:'')+' — للمتابعة والدعم، وليست للتقييم.</div>';
   var _rp=(SUP_CACHE&&SUP_CACHE.replies&&SUP_CACHE.replies[uid])||{};
-  [1,2,3].forEach(function(d,i){var t=(reflect[d]||'').toString().trim();var rp=_rp[d]||null;
+  var _lastWk=null;
+  days.forEach(function(dd){var d=dd.n;var t=(reflect[d]||'').toString().trim();var rp=_rp[d]||null;
+    var w=weekOf(d);
+    if(w!==_lastWk){_lastWk=w;
+      html+='<div style="font-weight:900;color:var(--navy);font-size:13.5px;margin:16px 0 8px;padding-bottom:5px;border-bottom:2px solid var(--line)">'+weekLabel(w)+' <span style="font-weight:400;font-size:11px;color:var(--muted)">'+weekRange(w)+'</span></div>';}
     html+='<div style="margin-bottom:14px;border:1px solid var(--line);border-radius:14px;padding:11px 13px;background:rgba(255,255,255,.45)">'
-      +'<div style="font-weight:800;color:var(--navy);font-size:13px;margin-bottom:5px">📝 '+labels[i]+'</div>'
+      +'<div style="font-weight:800;color:var(--navy);font-size:13px;margin-bottom:5px">📝 '+dd.name+' · '+dd.dow+' '+dd.date+'</div>'
       +'<div style="background:rgba(255,255,255,.75);border:1px solid var(--line);border-radius:12px;padding:11px 13px;font-size:13.5px;line-height:1.85;white-space:pre-wrap">'+(t?escH(t):'<span style="color:var(--muted)">— لم تكتب الطالبة ملاحظاتها بعد —</span>')+'</div>'
       +'<textarea id="rp'+d+'" rows="2" style="margin-top:8px" placeholder="اكتبي ردّك على ملاحظات هذا اليوم…">'+(rp&&rp.text?escH(rp.text):'')+'</textarea>'
       +'<div class="row" style="flex-wrap:wrap;align-items:center;margin-top:6px">'
