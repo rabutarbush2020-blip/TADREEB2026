@@ -217,6 +217,8 @@ input[type=checkbox]{accent-color:var(--teal);width:auto}
 .face.sel{background:var(--teal-soft);border-color:var(--teal)}
 .face span{display:block;font-size:11.5px;color:var(--muted);margin-top:3px;font-weight:600}
 .face.sel span{color:var(--teal)}
+/* سطر توضيحي صغير تحت سؤال التقييم الذاتي */
+.qhint{font-size:11.5px;color:var(--muted);font-weight:400;margin:2px 0 7px;line-height:1.6}
 
 /* ═══ التنبيهات ═══ */
 .banner{display:flex;gap:var(--s3);align-items:flex-start;padding:var(--s3) var(--s4);border-radius:var(--r-s);
@@ -295,6 +297,39 @@ input[type=checkbox]{accent-color:var(--teal);width:auto}
 .lvl.high{background:var(--ok-soft);color:var(--ok)}
 .lvl.mid{background:var(--sand);color:var(--ink-2)}
 .lvl.low{background:var(--warn-soft);color:var(--warn)}
+/* محاكاة المقابلة */
+.sim-av{width:64px;height:64px;border-radius:50%;box-shadow:0 4px 14px rgba(0,0,0,.12);transition:transform .2s}
+.sim-av.talk{animation:simTalk .5s ease-in-out infinite}
+.sim-av.think{opacity:.7}
+@keyframes simTalk{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+.sim-av.talk #simMouth{d:path("M33 52q7 7 14 0")}
+.sim-rep h3{font-size:15px;margin:16px 0 8px;font-weight:900}
+.sim-rep .sk{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px dashed var(--line)}
+.sim-rep .sk .n{flex:1;font-size:13.5px}
+.sim-rep .sk .n small{display:block;color:var(--muted);font-size:12px;margin-top:2px}
+.sim-rep ul{margin:0;padding-inline-start:20px;font-size:13.5px;line-height:1.8}
+.sim-tr{font-size:12.5px;line-height:1.8;max-height:220px;overflow:auto;background:var(--paper);border:1px solid var(--line);border-radius:var(--r-s);padding:8px 12px}
+.sim-tr b{color:var(--teal)}
+/* غرفة الأنشطة */
+.room-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.rm{border:1px solid var(--line);border-radius:var(--r-s);background:var(--paper);overflow:hidden;display:flex;flex-direction:column;position:relative}
+.rm.feat{border-color:var(--teal);box-shadow:0 0 0 2px var(--teal-soft)}
+.rm .ph{width:100%;aspect-ratio:4/3;object-fit:cover;background:var(--sand);cursor:zoom-in}
+.rm .bd{padding:12px 14px;display:flex;flex-direction:column;gap:6px;flex:1}
+.rm .tt{font-weight:900;font-size:14.5px;line-height:1.5}
+.rm .who{font-size:12px;color:var(--muted)}
+.rm .tx{font-size:13px;line-height:1.75;white-space:pre-wrap;max-height:9.5em;overflow:hidden;position:relative}
+.rm .tx.open{max-height:none}
+.rm .more{font-size:12px;color:var(--teal);cursor:pointer;font-weight:700}
+.rm .ft{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:auto;padding-top:8px;border-top:1px dashed var(--line)}
+.rm .clap{border:1px solid var(--line);background:#fff;border-radius:99px;padding:4px 12px;font-size:13px;cursor:pointer;font-weight:700;font-family:inherit}
+.rm .clap.on{background:var(--teal-soft);border-color:var(--teal);color:var(--teal)}
+.rm .star{align-self:flex-start;background:var(--teal);color:#fff;font-size:11px;font-weight:800;padding:3px 9px;border-radius:99px}
+.rm .mod{display:flex;gap:4px;margin-inline-start:auto}
+.rm .mod button{font-size:11.5px;padding:3px 8px}
+#rmPhotoPrev img{max-width:160px;border-radius:8px;border:1px solid var(--line)}
+.room-lb{position:fixed;inset:0;background:rgba(0,0,0,.82);display:flex;align-items:center;justify-content:center;z-index:9999;cursor:zoom-out}
+.room-lb img{max-width:94vw;max-height:92vh;border-radius:10px}
 .ind{display:flex;flex-direction:column;gap:var(--s1);margin-bottom:var(--s3)}
 .ind-top{display:flex;justify-content:space-between;font-size:13.5px;font-weight:600}
 .empty{text-align:center;color:var(--muted);padding:var(--s6) var(--s4);font-size:14px}
@@ -906,13 +941,17 @@ textarea:focus,input:focus,select:focus{background:#fff;border-color:var(--teal-
       <div class="nav-item active" data-v="home" onclick="go('home',this)"><span class="nav-ic"><svg viewBox="0 0 24 24"><use href="#ic-home"/></svg></span> الرئيسية</div>
       <div class="nav-item" data-v="guide" onclick="go('guide',this)"><span class="nav-ic"><svg viewBox="0 0 24 24"><use href="#ic-book"/></svg></span> دليل التدريب</div>
       <div class="nav-item" data-v="map" onclick="go('map',this)"><span class="nav-ic"><svg viewBox="0 0 24 24"><use href="#ic-map"/></svg></span> <span class="nav-tx">خريطة الإجراءات<small>إجراءات الدوام بالمؤسسة التدريبية</small></span></div>
-      <div class="nav-item" data-v="week" onclick="go('week',this)"><span class="nav-ic"><svg viewBox="0 0 24 24"><use href="#ic-route"/></svg></span> مسار الأسبوع <span class="bdg">٣ أيام</span></div>
+      <div class="nav-item" data-v="week" onclick="go('week',this)"><span class="nav-ic"><svg viewBox="0 0 24 24"><use href="#ic-route"/></svg></span> مسار الأسابيع التدريبية <span class="bdg" id="weekBdg">٣ أسابيع</span></div>
+      <div class="nav-item" data-v="room" onclick="go('room',this)"><span class="nav-ic"><svg viewBox="0 0 24 24"><use href="#ic-board"/></svg></span> <span class="nav-tx">غرفة الأنشطة<small>أنشطة الطالبات في كل المؤسسات</small></span></div>
+      <!-- «محاكاة مقابلة» مع الأفتار أُزيلت من الواجهة بطلب المستخدمة (2026-09-17) — الدالة sim وجدول sim_sessions والكود (simStart…) باقية.
+      <div class="nav-item" data-v="sim" onclick="go('sim',this)"><span class="nav-ic"><svg viewBox="0 0 24 24"><use href="#ic-help"/></svg></span> <span class="nav-tx">محاكاة مقابلة<small>تدرّبي مع عميلة افتراضية</small></span></div>
+      -->
       <!-- أُزيل عنصر «تدريب على مواقف محتملة» بطلب المستخدمة (2026-08-29) — الميزة محفوظة بالكود (openSim).
       <div class="nav-item" onclick="closeSidebar();openSim()"><span class="nav-ic"><svg viewBox="0 0 24 24"><use href="#ic-help"/></svg></span> <span class="nav-tx">تدريب على مواقف محتملة<small>مواقف واقعية — بلا تقييم</small></span></div>
       -->
       <div class="nav-item" data-v="assistant" onclick="go('assistant',this)"><span class="nav-ic"><svg viewBox="0 0 24 24"><use href="#ic-help"/></svg></span> المساعد الذكي</div>
       <div class="nav-item" data-v="forms" onclick="go('forms',this)"><span class="nav-ic"><svg viewBox="0 0 24 24"><use href="#ic-doc"/></svg></span> النماذج</div>
-      <div class="nav-item" data-v="community" onclick="go('community',this)"><span class="nav-ic"><svg viewBox="0 0 24 24"><use href="#ic-board"/></svg></span> لوحة الإعلانات</div>
+      <div class="nav-item" data-v="community" onclick="go('community',this)"><span class="nav-ic"><svg viewBox="0 0 24 24"><use href="#ic-board"/></svg></span> لوحة الإعلانات <span class="bdg" id="annBadge" style="display:none;background:var(--clay);color:#fff"></span></div>
       <div class="nav-sec">المشرفة</div>
       <div class="nav-item" data-v="supervisor" onclick="go('supervisor',this)"><span class="nav-ic"><svg viewBox="0 0 24 24"><use href="#ic-table"/></svg></span> لوحة المتابعة</div>
       <div class="nav-item" data-v="indicators" onclick="go('indicators',this)"><span class="nav-ic"><svg viewBox="0 0 24 24"><use href="#ic-chart"/></svg></span> مؤشرات الدعم المهني</div>
@@ -993,7 +1032,7 @@ textarea:focus,input:focus,select:focus{background:#fff;border-color:var(--teal-
             </select></div>
           <div class="lf"><label>نصّ الرسالة</label>
             <textarea id="mailBody" rows="4" placeholder="اكتبي رسالتك بأسلوب مهني وموجز…"></textarea></div>
-          <div class="note" style="font-size:12px;margin:2px 0 12px"><b>🕐 الساعات المكتبية:</b><br><b>الاثنين</b> ١١:٠٠–١٢:٠٠ · مكتب 128-C03 (المكتبة القديمة) &nbsp;|&nbsp; <b>الأربعاء</b> ٨:٣٠–٩:٣٠ · مكتب 237 · مبنى البنات C04</div>
+          <div class="note" style="font-size:12px;margin:2px 0 12px"><b>🕐 الساعات المكتبية:</b><br><b>الاثنين</b> ١١:٠٠–١٢:٠٠ &nbsp;|&nbsp; <b>الأربعاء</b> ٨:٣٠–٩:٣٠ &nbsp;·&nbsp; مكتب 237 · مبنى البنات C04</div>
           <div class="row" style="flex-wrap:wrap">
             <button class="btn btn-primary btn-sm" onclick="sendSupMail()">إرسال البريد</button>
             <button class="btn btn-ghost btn-sm" onclick="copySupMail()">نسخ عنوان المشرفة</button>
@@ -1012,7 +1051,7 @@ textarea:focus,input:focus,select:focus{background:#fff;border-color:var(--teal-
           <ul class="act" id="actList"></ul></section>
 
 
-        <div class="banner pink"><div class="bic">💡</div><div>للاطّلاع على الضوابط والجدول والفيديوهات، افتحي <b>دليل التدريب</b>. ولبدء مهامك اليومية افتحي <b>مسار الأسبوع</b>.</div></div>
+        <div class="banner pink"><div class="bic">💡</div><div>للاطّلاع على الضوابط والجدول والفيديوهات، افتحي <b>دليل التدريب</b>. ولبدء مهامك اليومية افتحي <b>مسار الأسابيع التدريبية</b>.</div></div>
       </div>
 
       <!-- ═══ GUIDE ═══ -->
@@ -1086,6 +1125,76 @@ textarea:focus,input:focus,select:focus{background:#fff;border-color:var(--teal-
         </div>
       </div>
 
+      <!-- ═══ ROOM · غرفة الأنشطة — منشورات الطالبات مرئية للجميع (جدول guide.activities) ═══ -->
+      <div class="view" id="v-room">
+        <div class="banner"><div class="bic">🏛️</div><div><b>غرفة الأنشطة</b> — أرسلي نشاطًا نفّذتِه في مؤسستك، فيصل إلى <b>المشرفة الأكاديمية أولًا</b>. بعد اعتمادها يظهر لزميلاتك في مؤسستك، وقد تختاره <b>نشاطًا مميّزًا</b> فيراه الجميع وتُعلن عنه في لوحة الإعلانات. كل نشاط هنا مادة جاهزة لبند «الأنشطة الوقائية/العلاجية/التنموية» في ملف الإنجاز ولعرضك النهائي.</div></div>
+        <div class="card card-3d" id="roomCompose">
+          <div class="card-head"><div class="card-title">✨ أرسلي نشاطًا</div><button class="btn btn-ghost btn-sm" id="roomToggle" onclick="roomToggleForm()">فتح النموذج</button></div>
+          <div id="roomForm" style="display:none">
+            <div class="grid g2" style="gap:10px">
+              <div><label style="font-size:12.5px;font-weight:700">عنوان النشاط</label><input id="rmTitle" maxlength="120" placeholder="مثال: جلسة توعية عن تنظيم الوقت للصف السابع"></div>
+              <div><label style="font-size:12.5px;font-weight:700">نوع النشاط</label><select id="rmKind"><option value="">— اختاري —</option><option>وقائي</option><option>علاجي</option><option>تنموي</option></select></div>
+              <div><label style="font-size:12.5px;font-weight:700">الدور المهني الذي مارستِه</label><select id="rmRole"><option value="">— اختاري —</option><option>المُعلِّم</option><option>المُمكِّن</option><option>الوسيط / المُحيل</option><option>المرشد</option><option>المدافع</option><option>منسّق الحالة</option><option>الميسّر</option></select></div>
+              <div><label style="font-size:12.5px;font-weight:700">صورة (اختيارية)</label><input type="file" id="rmPhoto" accept="image/*" onchange="roomPickPhoto(this)"><div id="rmPhotoPrev" style="margin-top:6px"></div></div>
+            </div>
+            <label style="font-size:12.5px;font-weight:700;display:block;margin-top:10px">ماذا فعلتِ، ولمن، وما الذي لاحظتِه؟</label>
+            <textarea id="rmBody" rows="4" maxlength="1500" placeholder="الفئة المستهدفة · الهدف · الخطوات باختصار · ما نجح وما ستغيّرينه"></textarea>
+            <label style="font-size:12.5px;display:flex;gap:8px;align-items:flex-start;margin-top:10px;cursor:pointer"><input type="checkbox" id="rmPriv" style="margin-top:3px"> أؤكد أن المنشور والصورة لا يتضمنان وجوه المستفيدين أو أسماءهم أو أي بيانات تكشف هويتهم.</label>
+            <div class="row" style="margin-top:12px;gap:8px;flex-wrap:wrap"><button class="btn btn-primary" id="rmSend" onclick="roomPost()">إرسال للمراجعة</button><span style="font-size:12px;color:var(--muted)">يصل للمشرفة الأكاديمية أولًا، ويظهر لزميلاتك بعد اعتمادها · حتى ٥ منشورات يوميًا</span></div>
+          </div>
+        </div>
+        <div class="card card-3d">
+          <div class="card-head"><div class="card-title">الأنشطة المنشورة <span class="chip" id="roomCount"></span><div id="roomHint" style="font-size:11.5px;font-weight:400;color:var(--muted);margin-top:4px">أنشطة مؤسستك التدريبية بعد اعتماد المشرفة — ويمكنك الاطّلاع على الأنشطة المميّزة ⭐ من جميع المؤسسات من القائمة</div></div>
+            <div class="row" style="flex-wrap:wrap"><select id="roomOrg" onchange="renderRoom()" style="max-width:190px"><option value="">كل المؤسسات</option></select><select id="roomKind" onchange="renderRoom()" style="max-width:130px"><option value="">كل الأنواع</option><option>وقائي</option><option>علاجي</option><option>تنموي</option></select><button class="btn btn-ghost btn-sm" onclick="loadRoom()">تحديث</button><button class="btn btn-ghost btn-sm" id="roomExport" style="display:none" onclick="roomExport()">تنزيل إكسل</button></div></div>
+          <div id="roomGrid" class="room-grid"><div class="empty">جارٍ التحميل…</div></div>
+        </div>
+      </div>
+      <!-- ═══ SIM · محاكاة مقابلة مع عميلة افتراضية — أُزيلت من الواجهة بطلب المستخدمة (2026-09-17). لإعادتها: أزيلي هذا التعليق وأعيدي عنصر القائمة.
+      <div class="view" id="v-sim">
+        <div class="banner"><div class="bic">🎭</div><div><b>محاكاة مقابلة بسيطة</b> — تتحدثين مع «نورة»، عميلة افتراضية يؤدّيها الذكاء الاصطناعي، ثم يصلكِ تقرير تكويني فوري (بلا درجات) ويصل للمشرفة الأكاديمية في اللحظة نفسها. هذا تدريب على مهارات الأسبوع الخامس: الافتتاح، الأسئلة المفتوحة، الإصغاء، السرّية، والإنهاء.</div></div>
+        <div class="card card-3d" id="simIntro">
+          <div class="card-title">السيناريو: نورة — مقابلة أولى في المدرسة</div>
+          <p style="margin:8px 0 12px;font-size:14px;line-height:1.9" id="simBrief">أحالت معلّمة اللغة العربية الطالبة نورة (١٤ سنة، الصف التاسع) إلى الأخصائية الاجتماعية لأن درجاتها تراجعت في الشهر الأخير، وصارت منعزلة، وتنام أحيانًا في الحصة. هذه أول مقابلة معها. هدفكِ: مقابلة تعارف وجمع بيانات أولية — لا تشخيص ولا خطة علاج.</p>
+          <div class="banner pink" style="margin-bottom:12px"><div class="bic">💡</div><div>ابدئي بالتعريف بنفسك وبهدف اللقاء، واطرحي أسئلة مفتوحة، واعكسي ما تسمعينه قبل أن تسألي التالي. عندما تشعرين أن المقابلة اكتملت، أنهيها بخطوة تالية واضحة ثم اضغطي «إنهاء وإصدار التقرير».</div></div>
+          <div class="row" style="flex-wrap:wrap;gap:8px;align-items:center">
+            <button class="btn btn-primary" onclick="simStart()">🎙️ ابدئي المقابلة</button>
+            <label style="font-size:12.5px;display:flex;align-items:center;gap:6px;cursor:pointer"><input type="checkbox" id="simVoice" checked> صوت نورة</label>
+            <span style="font-size:12px;color:var(--muted)">حتى ١٦ ردًّا · المحادثة تُحفظ باسمك ورقمك الجامعي</span>
+          </div>
+        </div>
+        <div class="card card-3d" id="simRoom" style="display:none">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px">
+            <div id="simAvatar" class="sim-av"><svg viewBox="0 0 80 80" width="64" height="64" aria-hidden="true">
+              <circle cx="40" cy="40" r="38" fill="#F3E7D9"/>
+              <path d="M14 42c0-20 10-30 26-30s26 10 26 30v18H14z" fill="#3B2E2A"/>
+              <ellipse cx="40" cy="44" rx="17" ry="20" fill="#F6D4B8"/>
+              <circle class="sim-eye" cx="33" cy="42" r="2.4" fill="#2B2B2B"/><circle class="sim-eye" cx="47" cy="42" r="2.4" fill="#2B2B2B"/>
+              <path d="M30 37q3-3 6 0M44 37q3-3 6 0" stroke="#3B2E2A" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+              <path id="simMouth" d="M34 53q6 3 12 0" stroke="#B0554A" stroke-width="2" fill="none" stroke-linecap="round"/>
+              <path d="M14 42c0-8 4-14 10-18q-6 10-4 26zM66 42c0-8-4-14-10-18q6 10 4 26z" fill="#3B2E2A"/>
+            </svg></div>
+            <div style="flex:1"><div style="font-weight:900">نورة</div><div style="font-size:11.5px;color:var(--muted)" id="simStatus">تنتظر أن تبدئي…</div></div>
+            <span class="chip" id="simTurns">٠ / ١٦</span>
+          </div>
+          <div class="chatbox" id="simBox" style="min-height:260px;max-height:52vh;overflow:auto"></div>
+          <div class="row" style="margin-top:10px;align-items:stretch">
+            <input id="simIn" placeholder="اكتبي ما ستقولينه لنورة…" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();simSend();}" autocomplete="off">
+            <button class="btn btn-ghost btn-sm" id="simMic" onclick="simMicToggle()" title="إملاء صوتي" aria-label="إملاء صوتي" style="display:none">🎤</button>
+            <button class="btn btn-primary" id="simSendBtn" onclick="simSend()">إرسال</button>
+          </div>
+          <div class="row" style="margin-top:10px;flex-wrap:wrap;gap:8px">
+            <button class="btn btn-ghost btn-sm" id="simEndBtn" onclick="simEnd()">🧾 إنهاء وإصدار التقرير</button>
+            <button class="btn btn-ghost btn-sm" onclick="simAbort()">إلغاء المحاكاة</button>
+          </div>
+        </div>
+        <div class="card card-3d" id="simReportCard" style="display:none"><div id="simReport"></div></div>
+        <div class="card card-3d" id="simHistCard" style="display:none">
+          <div class="card-head"><div class="card-title">محاكاتي السابقة</div><button class="btn btn-ghost btn-sm" onclick="simLoadMine()">تحديث</button></div>
+          <div id="simHist"></div>
+        </div>
+      </div>
+      ═══ نهاية كتلة المحاكاة المعطّلة ═══ -->
+
       <!-- ═══ FORMS ═══ -->
       <div class="view" id="v-forms">
         <!-- ═══ أُزيلت بطاقة «إثبات المباشرة» بطلب المستخدمة (2026-08-21) ═══
@@ -1108,22 +1217,14 @@ textarea:focus,input:focus,select:focus{background:#fff;border-color:var(--teal-
             <p style="margin:6px 0 10px;color:var(--muted);font-size:12.5px">نزّلي النموذج الرسمي، عبّئيه على جهازك، ثم ارفعيه في خانة «التقرير الأسبوعي» في بلاك بورد كل <b>سبت قبل الساعة ٦:٠٠ صباحًا</b>.</p>
             <div style="margin-top:12px"><button class="btn btn-primary" onclick="downloadWeekly()">⬇️ تنزيل نموذج التقرير (Word)</button></div>
           </div>
-          <div class="card card-3d"><div class="card-title">نموذج التقرير اليومي</div>
-            <p style="margin:6px 0 10px;color:var(--muted);font-size:12.5px">قالب اختياري يساعدك على تدوين يومك بأسلوب موضوعي.</p>
-            <details class="tmpl-fold">
-              <summary>عرض القالب اليومي</summary>
-              <div class="tmpl" id="tDaily" style="margin-top:10px"><button class="copy" onclick="cpy('tDaily')">نسخ</button>📅 التاريخ: ______
-🏢 المؤسسة/القسم: ______
-⏰ ساعات الحضور: من ____ إلى ____
-
-١) الأنشطة التي قمتُ بها (بوصف موضوعي):
-- ______
-٢) ما لاحظتُه/تعلّمتُه:
-- ______
-٣) صعوبة واجهتني وكيف تعاملتُ معها:
-- ______</div>
-            </details>
-
+          <!-- ═══ حُذفت بطاقة «نموذج التقرير اليومي» بطلب المستخدمة (2026-09-25) ═══
+               السبب: مكرّرة مع بطاقة «ملاحظات اليوم» داخل مسار الأسبوع، ولم تُذكر في تقييم الطالبات. ═══ -->
+          <div class="card card-3d" style="border:1.5px solid var(--teal)"><div class="card-title">🎬 شرح التقرير الأسبوعي والخطة التنفيذية</div>
+            <p style="margin:6px 0 10px;color:var(--muted);font-size:12.5px">شرح مصوّر من المشرفة الأكاديمية: كيف تُكتب بنود التقرير الأسبوعي، وكيف تُعدّين خطتك الأسبوعية التنفيذية قبل عرضها على مشرفتك. <b>ارجعي إليه في أي أسبوع</b> قبل كتابة تقريرك.</p>
+            <video id="vidPlan" controls playsinline preload="metadata" src="weekly-plan-guide.mp4"
+              controlsList="nodownload noplaybackrate noremoteplayback" disablePictureInPicture disableRemotePlayback
+              oncontextmenu="return false" style="width:100%;border-radius:14px;background:#2E2A45"></video>
+            <p style="font-size:11.5px;color:var(--muted);margin:8px 0 0">للمشاهدة داخل المنصة فقط — يُرجى عدم تنزيل الفيديو أو إعادة نشره.</p>
           </div>
           <!-- ═══ أُزيلت بطاقة «نموذج بريد مهني للمشرفة» بطلب المستخدمة (2026-08-24) ═══
                السبب: مكرّرة مع بطاقة «مراسلة المشرفة الأكاديمية» في الصفحة الرئيسية،
@@ -1146,14 +1247,13 @@ textarea:focus,input:focus,select:focus{background:#fff;border-color:var(--teal-
           <p style="margin:6px 0 12px;color:var(--muted);font-size:12.5px">مكان تسليم التقرير الأسبوعي، وتوصيف المقرر، وإعلانات المقرر الرسمية.</p>
           <a href="https://elearning.qu.edu.qa/" target="_blank" rel="noopener" class="btn btn-primary">🔗 فتح بلاك بورد</a>
         </div>
-        <div class="row" style="justify-content:flex-start;margin-top:12px;flex-wrap:wrap">
-          <button class="btn btn-ghost btn-sm" onclick="downloadNotes()">تنزيل ملاحظاتي</button>
-        </div>
+        <!-- أُزيلت بطاقة «ملاحظاتي اليومية» من النماذج بطلب المستخدمة (2026-09-26):
+             زر التنزيل انتقل إلى داخل بطاقة «ملاحظات اليوم» في مسار الأسابيع. -->
       </div>
 
       <!-- ═══ ANNOUNCEMENTS ═══ -->
       <div class="view" id="v-community">
-        <div class="banner"><div class="bic">📢</div><div><b>لوحة الإعلانات</b> — تذكيرات وإرشادات من المشرفة الأكاديمية لجميع الطالبات. <b>للقراءة فقط.</b><br>لأي استفسار شخصي أو ظرف طارئ: راسلي المشرفة من بطاقة «مراسلة المشرفة الأكاديمية» في الصفحة الرئيسية، أو احضري الساعات المكتبية — ويصلكِ الردّ بشكل خاص.<br><span style="font-size:12px">🕐 <b>الاثنين</b> ١١:٠٠–١٢:٠٠ · مكتب 128-C03 (المكتبة القديمة) &nbsp;|&nbsp; <b>الأربعاء</b> ٨:٣٠–٩:٣٠ · مكتب 237 · مبنى البنات C04</span></div></div>
+        <div class="banner"><div class="bic">📢</div><div><b>لوحة الإعلانات</b> — تذكيرات وإرشادات من المشرفة الأكاديمية لجميع الطالبات. <b>للقراءة فقط.</b><br>لأي استفسار شخصي أو ظرف طارئ: راسلي المشرفة من بطاقة «مراسلة المشرفة الأكاديمية» في الصفحة الرئيسية، أو احضري الساعات المكتبية — ويصلكِ الردّ بشكل خاص.<br><span style="font-size:12px">🕐 <b>الاثنين</b> ١١:٠٠–١٢:٠٠ &nbsp;|&nbsp; <b>الأربعاء</b> ٨:٣٠–٩:٣٠ &nbsp;·&nbsp; مكتب 237 · مبنى البنات C04</span></div></div>
         <div class="banner pink" id="supBanner" style="cursor:pointer" onclick="toggleSup()"><div><b>وضع المشرفة الأكاديمية:</b> <span id="supState">غير مُفعّل</span> — للنشر والحذف باسم المشرفة (اضغطي للتبديل).</div></div>
         <div class="card card-3d">
           <div class="card-head">
@@ -1194,6 +1294,13 @@ textarea:focus,input:focus,select:focus{background:#fff;border-color:var(--teal-
           <div style="overflow-x:auto"><table class="stbl"><thead><tr><th>الطالبة</th><th>الرقم الجامعي</th><th>المؤسسة</th><th>اليوم</th><th>ملاحظات الطالبة على اليوم التدريبي</th><th>الدعم المهني</th><th></th></tr></thead>
             <tbody id="supRows"><tr><td colspan="7"><div class="empty">جارٍ تحميل بيانات الطالبات…</div></td></tr></tbody></table></div>
         </div>
+        <!-- تقارير محاكاة المقابلة — معطّلة مع إزالة الأفتار (2026-09-17)
+        <div class="card card-3d" id="supSimCard">
+          <div class="card-head"><div class="card-title">🎭 تقارير محاكاة المقابلة <span class="chip" id="supSimNew" style="display:none"></span></div>
+            <div class="row"><select id="supSimFilter" onchange="renderSupSim()" style="max-width:200px"><option value="">كل المؤسسات</option></select><button class="btn btn-ghost btn-sm" onclick="loadSupSim()">تحديث</button></div></div>
+          <div id="supSimBody"><div class="empty">جارٍ التحميل…</div></div>
+        </div>
+        -->
       </div>
 
       <!-- ═══ INDICATORS (was analysis) ═══ -->
@@ -1314,9 +1421,24 @@ textarea:focus,input:focus,select:focus{background:#fff;border-color:var(--teal-
   <button data-v="home" onclick="go('home',null)"><svg viewBox="0 0 24 24"><use href="#ic-home"/></svg>الرئيسية</button>
   <button data-v="guide" onclick="go('guide',null)"><svg viewBox="0 0 24 24"><use href="#ic-book"/></svg>الدليل</button>
   <button data-v="map" onclick="go('map',null)"><svg viewBox="0 0 24 24"><use href="#ic-map"/></svg>الإجراءات</button>
-  <button data-v="week" onclick="go('week',null)"><svg viewBox="0 0 24 24"><use href="#ic-route"/></svg>مسار الأسبوع</button>
+  <button data-v="week" onclick="go('week',null)"><svg viewBox="0 0 24 24"><use href="#ic-route"/></svg>مسار الأسابيع</button>
   <button data-v="more" onclick="openMore()" aria-label="كل الأقسام"><svg viewBox="0 0 24 24"><use href="#ic-menu"/></svg>المزيد</button>
 </nav>
+
+<!-- نافذة «إعلان جديد» — تظهر للطالبة عند دخولها إن وُجد إعلان لم تره -->
+<div class="ov" id="annOv"><div class="login-card" style="max-width:520px;text-align:right">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+    <div style="font-size:30px">📢</div>
+    <div style="flex:1"><div style="font-weight:900" id="annOvCount">إعلان جديد من المشرفة الأكاديمية</div>
+      <div style="font-size:11.5px;color:var(--muted)" id="annOvTime"></div></div>
+    <button class="icon-btn" aria-label="إغلاق" onclick="annOvClose(false)"><svg viewBox="0 0 24 24"><use href="#ic-close"/></svg></button>
+  </div>
+  <div class="banner" style="margin:0"><div class="bic">🗒️</div><div id="annOvText" style="font-size:14px;line-height:1.9"></div></div>
+  <div class="row" style="margin-top:14px;gap:8px;flex-wrap:wrap">
+    <button class="btn btn-primary" style="flex:1" onclick="annOvClose(true)">فتح لوحة الإعلانات</button>
+    <button class="btn btn-ghost" onclick="annOvClose(false)">حسنًا</button>
+  </div>
+</div></div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -1421,6 +1543,7 @@ function tone(freq,start,dur,type){if(!audio.on)return;const c=ac();if(!c)return
 function sfxTask(){tone(660,0,.12);tone(880,.1,.16);}
 function sfxDay(){tone(523,0,.15);tone(659,.13,.15);tone(784,.26,.15);tone(1047,.39,.4);}
 function sfxMove(){tone(440,0,.08,'triangle');tone(620,.07,.12,'triangle');}
+function sfxAnn(){tone(784,0,.14);tone(1047,.13,.18);tone(1319,.28,.3);}  /* نغمة إعلان جديد */
 /* Voice */
 let arVoice=null;
 function loadVoices(){const vs=speechSynthesis.getVoices();
@@ -1438,7 +1561,8 @@ let _utter=null;
 function speak(text){return false;/* الصوت الآلي مُعطّل — العرض نصّي فقط */}
 const WELCOME_TEXT='أهلاً وسهلاً بكِ طالبتي العزيزة في دليل التدريب الميداني. سأرافقكِ خطوة بخطوة في أسبوعكِ التدريبي.';
 function playWelcome(){document.getElementById('welcomeText').textContent=WELCOME_TEXT;document.getElementById('welcomeOv').classList.add('show');}
-function closeWelcome(){if('speechSynthesis'in window)speechSynthesis.cancel();document.getElementById('welcomeOv').classList.remove('show');}
+function closeWelcome(){if('speechSynthesis'in window)speechSynthesis.cancel();document.getElementById('welcomeOv').classList.remove('show');
+  setTimeout(function(){try{annAlert();}catch(e){}},350);}  /* بعد الترحيب: تنبيه الإعلان الجديد إن وُجد */
 
 /* ════ Navigation + gating ════ */
 const OPEN=['home','guide','map'];
@@ -1456,9 +1580,12 @@ function go(name,el){
   const v=document.getElementById('v-'+name);if(v)v.classList.add('active');
   let nav=el||document.querySelector('.nav-item[data-v="'+name+'"]');
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));if(nav)nav.classList.add('active');
-  const T={home:'الرئيسية',guide:'دليل التدريب',map:'خريطة الإجراءات',week:'مسار الأسبوع',assistant:'المساعد الذكي',forms:'النماذج',community:'لوحة الإعلانات',supervisor:'لوحة المتابعة',indicators:'مؤشرات الدعم المهني'};
+  const T={home:'الرئيسية',guide:'دليل التدريب',map:'خريطة الإجراءات',week:'مسار الأسابيع التدريبية',room:'غرفة الأنشطة',sim:'محاكاة مقابلة',assistant:'المساعد الذكي',forms:'النماذج',community:'لوحة الإعلانات',supervisor:'لوحة المتابعة',indicators:'مؤشرات الدعم المهني'};
   document.getElementById('pageTitle').textContent=T[name]||name;
   if(name==='supervisor')loadSupervisor();
+  if(name==='room')loadRoom();
+  if(name==='community'&&!supMode)annMarkSeen();   /* فتح اللوحة = اطّلاع على الإعلانات */
+  if(name==='sim')simLoadMine();
   if(name==='indicators')loadIndicators();
   if(name==='forms')loadProofs();
   if(name==='home')renderHome();
@@ -1489,15 +1616,14 @@ const days=[
  {n:3,wk:2,name:'اليوم الثالث',dow:'الخميس',date:'٣ سبتمبر',sub:'فريق العمل والتقرير · ٦ ساعات',
   tip:'اختمي أسبوعك بالتعرّف على فريق العمل وتخصصاته والهيكل التنظيمي للمؤسسة، وإجراءات العمل وآلية إحالة الحالات، ودور الأخصائي الاجتماعي ضمن هذا الفريق ووصفه الوظيفي والسجلات التي يستخدمها.',
   note:'<b>تذكير:</b> جهّزي تقريرك الأسبوعي — يُرفع في خانة <b>«التقرير الأسبوعي»</b> في بلاك بورد <b>يوم السبت قبل الساعة ٦:٠٠ صباحًا</b>. نموذج الوورد الرسمي في صفحة <b>النماذج</b>، وملاحظاتك اليومية تجدينها بزر <b>«تنزيل ملاحظاتي»</b>.<div style="margin-top:10px"><a href="https://elearning.qu.edu.qa/" target="_blank" rel="noopener" class="btn btn-primary btn-sm">🔗 فتح بلاك بورد</a></div>',
-  note2:'<b>واجهتكِ صعوبة هذا الأسبوع؟</b> راسلي المشرفة الأكاديمية من بطاقة «مراسلة المشرفة الأكاديمية» في الصفحة الرئيسية، أو احضري الساعات المكتبية. طلب الدعم جزء من التدريب المهني، لا ضعفًا فيه.<br><span style="font-size:12px">🕐 <b>الاثنين</b> ١١:٠٠–١٢:٠٠ · مكتب 128-C03 (المكتبة القديمة) &nbsp;|&nbsp; <b>الأربعاء</b> ٨:٣٠–٩:٣٠ · مكتب 237 · مبنى البنات C04</span>',
+  note2:'<b>واجهتكِ صعوبة هذا الأسبوع؟</b> راسلي المشرفة الأكاديمية من بطاقة «مراسلة المشرفة الأكاديمية» في الصفحة الرئيسية، أو احضري الساعات المكتبية. طلب الدعم جزء من التدريب المهني، لا ضعفًا فيه.<br><span style="font-size:12px">🕐 <b>الاثنين</b> ١١:٠٠–١٢:٠٠ &nbsp;|&nbsp; <b>الأربعاء</b> ٨:٣٠–٩:٣٠ &nbsp;·&nbsp; مكتب 237 · مبنى البنات C04</span>',
   tasks:[{t:'التعرّف إلى فريق العمل بالمؤسسة وإجراءاتها'},{t:'الاطّلاع على الهيكل التنظيمي وموقع الخدمة الاجتماعية فيه'},{t:'التعرّف إلى تخصصات أعضاء الفريق ودور كل منهم'},{t:'التعرّف إلى دور الأخصائي الاجتماعي ضمن الفريق'},{t:'الاطّلاع على الوصف الوظيفي للأخصائي الاجتماعي في المؤسسة'},{t:'ملاحظة آلية إحالة الحالات وتسلسل الإجراءات داخل المؤسسة'},{t:'الاطّلاع على السجلات والنماذج التي يستخدمها الأخصائي الاجتماعي'},{t:'توقيع نموذج الحضور والغياب'}],
   reflect:'بجملة موضوعية: كيف تصفين تجربة أسبوعك الأول في المؤسسة؟'},
 
  /* ═══ الأسبوع التدريبي الثالث · ٦ – ١٠ سبتمبر ═══
     الهدف: مناقشة وتحليل بعض التقارير المرتبطة بالحالات والخطط التي تُطبَّق. */
+ /* نُقل فيديو «شرح التقرير الأسبوعي والخطة التنفيذية» إلى صفحة النماذج (2026-09-25) وحُذف من هنا ومن dayLinks */
  {n:4,wk:3,name:'اليوم الأول',dow:'الأحد',date:'٦ سبتمبر',sub:'تقارير الحالات · ٦ ساعات',
-  video:{src:'weekly-plan-guide.mp4',title:'دليل التقرير الأسبوعي والخطة التنفيذية',
-         desc:'شاهدي هذا الشرح في بداية الأسبوع التدريبي الثالث — يوضّح كيف تُكتب التقارير وتُحلَّل الخطط، وكيف تُعدّين خطتك الأسبوعية التنفيذية قبل عرضها على مشرفتك.'},
   tip:'يومك للاطّلاع على تقارير الحالات في المؤسسة: كيف تُوثَّق الحالة، وما البيانات التي يرصدها الأخصائي، وكيف يُصاغ التقرير بأسلوب مهني. اطّلعي بإذن مشرفتك ومع حفظ السرّية التامة.',
   tasks:[{t:'الاطّلاع على نماذج التقارير المعتمدة في المؤسسة'},
          {t:'التعرّف إلى طريقة توثيق الحالة في سجلات المؤسسة'},
@@ -1520,7 +1646,7 @@ const days=[
  {n:6,wk:3,name:'اليوم الثالث',dow:'الخميس',date:'١٠ سبتمبر',sub:'المناقشة والخطة الأسبوعية · ٦ ساعات',
   tip:'اختمي أسبوعك بالمناقشة والتحليل، ثم ابدئي كتابة خطتك الأسبوعية التنفيذية واعرضيها على مشرفتك في المؤسسة وعليّ للاطّلاع والملاحظات.',
   note:'<b>تذكير:</b> جهّزي تقريرك الأسبوعي — يُرفع في خانة <b>«التقرير الأسبوعي»</b> في بلاك بورد <b>يوم السبت قبل الساعة ٦:٠٠ صباحًا</b>. نموذج الوورد الرسمي في صفحة <b>النماذج</b>، وملاحظاتك اليومية تجدينها بزر <b>«تنزيل ملاحظاتي»</b>.<div style="margin-top:10px"><a href="https://elearning.qu.edu.qa/" target="_blank" rel="noopener" class="btn btn-primary btn-sm">🔗 فتح بلاك بورد</a></div>',
-  note2:'<b>واجهتكِ صعوبة هذا الأسبوع؟</b> راسلي المشرفة الأكاديمية من بطاقة «مراسلة المشرفة الأكاديمية» في الصفحة الرئيسية، أو احضري الساعات المكتبية. طلب الدعم جزء من التدريب المهني، لا ضعفًا فيه.<br><span style="font-size:12px">🕐 <b>الاثنين</b> ١١:٠٠–١٢:٠٠ · مكتب 128-C03 (المكتبة القديمة) &nbsp;|&nbsp; <b>الأربعاء</b> ٨:٣٠–٩:٣٠ · مكتب 237 · مبنى البنات C04</span>',
+  note2:'<b>واجهتكِ صعوبة هذا الأسبوع؟</b> راسلي المشرفة الأكاديمية من بطاقة «مراسلة المشرفة الأكاديمية» في الصفحة الرئيسية، أو احضري الساعات المكتبية. طلب الدعم جزء من التدريب المهني، لا ضعفًا فيه.<br><span style="font-size:12px">🕐 <b>الاثنين</b> ١١:٠٠–١٢:٠٠ &nbsp;|&nbsp; <b>الأربعاء</b> ٨:٣٠–٩:٣٠ &nbsp;·&nbsp; مكتب 237 · مبنى البنات C04</span>',
   tasks:[{t:'المشاركة في مناقشة حالة مع المشرفة الميدانية أو فريق العمل'},
          {t:'المقارنة بين تقريرين أو خطتين والوقوف على أوجه الاختلاف'},
          {t:'تمييز ما يُكتب بموضوعية عمّا هو رأي شخصي في التقارير'},
@@ -1530,13 +1656,86 @@ const days=[
          {t:'عرض الخطة على المشرفة الميدانية والاستفادة من ملاحظاتها'},
          {t:'إطلاع المشرفة الأكاديمية على الخطة'},
          {t:'توقيع نموذج الحضور والغياب'}],
-  reflect:'ما أهم ما تعلّمتِه هذا الأسبوع عن كتابة التقارير وتحليل الخطط؟ وما الذي ما زال غامضًا لديكِ؟'}
+  reflect:'ما أهم ما تعلّمتِه هذا الأسبوع عن كتابة التقارير وتحليل الخطط؟ وما الذي ما زال غامضًا لديكِ؟'},
+
+ /* حُذف «الأسبوع التدريبي الخامس» (أيام 7–9 · ٢٠/٢٢/٢٤ سبتمبر) بطلب المستخدمة 2026-09-25 — نسخته في rafiqa-site/index.backup-20260925-prew5del.html */
+
+ /* ═══ الأسبوع التدريبي السادس · ٢٧ / ٢٩ سبتمبر / ١ أكتوبر ٢٠٢٦ (أُضيف 2026-09-25) ═══
+    الهدف: مرحلة الممارسة تحت الإشراف والتوجيه، مع إتاحة الفرص للإبداع واقتراح الأفكار
+    المرتبطة بالتطوير وإقامة الأنشطة والفعاليات المهنية.
+    يخدم في ملف الإنجاز: بند ٤ (عملية المساعدة) · بند ٥ (الأنشطة الوقائية/العلاجية/التنموية) ·
+    بند ٢ (الخطة الأسبوعية التنفيذية) · بند ٣ (المسؤوليات الأخلاقية) · بند ٧ (التنوع الثقافي) ·
+    ويُمهّد لتقييم المنتصف (الأسبوع الثامن) وللعرض التقديمي. */
+ {n:10,wk:6,name:'اليوم الأول',dow:'الأحد',date:'٢٧ سبتمبر',sub:'الممارسة تحت الإشراف · ٦ ساعات',
+  tip:'ينتقل دورك هذا الأسبوع من الملاحظة إلى الممارسة: تؤدّين مهمة مهنية بنفسك والأخصائية تشرف وتوجّه. ابدئي بالاتفاق معها على ما ستتولّينه هذا الأسبوع وحدوده، فالممارسة تحت الإشراف تعني أن تفعلي لا أن تُشاهدي — مع الرجوع إليها في كل قرار.',
+  tasks:[{t:'الاتفاق مع المشرفة الميدانية على مهمة مهنية تتولّينها هذا الأسبوع وتحديد حدود صلاحيتك فيها'},
+         {t:'تنفيذ خطوة واحدة من عملية المساعدة بنفسك تحت إشرافها (استقبال · جمع بيانات · متابعة حالة) (بند ٤)'},
+         {t:'لا تنسي أن توثّقي ما نفّذتِه في سجل المؤسسة بأسلوب مهني موضوعي'},
+         {t:'رصد ما فعلته الأخصائية لتصحيح مسارك أثناء التنفيذ وما تعلّمتِه منه'},
+         {t:'ملاحظة كيف يختلف تعاملك باختلاف خصائص العميل (السن · اللغة · الخلفية الثقافية) (بند ٧)'},
+         {t:'التأكد من التزامك بحدود دورك المهني: لا قرار دون الرجوع للمشرفة (بند ٣)'},
+         {t:'توقيع نموذج الحضور والغياب'}],
+  reflect:'ما المهمة التي تولّيتِها اليوم بنفسك؟ وما الفرق الذي شعرتِ به بين أن تلاحظي وأن تنفّذي؟'},
+
+ {n:11,wk:6,name:'اليوم الثاني',dow:'الثلاثاء',date:'٢٩ سبتمبر',sub:'اقتراح فكرة تطويرية · ٦ ساعات',
+  tip:'يومك للإبداع المنظَّم: لاحظتِ خلال الأسابيع الماضية احتياجًا أو ثغرة في مؤسستك — حوّليها إلى فكرة نشاط أو فعالية مهنية قابلة للتنفيذ. الفكرة الجيدة تبدأ من حاجة حقيقية رصدتِها، لا من نشاط جاهز منقول.',
+  tasks:[{t:'تحديد احتياج حقيقي لاحظتِه في المؤسسة أو لدى فئة من المستفيدين، مع ذكر ما استندتِ إليه في رصده'},
+         {t:'صياغة مقترح نشاط أو فعالية مهنية: الهدف · الفئة المستهدفة · الأنشطة · المدى الزمني · مؤشر النجاح (بند ٥)'},
+         {t:'تصنيف المقترح: وقائي / علاجي / تنموي — مع ذكر السبب'},
+         {t:'عرض المقترح على المشرفة الميدانية ومناقشة قابليته للتنفيذ داخل إمكانات المؤسسة'},
+         {t:'تعديل المقترح بناءً على ملاحظاتها وتحديد ما ستنفّذينه فعليًا'},
+         {t:'التعرّف إلى الجهات داخل المؤسسة أو خارجها التي قد تلزم لتنفيذ الفكرة (بند ٦)'},
+         {t:'توقيع نموذج الحضور والغياب'}],
+  reflect:'ما الاحتياج الذي بنيتِ عليه فكرتك؟ وما أكثر ملاحظة من المشرفة الميدانية غيّرت المقترح؟'},
+
+ {n:12,wk:6,name:'اليوم الثالث',dow:'الخميس',date:'١ أكتوبر',sub:'التنفيذ والتقرير · ٦ ساعات',
+  tip:'اختمي أسبوعك بتنفيذ ما أمكن من فكرتك (ولو في صورة مصغّرة)، وبمراجعة تقدّمك المهني استعدادًا لتقييم المشرف المؤسسي في الأسبوع السابع. اسألي مشرفتك الميدانية صراحةً: ما الذي تودّين أن أطوّره قبل التقييم؟',
+  note:'<b>تذكير:</b> جهّزي تقريرك الأسبوعي — يُرفع في خانة <b>«التقرير الأسبوعي»</b> في بلاك بورد <b>يوم السبت قبل الساعة ٦:٠٠ صباحًا</b>. نموذج الوورد الرسمي في صفحة <b>النماذج</b>، وملاحظاتك اليومية تجدينها بزر <b>«تنزيل ملاحظاتي»</b>.<div style="margin-top:10px"><a href="https://elearning.qu.edu.qa/" target="_blank" rel="noopener" class="btn btn-primary btn-sm">🔗 فتح بلاك بورد</a></div>',
+  note2:'<b>واجهتكِ صعوبة هذا الأسبوع؟</b> راسلي المشرفة الأكاديمية من بطاقة «مراسلة المشرفة الأكاديمية» في الصفحة الرئيسية، أو احضري الساعات المكتبية. طلب الدعم جزء من التدريب المهني، لا ضعفًا فيه.<br><span style="font-size:12px">🕐 <b>الاثنين</b> ١١:٠٠–١٢:٠٠ &nbsp;|&nbsp; <b>الأربعاء</b> ٨:٣٠–٩:٣٠ &nbsp;·&nbsp; مكتب 237 · مبنى البنات C04</span>',
+  tasks:[{t:'تنفيذ فكرتك أو جزء منها بإشراف المشرفة الميدانية، وتوثيق ما نُفّذ فعلًا (بند ٥)'},
+         {t:'تقييم ما نفّذتِه: ما تحقق من الهدف · ما لم يتحقق · ما سأغيّره'},
+         {t:'إن رغبتِ: أرسلي نشاطك إلى خانة «غرفة الأنشطة» بهذا التطبيق (يراجعه المشرفة ثم يظهر لزميلاتك) — العنوان · النوع · الدور · الوصف · صورة بلا وجوه أو أسماء',go:'room',goLabel:'🏛️ فتح الخانة'},
+         {t:'مراجعة ما نفّذتِه هذا الأسبوع مع المشرفة الميدانية، وتدوين ما اتفقتما على تطويره'},
+         {t:'اسألي مشرفتك الميدانية: ما المهام التي تقترحينها لي في الأسبوع السابع؟'},
+         {t:'نقل ما نفّذتِه إلى بنود التقرير الأسبوعي، مع التمييز بين ما لاحظتِه وما نفّذتِه بنفسك'},
+         {t:'تحديث الخطة الأسبوعية التنفيذية للأسبوع السابع («العمل المهني المستقل مع الحالات») (بند ٢)'},
+         {t:'توقيع نموذج الحضور والغياب'}],
+  reflect:'اذكري موقفًا واحدًا قمتِ فيه بالعمل بنفسك هذا الأسبوع (لا بالملاحظة فقط): ماذا فعلتِ؟ وما المهارة التي تودّين تحسينها قبل تقييم المشرفة المؤسسية الأسبوع القادم؟'}
 ];
 /* أرقام الأيام — مشتقّة من المصفوفة أعلاه حتى لا تُنسى عند إضافة أسبوع جديد */
 function dayNums(){return days.map(function(d){return d.n;});}
+/* ════ فتح الأسبوع الموافق لتاريخ اليوم ════
+   يقرأ تاريخ كل يوم من حقل date («٢٧ سبتمبر») ويحوّله إلى تاريخ ميلادي.
+   لا يُحذف أي أسبوع ولا يُمسّ تقدّم الطالبة — يتغيّر فقط الأسبوع الذي يُفتح عند الدخول. */
+const TERM_YEAR=2026;
+const AR_MONTHS={'يناير':0,'فبراير':1,'مارس':2,'أبريل':3,'إبريل':3,'مايو':4,'يونيو':5,'يوليو':6,'أغسطس':7,'سبتمبر':8,'أكتوبر':9,'نوفمبر':10,'ديسمبر':11};
+function dayDate(d){try{
+  const s=String((d&&d.date)||'').replace(/[٠-٩]/g,function(c){return '٠١٢٣٤٥٦٧٨٩'.indexOf(c);});
+  const m=s.match(/(\d{1,2})\s*([^\s\d]+)/);
+  if(!m||!(m[2] in AR_MONTHS))return null;
+  return new Date(TERM_YEAR,AR_MONTHS[m[2]],Number(m[1]));
+}catch(e){return null;}}
+function defaultDayByDate(){
+  const today=new Date();today.setHours(0,0,0,0);
+  let best=null,bestDt=null;
+  days.forEach(function(d){const dt=dayDate(d);if(!dt)return;
+    if(dt>=today&&(!bestDt||dt<bestDt)){best=d;bestDt=dt;}});
+  if(best)return best.n;
+  for(let i=days.length-1;i>=0;i--){if(dayDate(days[i]))return days[i].n;}
+  return days.length?days[0].n:1;
+}
+/* يُستدعى عند التحميل: إن كان الأسبوع المحفوظ غير أسبوع التاريخ الحالي، يُفتح أسبوع اليوم */
+function syncWeekToDate(){
+  const dn=defaultDayByDate();if(!dn)return;
+  if(weekOf(state.cur)!==weekOf(dn))state.cur=dn;
+}
+/* اليوم المفتوح — مع تصحيح تلقائي إن كان محفوظًا على يوم حُذف من المصفوفة (أرقام الأيام غير متسلسلة) */
+function curDay(){let d=days.find(function(x){return x.n===state.cur;});
+  if(!d&&days.length){state.cur=days[0].n;d=days[0];try{persist();}catch(e){}}
+  return d;}
 function weekOf(n){const d=days.find(x=>x.n===n);return d&&d.wk?d.wk:2;}
 function weekDays(w){return days.filter(d=>(d.wk||2)===w);}
-function weekLabel(w){return w===3?'الأسبوع التدريبي الثالث':'الأسبوع التدريبي الثاني';}
+function weekLabel(w){const L={2:'الثاني',3:'الثالث',4:'الرابع',5:'الخامس',6:'السادس',7:'السابع',8:'الثامن',9:'التاسع',10:'العاشر',11:'الحادي عشر',12:'الثاني عشر',13:'الثالث عشر',14:'الرابع عشر'};return 'الأسبوع التدريبي '+(L[w]||L[2]);}
 function weekRange(w){const a=weekDays(w);return a.length?(a[0].date+' — '+a[a.length-1].date):'';}
 function dayIndexInWeek(n){const w=weekOf(n);return weekDays(w).findIndex(d=>d.n===n)+1;}
 /* اسم الأسبوع يتبع اليوم المفتوح — يُستدعى عند كل رسم */
@@ -1547,15 +1746,18 @@ function syncWeekLabels(){
     const gk=document.getElementById('greetKicker'); if(gk)gk.textContent=lbl;
     const wt=document.getElementById('weekTitle'); if(wt)wt.textContent=lbl;
     const wc=document.getElementById('weekChip'); if(wc)wc.textContent=weekRange(w);
+    const wb=document.getElementById('weekBdg'); if(wb){const n=allWeeks().length;wb.textContent=n===1?'أسبوع':(n===2?'أسبوعان':ar(n)+' أسابيع');}
   }catch(e){}
 }
 const state={cur:1,done:{},quiz:{},fin:{}};
 const answers={reflect:{}};
 function stateToJSON(){var d={};for(var k in state.done){d[k]=Array.from(state.done[k]);}return {cur:state.cur,done:d,quiz:state.quiz,fin:state.fin};}
-function stateFromJSON(o){if(!o)return;state.cur=o.cur||1;state.quiz=o.quiz||{};state.fin=o.fin||{};state.done={};if(o.done){for(var k in o.done){state.done[k]=new Set(o.done[k]);}}}
+function stateFromJSON(o){if(!o)return;state.cur=o.cur||1;
+  if(!days.some(function(d){return d.n===state.cur;}))state.cur=(days[0]||{n:1}).n;  /* يوم محفوظ حُذف من المصفوفة */state.quiz=o.quiz||{};state.fin=o.fin||{};state.done={};if(o.done){for(var k in o.done){state.done[k]=new Set(o.done[k]);}}}
 function refreshWeek(){try{buildPath();renderDay();updateHome();}catch(e){}}
 function loadAnswers(){try{const a=JSON.parse(localStorage.getItem('rafiqaAnswers'));if(a&&a.reflect)answers.reflect=a.reflect;}catch(e){}
-  try{const st=JSON.parse(localStorage.getItem('rafiqaState'));if(st)stateFromJSON(st);}catch(e){}}
+  try{const st=JSON.parse(localStorage.getItem('rafiqaState'));if(st)stateFromJSON(st);}catch(e){}
+  try{syncWeekToDate();}catch(e){}}  /* يفتح أسبوع اليوم — والتقدّم المحفوظ يبقى كما هو */
 let _pt=null;
 function persist(){try{localStorage.setItem('rafiqaAnswers',JSON.stringify(answers));localStorage.setItem('rafiqaState',JSON.stringify(stateToJSON()));}catch(e){}saveLocalReflect();clearTimeout(_pt);_pt=setTimeout(sbAnswers,800);}
 function saveReflect(n,v){answers.reflect[n]=v;persist();}
@@ -1603,11 +1805,17 @@ function dayVideo(d){
      <p style="font-size:12px;color:var(--muted);margin:8px 0 0">للمشاهدة داخل المنصة فقط — يُرجى عدم تنزيل الفيديو أو إعادة نشره.</p>
    </div>`;
 }
-function renderDay(){const d=days.find(x=>x.n===state.cur);const set=state.done[d.n]||(state.done[d.n]=new Set());
+function renderDay(){const d=curDay();if(!d)return;const set=state.done[d.n]||(state.done[d.n]=new Set());
   syncWeekLabels();
-  let tasks='';d.tasks.forEach((t,i)=>{tasks+=`<div class="task${set.has(i)?' done':''}" onclick="toggleTask(${d.n},${i})"><div class="tcheck">${set.has(i)?'✓':''}</div><span class="tt">${t.t}</span>${t.up?`<span class="chip pink" onclick="event.stopPropagation();toast('📎 نافذة رفع الملف (تجريبي)')">📎 رفع</span>`:''}</div>`;});
+  /* t.go = اسم صفحة داخل التطبيق تُفتح من زر صغير داخل المهمة (بلا احتساب المهمة منجزة) */
+  let tasks='';d.tasks.forEach((t,i)=>{tasks+=`<div class="task${set.has(i)?' done':''}" onclick="toggleTask(${d.n},${i})"><div class="tcheck">${set.has(i)?'✓':''}</div><span class="tt">${t.t}${t.go?`<button class="btn btn-ghost btn-sm" style="margin-inline-start:8px;vertical-align:middle" onclick="event.stopPropagation();go('${t.go}',null)">${t.goLabel||'افتحي الخانة'}</button>`:''}</span>${t.up?`<span class="chip pink" onclick="event.stopPropagation();toast('📎 نافذة رفع الملف (تجريبي)')">📎 رفع</span>`:''}</div>`;});
   const faces=['😣','😕','🙂','😊','🤩'],labels=['صعب','مربك','مقبول','جيد','ممتاز'];
-  let q='';['فهمي للمهام','اندماجي في البيئة','مستوى التحدي'].forEach((qq,qi)=>{let r='';faces.forEach((f,fi)=>{r+=`<div class="face${state.quiz[d.n+'-'+qi]===fi?' sel':''}" onclick="setQuiz(${d.n},${qi},${fi})">${f}<span>${labels[fi]}</span></div>`;});q+=`<div style="margin-bottom:12px"><div style="font-weight:700;font-size:13px;margin-bottom:7px">${qi+1}) ${qq}</div><div class="faces">${r}</div></div>`;});
+  /* ترتيب الأسئلة ومفاتيحها ثابتة (qi = 0,1,2) — التوضيح فقط أُضيف 2026-09-25 */
+  const QZ_ASK=[
+    ['فهمي للمهام','هل كانت مهام اليوم ودورك فيها واضحة لكِ؟'],
+    ['اندماجي في البيئة','كيف كان تواصلك اليوم مع فريق العمل والمستفيدين؟'],
+    ['مستوى التحدي','هل كان اليوم في مستواكِ أم وجدتِه صعبًا؟']];
+  let q='';QZ_ASK.forEach(([qq,hint],qi)=>{let r='';faces.forEach((f,fi)=>{r+=`<div class="face${state.quiz[d.n+'-'+qi]===fi?' sel':''}" onclick="setQuiz(${d.n},${qi},${fi})">${f}<span>${labels[fi]}</span></div>`;});q+=`<div style="margin-bottom:12px"><div style="font-weight:700;font-size:13px;margin-bottom:2px">${qi+1}) ${qq}</div><div class="qhint">${hint}</div><div class="faces">${r}</div></div>`;});
   document.getElementById('dayPanel').innerHTML=`
    <div class="card card-3d" style="background:var(--sand)">
      <div><div style="font-weight:900;color:var(--navy);margin-bottom:3px">🧭 إرشاد ${d.name} · ${d.dow} ${d.date}</div><div style="font-size:13px">${d.tip}</div></div>
@@ -1621,14 +1829,18 @@ function renderDay(){const d=days.find(x=>x.n===state.cur);const set=state.done[
      ${studentNotesCard(d)}
    </div>
    ${supDayPanel(d)}
-   <div class="card card-3d"><div class="card-title">التقييم الذاتي السريع — نهاية ${d.name} · ${d.dow} ${d.date}</div>${supSeenBadge(d.n)}<div style="margin-top:12px">${q}</div>
+   <div class="card card-3d"><div class="card-title">التقييم الذاتي السريع — نهاية ${d.name} · ${d.dow} ${d.date}</div>${supSeenBadge(d.n)}
+     <p class="qhint" style="margin:6px 0 10px">اختاري الوجه الأقرب لشعورك في كل سؤال — لا توجد إجابة صحيحة أو خاطئة، ولا تُحتسب درجات. الهدف أن تعرف مشرفتك الأكاديمية أين تحتاجين دعمًا.</p>
+     <div style="margin-top:12px">${q}</div>
      <button class="btn btn-primary" onclick="finishDay(${d.n})">إنهاء ${d.name}</button></div>`;afterRenderDay(d);}
 function afterRenderDay(d){if(supMode&&document.getElementById('dayNotesList'))renderSupDay(d.n);}
 function toggleTask(n,i){const set=state.done[n]||(state.done[n]=new Set());if(set.has(i))set.delete(i);else{set.add(i);sfxTask();toast('✅ أحسنتِ!');}renderDay();buildPath();updateHome();persist();}
 function setQuiz(n,qi,fi){state.quiz[n+'-'+qi]=fi;renderDay();persist();}
+/* الانتقال بترتيب المصفوفة لا برقم اليوم — الأرقام غير متسلسلة بعد حذف أسبوع */
 function finishDay(n){state.fin[n]=true;sfxDay();
-  if(n<days.length){state.cur=n+1;sfxMove();buildPath();renderDay();toast('🎉 أنهيتِ '+days.find(d=>d.n===n).name+'!');speak('أحسنتِ! أنهيتِ يومك بنجاح. لننتقل لليوم التالي بخطى واثقة.');}
-  else{buildPath();toast('🏆 مبروك! أكملتِ مهام أسبوعكِ التدريبي');speak('مبروك! أكملتِ مهام أسبوعكِ التدريبي. أنا فخورة بكِ.');}
+  const i=days.findIndex(d=>d.n===n),nxt=(i>=0&&i<days.length-1)?days[i+1]:null;
+  if(nxt){state.cur=nxt.n;sfxMove();buildPath();renderDay();toast('🎉 أنهيتِ '+days[i].name+'!');speak('أحسنتِ! أنهيتِ يومك بنجاح. لننتقل لليوم التالي بخطى واثقة.');}
+  else{buildPath();renderDay();toast('🏆 مبروك! أكملتِ مهام أسبوعكِ التدريبي');speak('مبروك! أكملتِ مهام أسبوعكِ التدريبي. أنا فخورة بكِ.');}
   updateHome();persist();}
 function updateHome(){syncWeekLabels();let tot=0,dn=0;days.forEach(d=>{tot+=d.tasks.length;dn+=(state.done[d.n]?state.done[d.n].size:0);});
   const pct=tot?Math.round(dn/tot*100):0;
@@ -1651,7 +1863,7 @@ function updateNextAction(cd){
     b.textContent='افتحي مهام اليوم';}
   else if(!wrote){t.textContent='أنجزتِ مهام '+cd.name+'. اكتبي ملاحظاتك على اليوم لتطّلع عليها المشرفة.';
     b.textContent='اكتبي ملاحظات اليوم';}
-  else{t.textContent='أنجزتِ مهام '+cd.name+' وسجّلتِ ملاحظاتك.';b.textContent='مراجعة مسار الأسبوع';}
+  else{t.textContent='أنجزتِ مهام '+cd.name+' وسجّلتِ ملاحظاتك.';b.textContent='مراجعة مسار الأسابيع';}
   b.onclick=function(){go('week',null);};
   syncHeroAlt('week');}
 /* الزرّ الثانوي يقترح دائمًا وجهة مختلفة عن الزرّ الرئيسي */
@@ -1679,7 +1891,7 @@ const faqs=[
  {q:'كيف أوثّق ساعات التدريب؟',a:'سجّلي حضورك في نموذج الحضور المعتمد، ودوّني أنشطتك بموضوعية، واحفظي إثباتات المباشرة.'},
  {q:'ماذا أفعل إذا تغيّبت؟',a:'أبلغي المشرفة الميدانية والمشرف الأكاديمي مبكرًا مع العذر، والتزمي بسياسة الغياب في بلاك بورد.'},
  {q:'متى يُسلّم التقرير الأسبوعي؟',a:'في بلاك بورد بخانة «التقرير الأسبوعي» كل يوم سبت قبل الساعة ٦:٠٠ صباحًا، بأسلوب موضوعي.'},
- {q:'ما هي الساعات المكتبية للمشرفة الأكاديمية؟',a:'الاثنين من ١١:٠٠ إلى ١٢:٠٠ في مكتب 128-C03 بالمكتبة القديمة، والأربعاء من ٨:٣٠ إلى ٩:٣٠ في مكتب 237 بمبنى البنات C04.'}
+ {q:'ما هي الساعات المكتبية للمشرفة الأكاديمية؟',a:'الاثنين من ١١:٠٠ إلى ١٢:٠٠ والأربعاء من ٨:٣٠ إلى ٩:٣٠، وكلاهما في مكتب 237 بمبنى البنات C04.'}
  // {q:'ماذا لو كانت المشرفة غائبة؟',a:'عرّفي بنفسك للموظفين، واستفيدي من الوقت في الملاحظة، وتابعي مع المشرفة لاحقًا — وهذا وارد في الأسبوع الأول.'}
 ];
 function buildFaq(){const c=document.getElementById('faqChips');c.innerHTML='';faqs.forEach(f=>{const e=document.createElement('div');e.className='fchip';e.textContent=f.q;e.onclick=()=>ask(f.q);c.appendChild(e);});}
@@ -1691,11 +1903,15 @@ function sendAsk(){const i=document.getElementById('askIn');const v=i.value.trim
 /* ════ Forms ════ */
 function cpy(id){const t=document.getElementById(id).innerText.replace('📋 نسخ','').trim();if(navigator.clipboard)navigator.clipboard.writeText(t).then(()=>toast('📋 تم النسخ'));else toast('📋 حدّدي النص وانسخيه');}
 function loadVid(src,label){const v=document.getElementById('vid');v.style.display='block';v.src=src;v.play().catch(()=>{});toast('🎥 '+label);}
-function downloadNotes(){const L=['اليوم الأول','اليوم الثاني','اليوم الثالث'];let t='ملاحظات التدريب الميداني\n========================\n';
-  t+='الطالبة: '+(student.name||'—')+'\nالرقم: '+(student.id||'—')+'\nالمؤسسة: '+(student.org||'—')+'\nالتاريخ: '+new Date().toLocaleString('ar-EG')+'\n\n';
-  days.forEach(function(d){t+=d.name+' · '+d.dow+' '+d.date+':\n'+(answers.reflect[d.n]||'(لم تُكتب)')+'\n\n';});
+/* ملاحظات الأسبوع التدريبي المفتوح — لتُنسخ في التقرير الأسبوعي (2026-09-26) */
+function downloadNotes(){
+  const w=weekOf(state.cur),wd=weekDays(w),lbl=weekLabel(w);
+  let t='ملاحظات التدريب الميداني — '+lbl+'\n========================\n';
+  t+='الطالبة: '+(student.name||'—')+'\nالرقم: '+(student.id||'—')+'\nالمؤسسة: '+(student.org||'—')+'\nالفترة: '+weekRange(w)+'\nتاريخ التنزيل: '+new Date().toLocaleString('ar-EG')+'\n\n';
+  wd.forEach(function(d){t+=d.name+' · '+d.dow+' '+d.date+':\n'+(answers.reflect[d.n]||'(لم تُكتب)')+'\n\n';});
   t+='ملاحظة: التقرير الأسبوعي يُرفع في بلاك بورد كل سبت قبل ٦:٠٠ صباحًا، بأسلوب موضوعي.';
-  const b=new Blob([t],{type:'text/plain;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='ملاحظات-'+(student.name||'طالبة').replace(/\s+/g,'_')+'.txt';a.click();toast('⬇️ تم تنزيل ملاحظاتك');}
+  const b=new Blob([t],{type:'text/plain;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(b);
+  a.download='ملاحظات-'+lbl.replace(/\s+/g,'-')+'-'+(student.name||'طالبة').replace(/\s+/g,'_')+'.txt';a.click();toast('⬇️ تم تنزيل ملاحظات '+lbl);}
 
 /* تقرير أسبوعي معبّأ ببيانات الطالبة وتأمّلاتها */
 /* نموذج التقرير الأسبوعي الرسمي (Word) مضمّن كما هو — يُنزَّل فارغًا لتعبئته */
@@ -1825,9 +2041,38 @@ async function loadAnns(){
   if(!sb){renderPosts();return;}
   try{const r=await sb.rpc(SB_RPC.annList);if(r&&r.error)throw r.error;
     posts=(r.data||[]).map(a=>({id:a.id,text:a.text,pinned:a.pinned,at:a.created_at}));
-    annLoaded=true;savePosts();renderPosts();}
+    annLoaded=true;savePosts();renderPosts();annAlert();}
   catch(e){renderPosts();if(annLoaded)toast('⚠️ تعذّر تحديث الإعلانات — تُعرض آخر نسخة محفوظة');}
 }
+
+/* ════ تنبيه الإعلانات الجديدة ════
+   يُقارَن أكبر رقم إعلان اطّلعت عليه الطالبة (محفوظ محليًا) بما وصل من القاعدة:
+   نافذة منبثقة + نغمة + شارة على «لوحة الإعلانات» — لا تظهر للمشرفة. */
+function annSeenId(){try{return Number(localStorage.getItem('rafiqaAnnSeen')||0)||0;}catch(e){return 0;}}
+function annMarkSeen(){try{const mx=posts.reduce((m,a)=>Math.max(m,Number(a.id)||0),0);localStorage.setItem('rafiqaAnnSeen',String(mx));}catch(e){}
+  annBadge(0);}
+function annNewOnes(){const seen=annSeenId();return posts.filter(a=>Number(a.id)>seen);}
+function annBadge(n){
+  const el=document.getElementById('annBadge');if(el){el.textContent=n?ar(n)+' جديد':'';el.style.display=n?'':'none';}
+  const tb=document.getElementById('annDot');if(tb)tb.style.display=n?'':'none';}
+function annAlert(){
+  if(supMode){annBadge(0);return;}
+  /* لا تُعرض النافذة وصفحة الدخول أو الترحيب مفتوحة — تُستدعى ثانيةً بعد إغلاق الترحيب */
+  const li=document.getElementById('loginOv'),wl=document.getElementById('welcomeOv');
+  const busy=(li&&li.classList.contains('show'))||(wl&&wl.classList.contains('show'));
+  const fresh=annNewOnes();
+  annBadge(fresh.length);
+  if(!fresh.length||busy)return;
+  /* أول زيارة للطالبة: تُعلَّم الإعلانات القديمة كمقروءة بلا إزعاج */
+  if(!annSeenId()&&posts.length){annMarkSeen();return;}
+  const a=fresh[0];
+  const ov=document.getElementById('annOv');if(!ov)return;
+  document.getElementById('annOvCount').textContent=fresh.length>1?('لديكِ '+ar(fresh.length)+' إعلانات جديدة — أحدثها:'):'إعلان جديد من المشرفة الأكاديمية';
+  document.getElementById('annOvTime').textContent=annFmt(a.at);
+  document.getElementById('annOvText').innerHTML=annEsc(a.text).replace(/\n/g,'<br>');
+  ov.classList.add('show');sfxAnn();
+}
+function annOvClose(open){document.getElementById('annOv').classList.remove('show');annMarkSeen();if(open)go('community',null);}
 
 function toggleSup(){if(!supMode&&!supUnlocked){askSupPass(()=>toggleSup());return;}
   supMode=!supMode;document.getElementById('supState').textContent=supMode?'مُفعّل ✅':'غير مُفعّل';
@@ -2070,7 +2315,8 @@ async function exportExcel(){
     return (r&&r.at)?new Date(r.at).toLocaleDateString('ar-EG'):'';};
   const emailOf=function(u){return (C.emails&&C.emails[u])?C.emails[u]:'';};
   const stOf=function(u){return (C.students||[]).filter(function(x){return x.uid===u;})[0]||{};};
-  const DAYS=[{n:1,t:'اليوم الأول (الأحد ٣٠ أغسطس)'},{n:2,t:'اليوم الثاني (الثلاثاء ١ سبتمبر)'},{n:3,t:'اليوم الثالث (الخميس ٣ سبتمبر)'}];
+  /* الأيام مشتقّة من مصفوفة days — تشمل كل أسبوع يُضاف تلقائيًا (كانت ثابتة على الأيام ١–٣ حتى 2026-09-17) */
+  const DAYS=days.map(function(d){return {n:d.n,t:'أ'+ar(d.wk||2)+' '+d.name+' ('+d.dow+' '+d.date+')'};});
   const data=rows.map(function(r){
     const ind=computeInd(r.reflect),st=stOf(r.uid);
     const o={'اسم الطالبة':r.name||'','الرقم الجامعي':r.uid||'','المؤسسة التدريبية':r.org||'',
@@ -2098,9 +2344,8 @@ async function exportExcel(){
   try{
     if(window.XLSX){
       const ws=XLSX.utils.json_to_sheet(data);
-      ws['!cols']=[{wch:22},{wch:15},{wch:24},{wch:26},{wch:16},
-                   {wch:52},{wch:52},{wch:52},{wch:52},{wch:52},{wch:52},
-                   {wch:14},{wch:14},{wch:16},{wch:26},{wch:34},{wch:20}];
+      ws['!cols']=[{wch:22},{wch:15},{wch:24},{wch:26},{wch:16}].concat(DAYS.map(function(){return [{wch:52},{wch:52}];}).flat(),[
+                   {wch:14},{wch:14},{wch:16},{wch:26},{wch:34},{wch:20}]);
       /* التفاف النصّ الطويل داخل الخلية ليكون مقروءًا */
       Object.keys(ws).forEach(function(k){if(k[0]!=='!'&&ws[k].t==='s'){
         ws[k].s={alignment:{wrapText:true,vertical:'top',readingOrder:2,horizontal:'right'}};}});
@@ -2185,6 +2430,202 @@ function simSummary(){speechSynthesis.cancel();document.getElementById('simOv').
    <div class="banner"><div class="bic">🪑</div><div>غياب المشرفة وارد — عرّفي بنفسك واستفيدي من وقتك.</div></div>
    <div class="banner pink"><div class="bic">📧</div><div>وإن احتجتِ دعمًا — راسليني عبر التطبيق أو احضري الساعات المكتبية.</div></div></div>
   <button class="btn btn-primary" style="width:100%;margin-top:6px" onclick="closeSim()">تم</button></div>`;sfxDay();}
+
+/* ════ محاكاة مقابلة مع عميلة افتراضية («نورة») ════
+   الحوار يمرّ عبر Edge Function «sim» (المفتاح على الخادم)، ويُحفظ في guide.sim_sessions،
+   والتقرير يُعرض للطالبة فورًا ويظهر للمشرفة في لوحة المتابعة. */
+const SIM_FN=SB_CONFIG.url+'/functions/v1/sim';
+const SIM_MAX=16;
+let SIM={id:null,turns:[],busy:false,done:false};
+let simRec=null;
+function simUUID(){return (crypto.randomUUID?crypto.randomUUID():'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{const r=Math.random()*16|0;return (c==='x'?r:(r&3|8)).toString(16);}));}
+async function simCall(action,extra){
+  const body=Object.assign({action,session_id:SIM.id,uid:student.id,name:student.name,org:student.org,scenario:'noura',turns:SIM.turns},extra||{});
+  const r=await fetch(SIM_FN,{method:'POST',headers:{'Content-Type':'application/json','apikey':SB_CONFIG.key,'Authorization':'Bearer '+SB_CONFIG.key},body:JSON.stringify(body)});
+  let j=null;try{j=await r.json();}catch(e){}
+  if(!r.ok||!j||j.error){const code=(j&&j.error)||('http_'+r.status);
+    const M={no_api_key:'لم يُضبط مفتاح الذكاء الاصطناعي على الخادم بعد — أبلغي المشرفة.',rate_limited:'الخدمة مشغولة الآن، حاولي بعد دقيقة.',refusal:'تعذّر إصدار التقرير لهذه المحادثة.'};
+    throw new Error(M[code]||('تعذّر الاتصال بالخدمة ('+code+')'));}
+  return j;}
+function simStart(){
+  if(!student.id){toast('سجّلي دخولك برقمك الجامعي أولًا');return;}
+  SIM={id:simUUID(),turns:[],busy:false,done:false};
+  document.getElementById('simIntro').style.display='none';document.getElementById('simReportCard').style.display='none';
+  document.getElementById('simRoom').style.display='block';
+  const box=document.getElementById('simBox');box.innerHTML='';
+  simBubble('b','…');  /* نورة تدخل الغرفة صامتة — الطالبة تبدأ */
+  box.lastElementChild.querySelector('.bub').innerHTML='<span style="color:var(--muted)">(نورة تجلس أمامك، تنظر إلى الأرض وتنتظر أن تبدئي.)</span>';
+  simSetTurns();document.getElementById('simStatus').textContent='تنتظر أن تبدئي…';
+  if('webkitSpeechRecognition' in window||'SpeechRecognition' in window)document.getElementById('simMic').style.display='';
+  document.getElementById('simIn').focus();}
+function simBubble(who,text){const box=document.getElementById('simBox');const d=document.createElement('div');d.className='msg '+who;
+  d.innerHTML='<div class="mav '+who+'">'+(who==='b'?'👧':'👩‍🎓')+'</div><div class="bub">'+escH(text)+'</div>';box.appendChild(d);box.scrollTop=box.scrollHeight;return d;}
+function simSetTurns(){const n=SIM.turns.filter(t=>t.role==='user').length;document.getElementById('simTurns').textContent=ar(n)+' / '+ar(SIM_MAX);}
+function simSpeak(text){try{if(!document.getElementById('simVoice').checked||!window.speechSynthesis)return;
+  speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='ar-SA';u.rate=.95;u.pitch=1.15;
+  const v=speechSynthesis.getVoices().find(v=>/^ar/i.test(v.lang));if(v)u.voice=v;
+  const av=document.getElementById('simAvatar');u.onstart=()=>av.classList.add('talk');u.onend=u.onerror=()=>av.classList.remove('talk');
+  speechSynthesis.speak(u);}catch(e){}}
+async function simSend(){
+  const i=document.getElementById('simIn');const v=i.value.trim();if(!v||SIM.busy||SIM.done)return;
+  const n=SIM.turns.filter(t=>t.role==='user').length;if(n>=SIM_MAX){toast('وصلتِ إلى الحد الأقصى — أنهي المقابلة لإصدار التقرير');return;}
+  i.value='';SIM.turns.push({role:'user',text:v});simBubble('u',v);simSetTurns();
+  SIM.busy=true;document.getElementById('simSendBtn').disabled=true;
+  const av=document.getElementById('simAvatar');av.classList.add('think');document.getElementById('simStatus').textContent='نورة تفكّر…';
+  const wait=simBubble('b','…');
+  try{const j=await simCall('chat');wait.remove();simBubble('b',j.reply);SIM.turns.push({role:'assistant',text:j.reply});simSpeak(j.reply);
+    document.getElementById('simStatus').textContent=j.remaining>0?('بقي '+ar(j.remaining)+' ردًّا'):'اكتمل الحد — أنهي المقابلة';
+    if(j.remaining<=3&&j.remaining>0)toast('بقي '+ar(j.remaining)+' ردود — فكّري في إنهاء المقابلة بخطوة تالية');}
+  catch(e){wait.remove();SIM.turns.pop();simBubble('b','');document.getElementById('simBox').lastElementChild.querySelector('.bub').innerHTML='<span style="color:var(--warn)">⚠️ '+escH(e.message)+'</span>';i.value=v;}
+  finally{SIM.busy=false;av.classList.remove('think');document.getElementById('simSendBtn').disabled=false;i.focus();}}
+async function simEnd(){
+  const n=SIM.turns.filter(t=>t.role==='user').length;
+  if(n<2){toast('تحدثي مع نورة قليلًا قبل إصدار التقرير');return;}
+  if(SIM.busy)return;SIM.busy=true;SIM.done=true;speechSynthesis&&speechSynthesis.cancel();
+  const b=document.getElementById('simEndBtn');b.disabled=true;b.textContent='⏳ جارٍ إعداد التقرير…';
+  document.getElementById('simStatus').textContent='المشرفة الافتراضية تقرأ المحادثة…';
+  try{const j=await simCall('report');renderSimReport(j.report,SIM.turns,'simReport');
+    document.getElementById('simRoom').style.display='none';document.getElementById('simReportCard').style.display='block';
+    window.scrollTo({top:document.getElementById('simReportCard').offsetTop-80,behavior:'smooth'});sfxDay();toast('🧾 وصل تقريركِ — ووصل للمشرفة أيضًا');simLoadMine();}
+  catch(e){SIM.done=false;toast('⚠️ '+e.message);}
+  finally{SIM.busy=false;b.disabled=false;b.textContent='🧾 إنهاء وإصدار التقرير';}}
+function simAbort(){if(SIM.busy)return;speechSynthesis&&speechSynthesis.cancel();SIM={id:null,turns:[],busy:false,done:false};
+  document.getElementById('simRoom').style.display='none';document.getElementById('simIntro').style.display='block';}
+function simLvl(v){return v==='متمكّنة'?'<span class="lvl high">متمكّنة</span>':v==='نامية'?'<span class="lvl mid">نامية</span>':'<span class="lvl low">تحتاج تطويرًا</span>';}
+function simList(a){return (a&&a.length)?'<ul>'+a.map(x=>'<li>'+escH(x)+'</li>').join('')+'</ul>':'<div style="color:var(--muted);font-size:13px">— لا يوجد —</div>';}
+function simTranscriptHTML(turns){return '<div class="sim-tr">'+(turns||[]).map(t=>'<div><b>'+(t.role==='user'?'الطالبة':'نورة')+':</b> '+escH(t.text)+'</div>').join('')+'</div>';}
+function renderSimReport(r,turns,elId,opts){opts=opts||{};const el=document.getElementById(elId);if(!el||!r)return;
+  let h='<div class="sim-rep">';
+  h+='<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><div class="card-title" style="margin:0">🧾 تقرير المحاكاة'+(opts.who?' — '+escH(opts.who):'')+'</div>'+simLvl(r.level)+'</div>';
+  h+='<p style="font-size:14px;line-height:1.9;margin:10px 0 0">'+escH(r.summary)+'</p>';
+  h+='<h3>مهارات المقابلة</h3>';(r.skills||[]).forEach(s=>{h+='<div class="sk"><div class="n">'+escH(s.name)+'<small>الدليل: «'+escH(s.evidence)+'» · '+escH(s.tip)+'</small></div>'+simLvl(s.level)+'</div>';});
+  h+='<div class="grid g2" style="margin-top:6px"><div><h3>الأدوار التي مارستِها</h3>'+simList(r.roles_used)+'</div><div><h3>الأدوار الأنسب لحالة نورة</h3>'+simList(r.roles_fit)+'</div></div>';
+  h+='<div class="grid g2"><div><h3>نقاط القوة</h3>'+simList(r.strengths)+'</div><div><h3>ما يُطوَّر</h3>'+simList(r.improvements)+'</div></div>';
+  if(r.ethics&&r.ethics.length)h+='<h3>ملاحظات أخلاقية</h3><div class="banner pink"><div class="bic">⚖️</div><div>'+simList(r.ethics)+'</div></div>';
+  h+='<h3>الخطوة التالية في المؤسسة</h3><p style="font-size:13.5px;line-height:1.8;margin:0">'+escH(r.next_step)+'</p>';
+  h+='<h3>أسئلة تحمِلينها إلى الإشراف</h3>'+simList(r.supervision_questions);
+  if(opts.supervisor&&r.supervisor_note)h+='<h3>ملاحظة للمشرفة</h3><div class="banner"><div class="bic">👩‍🏫</div><div>'+escH(r.supervisor_note)+'</div></div>';
+  h+='<details style="margin-top:14px"><summary style="cursor:pointer;font-size:13px;font-weight:700">نصّ المحادثة</summary><div style="margin-top:8px">'+simTranscriptHTML(turns)+'</div></details>';
+  if(!opts.supervisor)h+='<div class="row" style="margin-top:14px;flex-wrap:wrap;gap:8px"><button class="btn btn-primary btn-sm" onclick="simStart()">🔁 محاكاة جديدة</button><button class="btn btn-ghost btn-sm" onclick="simAbort()">العودة</button></div>';
+  h+='</div>';el.innerHTML=h;}
+async function simLoadMine(){const card=document.getElementById('simHistCard'),body=document.getElementById('simHist');if(!sb||!student.id||supMode){card.style.display='none';return;}
+  try{const r=await sb.rpc('guide_sim_mine',{p_uid:student.id});if(r.error)throw r.error;const rows=r.data||[];
+    if(!rows.length){card.style.display='none';return;}card.style.display='block';
+    body.innerHTML=rows.map((s,i)=>'<details'+(i===0?'':'')+' style="padding:8px 0;border-bottom:1px dashed var(--line)"><summary style="cursor:pointer;font-size:13.5px;font-weight:700">'+new Date(s.ended_at||s.started_at).toLocaleString('ar-EG')+' · '+ar(s.turns)+' ردود · '+simLvl(s.report&&s.report.level)+'</summary><div id="simH'+i+'" style="margin-top:8px"></div></details>').join('');
+    rows.forEach((s,i)=>renderSimReport(s.report,s.transcript,'simH'+i,{}));
+    document.querySelectorAll('#simHist .sim-rep .row').forEach(x=>x.remove());
+  }catch(e){card.style.display='none';}}
+/* لوحة المشرفة */
+let SUP_SIM=[];
+async function loadSupSim(){const body=document.getElementById('supSimBody');if(!sb){body.innerHTML='<div class="empty">لا اتصال بقاعدة البيانات</div>';return;}
+  try{const r=await sb.rpc('guide_sim_list',{p_pass:SUP_PASS});if(r.error)throw r.error;SUP_SIM=r.data||[];
+    const f=document.getElementById('supSimFilter');const cur=f.value;const orgs=[...new Set(SUP_SIM.map(s=>s.org).filter(Boolean))].sort();
+    f.innerHTML='<option value="">كل المؤسسات</option>'+orgs.map(o=>'<option'+(o===cur?' selected':'')+'>'+escH(o)+'</option>').join('');
+    renderSupSim();}
+  catch(e){body.innerHTML='<div class="empty">تعذّر تحميل تقارير المحاكاة</div>';}}
+function renderSupSim(){const body=document.getElementById('supSimBody');const f=document.getElementById('supSimFilter').value;
+  const rows=SUP_SIM.filter(s=>!f||s.org===f);const fresh=SUP_SIM.filter(s=>!s.sup_seen).length;
+  const nb=document.getElementById('supSimNew');nb.style.display=fresh?'':'none';nb.textContent=ar(fresh)+' جديد';
+  if(!rows.length){body.innerHTML='<div class="empty">لم تُجرِ أي طالبة محاكاة بعد.</div>';return;}
+  body.innerHTML=rows.map((s,i)=>'<details style="padding:8px 0;border-bottom:1px dashed var(--line)" ontoggle="if(this.open)supSimSeen(\''+s.id+'\',this)"><summary style="cursor:pointer;font-size:13.5px;font-weight:700;display:flex;gap:8px;align-items:center;flex-wrap:wrap">'+(s.sup_seen?'':'<span class="chip pink">جديد</span>')+'<span>👩‍🎓 '+escH(s.name||s.uid)+'</span><span style="color:var(--muted);font-weight:500">'+escH(s.org||'')+' · '+new Date(s.ended_at||s.started_at).toLocaleString('ar-EG')+' · '+ar(s.turns)+' ردود</span>'+simLvl(s.report&&s.report.level)+'</summary><div id="supSim'+i+'" style="margin-top:8px"></div></details>').join('');
+  rows.forEach((s,i)=>renderSimReport(s.report,s.transcript,'supSim'+i,{supervisor:true,who:s.name||s.uid}));}
+async function supSimSeen(id,det){const s=SUP_SIM.find(x=>x.id===id);if(!s||s.sup_seen)return;s.sup_seen=true;
+  const c=det.querySelector('summary .chip.pink');if(c)c.remove();const fresh=SUP_SIM.filter(x=>!x.sup_seen).length;const nb=document.getElementById('supSimNew');nb.style.display=fresh?'':'none';nb.textContent=ar(fresh)+' جديد';
+  try{await sb.rpc('guide_sim_seen',{p_pass:SUP_PASS,p_id:id,p_seen:true});}catch(e){}}
+/* إملاء صوتي اختياري (Chrome) */
+function simMicToggle(){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR)return;const b=document.getElementById('simMic');
+  if(simRec){simRec.stop();return;}
+  simRec=new SR();simRec.lang='ar-SA';simRec.interimResults=true;simRec.continuous=false;b.textContent='⏹';b.classList.add('btn-primary');
+  const i=document.getElementById('simIn');const base=i.value?i.value+' ':'';
+  simRec.onresult=e=>{let t='';for(const r of e.results)t+=r[0].transcript;i.value=base+t;};
+  simRec.onend=()=>{simRec=null;b.textContent='🎤';b.classList.remove('btn-primary');i.focus();};
+  simRec.onerror=()=>{toast('تعذّر الإملاء الصوتي — اكتبي نصًّا');};
+  simRec.start();}
+
+/* ════ غرفة الأنشطة — منشورات الطالبات مرئية للجميع (guide.activities) ════ */
+let ROOM=[],roomPhoto=null;
+function roomToggleForm(){const f=document.getElementById('roomForm'),b=document.getElementById('roomToggle');const open=f.style.display==='none';f.style.display=open?'block':'none';b.textContent=open?'إغلاق النموذج':'فتح النموذج';if(open)document.getElementById('rmTitle').focus();}
+async function roomPickPhoto(inp){const f=inp.files&&inp.files[0];inp.value='';roomPhoto=null;const pv=document.getElementById('rmPhotoPrev');pv.innerHTML='';if(!f)return;
+  if(!/^image\//.test(f.type)){toast('⚠️ يُقبل رفع الصور فقط');return;}
+  pv.innerHTML='<span style="font-size:12px;color:var(--muted)">⏳ جارٍ تصغير الصورة…</span>';
+  try{roomPhoto=await shrinkImage(f,900,380000);pv.innerHTML='<img src="'+roomPhoto+'" alt=""> <button class="btn btn-ghost btn-sm" onclick="roomPhoto=null;document.getElementById(\'rmPhotoPrev\').innerHTML=\'\'">إزالة</button>';}
+  catch(e){pv.innerHTML='';toast('⚠️ '+e.message);}}
+async function roomPost(){
+  if(supMode||!student.id){toast('⚠️ النشر للطالبات بعد تسجيل الدخول');return;}
+  const title=document.getElementById('rmTitle').value.trim(),kind=document.getElementById('rmKind').value,role=document.getElementById('rmRole').value,body=document.getElementById('rmBody').value.trim();
+  if(!title){toast('اكتبي عنوان النشاط');return;}
+  if(!kind){toast('اختاري نوع النشاط');return;}
+  if(body.length<20){toast('صفي النشاط بجملتين على الأقل');return;}
+  if(!document.getElementById('rmPriv').checked){toast('أكّدي أن المنشور لا يكشف هوية المستفيدين');return;}
+  if(!sb){toast('⚠️ لا يوجد اتصال بقاعدة البيانات');return;}
+  const b=document.getElementById('rmSend');b.disabled=true;b.textContent='⏳ جارٍ الإرسال…';
+  try{const r=await sb.rpc('guide_act_add',{p_uid:student.id,p_name:student.name,p_org:student.org,p_title:title,p_kind:kind,p_role:role,p_body:body,p_photo:roomPhoto});
+    if(r.error)throw r.error;
+    ['rmTitle','rmBody'].forEach(id=>document.getElementById(id).value='');document.getElementById('rmKind').value='';document.getElementById('rmRole').value='';document.getElementById('rmPriv').checked=false;roomPhoto=null;document.getElementById('rmPhotoPrev').innerHTML='';
+    roomToggleForm();sfxTask();toast('📨 وصل نشاطك للمشرفة الأكاديمية للمراجعة');await loadRoom();}
+  catch(e){const m=String(e&&e.message||'');toast(m.includes('daily_limit')?'⚠️ الحد اليومي ٥ منشورات':m.includes('unknown_student')?'⚠️ سجّلي دخولك أولًا':'⚠️ تعذّر النشر — حاولي مجددًا');}
+  finally{b.disabled=false;b.textContent='إرسال للمراجعة';}}
+async function loadRoom(){const g=document.getElementById('roomGrid');if(!sb){g.innerHTML='<div class="empty">لا اتصال بقاعدة البيانات</div>';return;}
+  document.getElementById('roomCompose').style.display=supMode?'none':'';document.getElementById('roomExport').style.display=supMode?'':'none';
+  const rh=document.getElementById('roomHint');if(rh)rh.textContent=supMode?'كل المؤسسات — غير المعتمد يظهر أولًا':'أنشطة مؤسستك التدريبية بعد اعتماد المشرفة — ويمكنك الاطّلاع على الأنشطة المميّزة ⭐ من جميع المؤسسات من القائمة';
+  /* الطالبة: أنشطة مؤسستها + المميّزة من كل المؤسسات · المشرفة: كل شيء مع تصفية بالمؤسسة */
+  try{const r=supMode?await sb.rpc('guide_act_all',{p_pass:SUP_PASS}):await sb.rpc('guide_act_list',{p_uid:student.id});if(r.error)throw r.error;ROOM=r.data||[];
+    const f=document.getElementById('roomOrg');const cur=f.value;
+    if(supMode){const orgs=[...new Set(ROOM.map(a=>a.org).filter(Boolean))].sort();
+      f.innerHTML='<option value="">كل المؤسسات</option>'+orgs.map(o=>'<option'+(o===cur?' selected':'')+'>'+escH(o)+'</option>').join('');}
+    else{f.innerHTML='<option value="__mine">أنشطة مؤسستي</option><option value="__feat">الأنشطة المميّزة ⭐ (كل المؤسسات)</option>';f.value=(cur==='__feat')?'__feat':'__mine';}
+    renderRoom();}
+  catch(e){g.innerHTML='<div class="empty">تعذّر تحميل الأنشطة</div>';}}
+function roomClapped(a){try{return (JSON.parse(localStorage.getItem('rafiqaClaps')||'[]')).includes(a.id);}catch(e){return false;}}
+function roomSetClapped(id,on){try{let l=JSON.parse(localStorage.getItem('rafiqaClaps')||'[]');l=l.filter(x=>x!==id);if(on)l.push(id);localStorage.setItem('rafiqaClaps',JSON.stringify(l));}catch(e){}}
+function renderRoom(){const g=document.getElementById('roomGrid');const fo=document.getElementById('roomOrg').value,fk=document.getElementById('roomKind').value;
+  /* الطالبة: إما أنشطة مؤسستها (ومنها منشورها غير المعتمد) أو الأنشطة المميّزة من كل المؤسسات */
+  const rows=ROOM.filter(a=>(!fk||a.kind===fk)&&(supMode?(!fo||a.org===fo):(fo==='__feat'?a.featured:(a.org===student.org||a.mine))));
+  const pend=ROOM.filter(a=>!a.approved&&!a.hidden).length;
+  document.getElementById('roomCount').textContent=ar(rows.length)+' نشاط'+(supMode&&pend?' · '+ar(pend)+' بانتظار المراجعة':'');
+  if(!rows.length){g.innerHTML='<div class="empty" style="grid-column:1/-1">'+(ROOM.length?'لا أنشطة تطابق التصفية.':(supMode?'لم تُرسل أي طالبة نشاطًا بعد.':'الغرفة فارغة بعد — أرسلي نشاطك ليراجع ثم يظهر لزميلاتك! 🌱'))+'</div>';return;}
+  g.innerHTML=rows.map(a=>{const mine=!supMode&&a.mine;const on=roomClapped(a);const other=!supMode&&a.org!==student.org;
+    let h='<div class="rm'+(a.featured?' feat':'')+'" id="rm'+a.id+'"'+((a.hidden||!a.approved)?' style="opacity:.62"':'')+'>';
+    if(a.photo)h+='<img class="ph" src="'+a.photo+'" alt="" loading="lazy" onclick="roomLightbox(this.src)">';
+    h+='<div class="bd">'+(a.featured?'<span class="star">⭐ نشاط مميّز'+(other?' · من '+escH(a.org):'')+'</span>':'')
+      +(!a.approved?'<span class="chip pink">⏳ '+(supMode?'بانتظار مراجعتك — لا يراه أحد بعد':'بانتظار مراجعة المشرفة — لا يراه زميلاتك بعد')+'</span>':'')
+      +(a.hidden?'<span class="chip pink">مخفي</span>':'')+'<div class="tt">'+escH(a.title)+'</div><div class="who">👩‍🎓 '+escH(a.name||a.uid)+(a.org?' · '+escH(a.org):'')+' · '+new Date(a.created_at).toLocaleDateString('ar-EG',{day:'numeric',month:'long'})+'</div>';
+    h+='<div>'+(a.kind?'<span class="chip">'+escH(a.kind)+'</span> ':'')+(a.role?'<span class="chip pink">'+escH(a.role)+'</span>':'')+'</div>';
+    h+='<div class="tx" id="rmtx'+a.id+'">'+escH(a.body)+'</div>'+(a.body.length>260?'<span class="more" onclick="const t=document.getElementById(\'rmtx'+a.id+'\');t.classList.toggle(\'open\');this.textContent=t.classList.contains(\'open\')?\'أقل\':\'المزيد…\'">المزيد…</span>':'');
+    if(a.sup_comment)h+='<div class="banner" style="margin:4px 0 0;padding:8px 10px;font-size:12.5px"><div class="bic">👩‍🏫</div><div><b>تعليق المشرفة:</b> '+escH(a.sup_comment)+'</div></div>';
+    h+='<div class="ft"><button class="clap'+(on?' on':'')+'" onclick="roomClap('+a.id+',this)" '+((supMode||!a.approved)?'disabled':'')+'>👏 <span>'+ar(a.claps||0)+'</span></button>';
+    if(mine)h+='<button class="btn btn-ghost btn-sm" onclick="roomDel('+a.id+')">حذف</button>';
+    if(supMode)h+='<div class="mod">'
+      +'<button class="btn '+(a.approved?'btn-ghost':'btn-primary')+' btn-sm" onclick="roomApprove('+a.id+','+(!a.approved)+')">'+(a.approved?'سحب الاعتماد':'✅ اعتماد ونشر')+'</button>'
+      +'<button class="btn btn-ghost btn-sm" onclick="roomComment('+a.id+')">💬 '+(a.sup_comment?'تعديل التعليق':'تعليق')+'</button>'
+      +'<button class="btn btn-ghost btn-sm" onclick="roomFeature('+a.id+','+(!a.featured)+')">'+(a.featured?'إلغاء التمييز':'⭐ تمييز للجميع')+'</button>'
+      +'<button class="btn btn-ghost btn-sm" onclick="if(confirm(\'حذف هذا المنشور نهائيًا؟\'))roomMod('+a.id+',{p_delete:true})">حذف</button></div>';
+    h+='</div></div></div>';return h;}).join('');}
+async function roomClap(id,btn){if(supMode||!student.id){toast('سجّلي دخولك لتصفّقي');return;}
+  const on=!btn.classList.contains('on');btn.classList.toggle('on',on);const s=btn.querySelector('span');const cur=Number((s.textContent||'0').replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d)));s.textContent=ar(Math.max(0,cur+(on?1:-1)));roomSetClapped(id,on);
+  try{const r=await sb.rpc('guide_act_clap',{p_uid:student.id,p_id:id});if(r.error)throw r.error;s.textContent=ar(r.data);const a=ROOM.find(x=>x.id===id);if(a)a.claps=r.data;}catch(e){btn.classList.toggle('on',!on);roomSetClapped(id,!on);}}
+async function roomDel(id){if(!confirm('حذف منشورك من الغرفة؟'))return;try{const r=await sb.rpc('guide_act_del',{p_uid:student.id,p_id:id});if(r.error)throw r.error;ROOM=ROOM.filter(a=>a.id!==id);renderRoom();toast('حُذف المنشور');}catch(e){toast('⚠️ تعذّر الحذف');}}
+async function roomMod(id,p){try{const r=await sb.rpc('guide_act_mod',Object.assign({p_pass:SUP_PASS,p_id:id},p));if(r.error)throw r.error;await loadRoom();toast('تم');return true;}catch(e){toast('⚠️ تعذّر التعديل');return false;}}
+/* الاعتماد = يظهر النشاط لزميلات الطالبة في مؤسستها. قبله لا يراه أحد سوى صاحبته والمشرفة */
+async function roomApprove(id,on){const a=ROOM.find(x=>x.id===id);if(!a)return;
+  if(!on&&!confirm('سحب الاعتماد يُخفي النشاط عن الطالبات. متابعة؟'))return;
+  const ok=await roomMod(id,on?{p_approved:true,p_hidden:false}:{p_approved:false});if(!ok)return;
+  if(on)toast('✅ اعتُمد النشاط — صار يظهر لزميلاتها في '+(a.org||'مؤسستها'));}
+/* التمييز = يصبح النشاط مرئيًا لطالبات كل المؤسسات (ويُعتمد تلقائيًا)، ثم عرض نشر إعلان عنه */
+async function roomFeature(id,on){const a=ROOM.find(x=>x.id===id);if(!a)return;
+  if(on&&a.hidden){toast('النشاط مخفي — أظهريه أولًا');return;}
+  const ok=await roomMod(id,on?{p_featured:true,p_approved:true}:{p_featured:false});if(!ok||!on)return;
+  if(confirm('أصبح النشاط مرئيًا لجميع الطالبات ⭐\nهل تريدين نشر إعلان عنه في لوحة الإعلانات الآن؟'))roomAnnounce(a);}
+async function roomComment(id){const a=ROOM.find(x=>x.id===id);if(!a)return;const t=prompt('تعليقك على نشاط «'+a.title+'» (يراه زميلاتها في المؤسسة'+(a.featured?' وكل الطالبات':'')+'):',a.sup_comment||'');if(t===null)return;
+  try{const r=await sb.rpc('guide_act_comment',{p_pass:SUP_PASS,p_id:id,p_text:t});if(r.error)throw r.error;await loadRoom();toast(t.trim()?'💬 حُفظ التعليق':'أُزيل التعليق');}catch(e){toast('⚠️ تعذّر حفظ التعليق');}}
+function roomAnnounce(a){
+  const txt='🌟 نشاط مميّز من '+(a.org||'إحدى المؤسسات')+' — '+a.title+'\n'+(a.name?'نفّذته الطالبة '+a.name+'. ':'')+(a.kind?'نشاط '+a.kind+(a.role?' (دور '+a.role+')':'')+'. ':'')+'\n'+a.body.slice(0,400)+(a.body.length>400?'…':'')+'\n\nتجدنه كاملًا في «غرفة الأنشطة». شكرًا لها 🤍';
+  go('community',null);setTimeout(()=>{const c=document.getElementById('composer');if(c&&c.style.display==='none')toggleComposer();const ta=document.getElementById('cText');if(ta){ta.value=txt;ta.focus();ta.scrollIntoView({block:'center'});}toast('راجعي النص ثم انشري الإعلان');},400);}
+function roomLightbox(src){const d=document.createElement('div');d.className='room-lb';d.innerHTML='<img src="'+src+'" alt="">';d.onclick=()=>d.remove();document.body.appendChild(d);}
+async function roomExport(){await ensureXLSX();const data=ROOM.map(a=>({'الطالبة':a.name,'الرقم الجامعي':a.uid,'المؤسسة':a.org,'العنوان':a.title,'النوع':a.kind,'الدور':a.role,'الوصف':a.body,'تعليق المشرفة':a.sup_comment||'','الحالة':a.approved?(a.featured?'مميّز للجميع':'معتمد'):'بانتظار المراجعة','تصفيق':a.claps||0,'مخفي':a.hidden?'نعم':'','التاريخ':new Date(a.created_at).toLocaleString('ar-EG')}));
+  if(!data.length){toast('لا أنشطة للتصدير');return;}
+  const ws=XLSX.utils.json_to_sheet(data);ws['!cols']=[{wch:22},{wch:14},{wch:24},{wch:34},{wch:10},{wch:16},{wch:60},{wch:40},{wch:18},{wch:8},{wch:8},{wch:20}];
+  const wb=XLSX.utils.book_new();wb.Workbook={Views:[{RTL:true}]};XLSX.utils.book_append_sheet(wb,ws,'غرفة الأنشطة');XLSX.writeFile(wb,'غرفة-الأنشطة-'+new Date().toISOString().slice(0,10)+'.xlsx');}
 
 /* ════ Login + student ════ */
 const student={name:'',id:'',org:'',sup:'',email:''};
@@ -2302,18 +2743,18 @@ const PROOF_MAX=6,PROOF_DIM=1400;
 let PROOFS=[],SUP_PROOFS=[];
 function escH(t){return String(t==null?'':t).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
 function proofMsg(t){const e=document.getElementById('proofMsg');if(e)e.textContent=t||'';}
-function shrinkImage(file){return new Promise(function(res,rej){
+function shrinkImage(file,dim,maxLen){dim=dim||PROOF_DIM;maxLen=maxLen||880000;return new Promise(function(res,rej){
   const fr=new FileReader();
   fr.onerror=function(){rej(new Error('تعذّرت قراءة الملف'));};
   fr.onload=function(){const img=new Image();
     img.onerror=function(){rej(new Error('الملف ليس صورة صالحة'));};
     img.onload=function(){let w=img.width,h=img.height;const m=Math.max(w,h);
-      if(m>PROOF_DIM){w=Math.round(w*PROOF_DIM/m);h=Math.round(h*PROOF_DIM/m);}
+      if(m>dim){w=Math.round(w*dim/m);h=Math.round(h*dim/m);}
       const c=document.createElement('canvas');c.width=w;c.height=h;
       const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,w,h);x.drawImage(img,0,0,w,h);
       let q=.72,out=c.toDataURL('image/jpeg',q);
-      while(out.length>860000&&q>.28){q-=.12;out=c.toDataURL('image/jpeg',q);}
-      if(out.length>880000){rej(new Error('الصورة كبيرة جدًا — جرّبي صورة أصغر'));return;}
+      while(out.length>maxLen-20000&&q>.28){q-=.12;out=c.toDataURL('image/jpeg',q);}
+      if(out.length>maxLen){rej(new Error('الصورة كبيرة جدًا — جرّبي صورة أصغر'));return;}
       res(out);};
     img.src=fr.result;};
   fr.readAsDataURL(file);});}
@@ -2380,33 +2821,21 @@ function studentNotesCard(d){
   if(NO_NOTES_DAYS.includes(d.n))return '';
   var val=(answers.reflect[d.n]||'').replace(/</g,'&lt;');
   return '<div class="card card-3d"><div class="card-title">ملاحظات اليوم</div>'+
-    '<div style="font-size:11px;color:var(--muted);margin:6px 0">اكتبي ملاحظاتك عن يومك التدريبي — ما لاحظتِه أو واجهتِه أو أردتِ سؤال المشرفة عنه. <b>الكتابة اختيارية</b>، وتطّلع عليها المشرفة الأكاديمية وقد تردّ عليكِ هنا.</div>'+
+    '<div style="font-size:11px;color:var(--muted);margin:6px 0">اكتبي ملاحظاتك عن يومك التدريبي — ما لاحظتِه أو واجهتِه أو أردتِ سؤال المشرفة عنه. <b>الكتابة اختيارية</b>، وتطّلع عليها المشرفة الأكاديمية وقد تردّ عليكِ هنا.<br>وما تكتبينه هنا <b>يساعدك على كتابة تقريرك الأسبوعي</b> — نزّلي ملاحظات الأسبوع من الزرّ أسفل الخانة وانسخي منها ما يلزمك.</div>'+
     (d.reflect?'<label for="reflect'+d.n+'">'+d.reflect+'</label>':'')+
     '<textarea id="reflect'+d.n+'" rows="5" oninput="saveReflect('+d.n+',this.value)" placeholder="اختياري — اكتبي بموضوعية واختصار...">'+val+'</textarea>'+
-    '<div style="font-size:11px;color:var(--navy);margin-top:5px">يُحفظ تلقائيًا</div>'+
+    '<div class="row" style="margin-top:6px;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px">'+
+      '<span style="font-size:11px;color:var(--navy)">يُحفظ تلقائيًا</span>'+
+      '<button class="btn btn-ghost btn-sm" onclick="downloadNotes()" title="ملف نصّي بملاحظات أيام هذا الأسبوع">⬇️ تنزيل ملاحظات الأسبوع</button>'+
+    '</div>'+
     replyBox(d.n)+'</div>';
 }
 
 /* ════════ ردّ المشرفة على ملاحظات اليوم — داخل صفحة المهام ════════ */
-/* فيديو الخطة والتقرير الأسبوعي — داخل مسار الأسبوع الثالث.
-   مشغّل مستقل عن مشغّل «كلمة مشرفة التدريب» الذي يبقى في صفحة دليل التدريب. */
-function playWeekVid(){
-  const v=document.getElementById('vidWk'); if(!v)return;
-  if(!v.getAttribute('src'))v.setAttribute('src','weekly-plan-guide.mp4');
-  v.style.display='block'; v.play().catch(function(){});
-  setTimeout(function(){v.scrollIntoView({block:'center'});},150);
-  toast('🎥 الخطة الأسبوعية والتقرير الأسبوعي');
-}
+/* حُذفت دالة playWeekVid (2026-09-25): الفيديو صار مضمّنًا مباشرة في صفحة «النماذج» (#vidPlan). */
 function dayLinks(d){
-  /* الأسبوع الثالث: شرح الخطة الأسبوعية والتقرير الأسبوعي — في أيامه الثلاثة */
-  if(weekOf(d.n)===3){
-    return '<section class="card daylinks">'+
-      '<div class="card-title">الخطة الأسبوعية والتقرير الأسبوعي</div>'+
-      '<p style="font-size:13px;color:var(--muted);margin:4px 0 12px">شرح مسجّل من المشرفة الأكاديمية عن كيفية إعداد الخطة الأسبوعية وكتابة التقرير الأسبوعي.</p>'+
-      '<button class="btn btn-primary btn-sm" onclick="playWeekVid()">▶️ تشغيل الشرح</button>'+
-      '<video id="vidWk" controls playsinline controlsList="nodownload noplaybackrate" disablePictureInPicture oncontextmenu="return false" style="width:100%;border-radius:14px;background:#2E2A45;display:none;margin-top:12px"></video>'+
-    '</section>';
-  }
+  /* نُقل شرح الخطة والتقرير الأسبوعي إلى صفحة «النماذج» ليكون متاحًا في كل أسبوع (2026-09-25)
+     — كان يظهر في أيام الأسبوع الثالث فقط. */
   if(d.n!==1)return '';
   return '<section class="card daylinks">'+
     '<div class="card-title">ما تحتاجينه في أول يوم تدريبي</div>'+
@@ -2488,10 +2917,12 @@ function qaCard(icon,tone,title,sub,fn,badge){
 /* عدّادات مشتقّة من الحالة */
 function homeStats(){
   let tot=0,dn=0;days.forEach(d=>{tot+=d.tasks.length;dn+=(state.done[d.n]?state.done[d.n].size:0);});
+  /* عدّادات الأسبوع الحالي وحده — لبطاقة «مهام الأسبوع» */
+  let wtot=0,wdn=0;weekDays(weekOf(state.cur)).forEach(d=>{wtot+=d.tasks.length;wdn+=(state.done[d.n]?state.done[d.n].size:0);});
   const written=dayNums().filter(d=>answers.reflect[d]&&(''+answers.reflect[d]).trim()).length;
   const finished=dayNums().filter(d=>state.fin[d]).length;
   const replies=Object.keys(REPLIES||{}).filter(k=>REPLIES[k]&&REPLIES[k].text).length;
-  return {tot:tot,dn:dn,pct:tot?Math.round(dn/tot*100):0,written:written,finished:finished,replies:replies};
+  return {tot:tot,dn:dn,pct:tot?Math.round(dn/tot*100):0,wtot:wtot,wdn:wdn,written:written,finished:finished,replies:replies};
 }
 function renderHome(){
   const strip=document.getElementById('statStrip');if(!strip)return;
@@ -2501,8 +2932,8 @@ function renderHome(){
 
   /* شريط الإحصاءات */
   strip.innerHTML=
-    statCard('ic-route','navy',ar(cd.n)+' من '+ar(days.length),'يومك التدريبي')+
-    statCard('ic-check','',ar(st.dn)+' من '+ar(st.tot),'مهام الأسبوع')+
+    statCard('ic-route','navy',ar(days.findIndex(x=>x.n===cd.n)+1)+' من '+ar(days.length),'يومك التدريبي')+
+    statCard('ic-check','',ar(st.wdn)+' من '+ar(st.wtot),'مهام الأسبوع')+
     statCard('ic-pen','gold',ar(st.written)+' من '+ar(days.length),'أيام بملاحظات')+
     statCard('ic-flag',st.finished?'':'warn',ar(st.finished)+' من '+ar(days.length),'أيام أنهيتِها');
 
@@ -2513,7 +2944,7 @@ function renderHome(){
   const bar=document.getElementById('homeBar');if(bar)bar.style.width=st.pct+'%';
   document.getElementById('featSub').textContent=
     st.pct===100?('أكملتِ مهام '+weekLabel(weekOf(state.cur))+'.'):
-    'المتبقّي '+ar(st.tot-st.dn)+' مهمة موزّعة على أيامك التدريبية الثلاثة.';
+    'المتبقّي '+ar(st.wtot-st.wdn)+' مهمة في '+weekLabel(weekOf(state.cur))+'.';
 
   /* الإجراءات السريعة */
   document.getElementById('qaGrid').innerHTML=
@@ -2533,12 +2964,15 @@ function renderHome(){
     row('المشرفة الأكاديمية','أ. ربى أبو طربوش');
 
   /* الأيام التدريبية */
-  document.getElementById('upcoming').innerHTML=days.map(function(d){
+  /* الأسبوع الحالي أولًا ثم بقية الأسابيع كاملة — لا يُحذف أي يوم سابق */
+  const _cw=weekOf(state.cur);
+  const _ordered=weekDays(_cw).concat(days.filter(function(d){return (d.wk||2)!==_cw;}));
+  document.getElementById('upcoming').innerHTML=_ordered.map(function(d){
     const done=!!state.fin[d.n],now=d.n===state.cur;
     const cls=done?'is-done':(now?'is-now':'');
     const status=done?'مُنهى':(now?'يومك الحالي':'قادم');
-    return '<li class="'+cls+'"><span class="tl-mark">'+(done?'✓':ar(d.n))+'</span>'+
-      '<span class="tl-b"><span class="tl-t">'+d.name+' · '+d.dow+' '+(d.date||'')+'</span>'+
+    return '<li class="'+cls+'"><span class="tl-mark">'+(done?'✓':ar(dayIndexInWeek(d.n)))+'</span>'+
+      '<span class="tl-b"><span class="tl-t">'+weekLabel(d.wk||2)+' · '+d.name+' · '+d.dow+' '+(d.date||'')+'</span>'+
       '<span class="tl-d">'+d.sub+'</span></span><span class="tl-s">'+status+'</span></li>';}).join('');
 
   /* مراحل التدريب */
