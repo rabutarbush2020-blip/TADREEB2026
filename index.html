@@ -1435,7 +1435,7 @@ textarea:focus,input:focus,select:focus{background:#fff;border-color:var(--teal-
   </div>
   <div class="banner" style="margin:0"><div class="bic">🗒️</div><div id="annOvText" style="font-size:14px;line-height:1.9"></div></div>
   <div class="row" style="margin-top:14px;gap:8px;flex-wrap:wrap">
-    <button class="btn btn-primary" style="flex:1" onclick="annOvClose(true)">فتح لوحة الإعلانات</button>
+    <button class="btn btn-primary" style="flex:1" id="annOvOpen" onclick="annOvClose(true)">فتح لوحة الإعلانات</button>
     <button class="btn btn-ghost" onclick="annOvClose(false)">حسنًا</button>
   </div>
 </div></div>
@@ -2117,16 +2117,21 @@ function annAlert(){
   const fresh=annNewOnes();
   annBadge(fresh.length);
   if(!fresh.length||busy)return;
-  /* أول زيارة للطالبة: تُعلَّم الإعلانات القديمة كمقروءة بلا إزعاج */
-  if(!annSeenId()&&posts.length){annMarkSeen();return;}
-  const a=fresh[0];
+  /* يُعرض أحدث إعلان غير مقروء (بالتاريخ)، حتى في أول زيارة للطالبة (2026-10-04) */
+  const a=fresh.slice().sort(function(x,y){return new Date(y.at)-new Date(x.at);})[0];
   const ov=document.getElementById('annOv');if(!ov)return;
-  document.getElementById('annOvCount').textContent=fresh.length>1?('لديكِ '+ar(fresh.length)+' إعلانات جديدة — أحدثها:'):'إعلان جديد من المشرفة الأكاديمية';
+  /* إعلان النشاط المميّز يفتح غرفة الأنشطة مباشرة */
+  ANN_OV_FEAT=/^\s*🌟\s*نشاط مميّز/.test(a.text||'');
+  document.getElementById('annOvCount').textContent=ANN_OV_FEAT?'🌟 نشاط مميّز من زميلاتك':'إعلان جديد من المشرفة الأكاديمية';
   document.getElementById('annOvTime').textContent=annFmt(a.at);
   document.getElementById('annOvText').innerHTML=annEsc(a.text).replace(/\n/g,'<br>');
+  const ob=document.getElementById('annOvOpen');if(ob)ob.textContent=ANN_OV_FEAT?'🏛️ مشاهدة النشاط في غرفة الأنشطة':'فتح لوحة الإعلانات';
   ov.classList.add('show');sfxAnn();
 }
-function annOvClose(open){document.getElementById('annOv').classList.remove('show');annMarkSeen();if(open)go('community',null);}
+let ANN_OV_FEAT=false,ROOM_WANT_FEAT=false;
+/* زر النشاط المميّز يفتح الغرفة على «الأنشطة المميّزة» — لأن النشاط غالبًا من مؤسسة أخرى */
+function annOvClose(open){document.getElementById('annOv').classList.remove('show');annMarkSeen();
+  if(open){if(ANN_OV_FEAT){ROOM_WANT_FEAT=true;go('room',null);}else go('community',null);}}
 
 function toggleSup(){if(!supMode&&!supUnlocked){askSupPass(()=>toggleSup());return;}
   supMode=!supMode;document.getElementById('supState').textContent=supMode?'مُفعّل ✅':'غير مُفعّل';
@@ -2650,7 +2655,7 @@ async function loadRoom(){const g=document.getElementById('roomGrid');if(!sb){g.
     const f=document.getElementById('roomOrg');const cur=f.value;
     if(supMode){const orgs=[...new Set(ROOM.map(a=>a.org).filter(Boolean))].sort();
       f.innerHTML='<option value="">كل المؤسسات</option>'+orgs.map(o=>'<option'+(o===cur?' selected':'')+'>'+escH(o)+'</option>').join('');}
-    else{f.innerHTML='<option value="__mine">أنشطة مؤسستي</option><option value="__feat">الأنشطة المميّزة ⭐ (كل المؤسسات)</option>';f.value=(cur==='__feat')?'__feat':'__mine';}
+    else{f.innerHTML='<option value="__mine">أنشطة مؤسستي</option><option value="__feat">الأنشطة المميّزة ⭐ (كل المؤسسات)</option>';f.value=(ROOM_WANT_FEAT||cur==='__feat')?'__feat':'__mine';ROOM_WANT_FEAT=false;}
     renderRoom();}
   catch(e){g.innerHTML='<div class="empty">تعذّر تحميل الأنشطة</div>';}}
 function roomClapped(a){try{return (JSON.parse(localStorage.getItem('rafiqaClaps')||'[]')).includes(a.id);}catch(e){return false;}}
@@ -2734,7 +2739,9 @@ function doLogin(){const name=document.getElementById('lName').value.trim(),id=d
     localStorage.setItem('rafiqaUid',id);}catch(e){}
   gate.readSyl=false;gate.seenMap=false;saveGate();var _sc=document.getElementById('sylCheck');if(_sc){_sc.classList.remove('done');_sc.textContent='';document.getElementById('sylTask').classList.remove('done');}
   applyStudent();document.getElementById('loginOv').classList.remove('show');stopLoginFX();startIdle();sbStudent();sbConsent();sbVisit();sbLoadProgress();PROOFS=[];renderProofs();ac();
-  toast('🌸 أهلاً بكِ '+name+'!');setTimeout(playWelcome,500);}
+  /* أُوقفت نافذة «كلمة الترحيب» بعد الدخول بطلب المستخدمة (2026-10-04) — يظهر الإعلان الجديد مباشرة.
+     لإعادتها: استبدلي annAlert بـ playWelcome في السطر التالي. */
+  toast('🌸 أهلاً بكِ '+name+'!');setTimeout(function(){try{annAlert();}catch(e){}},700);}
 (function restore(){try{const s=JSON.parse(localStorage.getItem('rafiqaStudent'));if(s&&s.name){Object.assign(student,s);applyStudent();document.getElementById('loginOv').classList.remove('show');stopLoginFX();startIdle();
   if(student.id){rosterAdd(student);setTimeout(function(){sbStudent();sbVisit();},600);}}}catch(e){}})();
 
