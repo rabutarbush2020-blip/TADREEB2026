@@ -941,7 +941,7 @@ textarea:focus,input:focus,select:focus{background:#fff;border-color:var(--teal-
       <div class="nav-item active" data-v="home" onclick="go('home',this)"><span class="nav-ic"><svg viewBox="0 0 24 24"><use href="#ic-home"/></svg></span> الرئيسية</div>
       <div class="nav-item" data-v="guide" onclick="go('guide',this)"><span class="nav-ic"><svg viewBox="0 0 24 24"><use href="#ic-book"/></svg></span> دليل التدريب</div>
       <div class="nav-item" data-v="map" onclick="go('map',this)"><span class="nav-ic"><svg viewBox="0 0 24 24"><use href="#ic-map"/></svg></span> <span class="nav-tx">خريطة الإجراءات<small>إجراءات الدوام بالمؤسسة التدريبية</small></span></div>
-      <div class="nav-item" data-v="week" onclick="go('week',this)"><span class="nav-ic"><svg viewBox="0 0 24 24"><use href="#ic-route"/></svg></span> مسار الأسابيع التدريبية <span class="bdg" id="weekBdg">٣ أسابيع</span></div>
+      <div class="nav-item" data-v="week" onclick="go('week',this)"><span class="nav-ic"><svg viewBox="0 0 24 24"><use href="#ic-route"/></svg></span> مهام الأسبوع التدريبي <span class="bdg" id="weekBdg">٣ أسابيع</span></div>
       <div class="nav-item" data-v="room" onclick="go('room',this)"><span class="nav-ic"><svg viewBox="0 0 24 24"><use href="#ic-board"/></svg></span> <span class="nav-tx">غرفة الأنشطة<small>أنشطة الطالبات في كل المؤسسات</small></span></div>
       <!-- «محاكاة مقابلة» مع الأفتار أُزيلت من الواجهة بطلب المستخدمة (2026-09-17) — الدالة sim وجدول sim_sessions والكود (simStart…) باقية.
       <div class="nav-item" data-v="sim" onclick="go('sim',this)"><span class="nav-ic"><svg viewBox="0 0 24 24"><use href="#ic-help"/></svg></span> <span class="nav-tx">محاكاة مقابلة<small>تدرّبي مع عميلة افتراضية</small></span></div>
@@ -1051,7 +1051,7 @@ textarea:focus,input:focus,select:focus{background:#fff;border-color:var(--teal-
           <ul class="act" id="actList"></ul></section>
 
 
-        <div class="banner pink"><div class="bic">💡</div><div>للاطّلاع على الضوابط والجدول والفيديوهات، افتحي <b>دليل التدريب</b>. ولبدء مهامك اليومية افتحي <b>مسار الأسابيع التدريبية</b>.</div></div>
+        <div class="banner pink"><div class="bic">💡</div><div>للاطّلاع على الضوابط والجدول والفيديوهات، افتحي <b>دليل التدريب</b>. ولبدء مهامك اليومية افتحي <b>مهام الأسبوع التدريبي</b>.</div></div>
       </div>
 
       <!-- ═══ GUIDE ═══ -->
@@ -1421,7 +1421,7 @@ textarea:focus,input:focus,select:focus{background:#fff;border-color:var(--teal-
   <button data-v="home" onclick="go('home',null)"><svg viewBox="0 0 24 24"><use href="#ic-home"/></svg>الرئيسية</button>
   <button data-v="guide" onclick="go('guide',null)"><svg viewBox="0 0 24 24"><use href="#ic-book"/></svg>الدليل</button>
   <button data-v="map" onclick="go('map',null)"><svg viewBox="0 0 24 24"><use href="#ic-map"/></svg>الإجراءات</button>
-  <button data-v="week" onclick="go('week',null)"><svg viewBox="0 0 24 24"><use href="#ic-route"/></svg>مسار الأسابيع</button>
+  <button data-v="week" onclick="go('week',null)"><svg viewBox="0 0 24 24"><use href="#ic-route"/></svg>مهام الأسبوع</button>
   <button data-v="more" onclick="openMore()" aria-label="كل الأقسام"><svg viewBox="0 0 24 24"><use href="#ic-menu"/></svg>المزيد</button>
 </nav>
 
@@ -1580,7 +1580,7 @@ function go(name,el){
   const v=document.getElementById('v-'+name);if(v)v.classList.add('active');
   let nav=el||document.querySelector('.nav-item[data-v="'+name+'"]');
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));if(nav)nav.classList.add('active');
-  const T={home:'الرئيسية',guide:'دليل التدريب',map:'خريطة الإجراءات',week:'مسار الأسابيع التدريبية',room:'غرفة الأنشطة',sim:'محاكاة مقابلة',assistant:'المساعد الذكي',forms:'النماذج',community:'لوحة الإعلانات',supervisor:'لوحة المتابعة',indicators:'مؤشرات الدعم المهني'};
+  const T={home:'الرئيسية',guide:'دليل التدريب',map:'خريطة الإجراءات',week:'مهام الأسبوع التدريبي',room:'غرفة الأنشطة',sim:'محاكاة مقابلة',assistant:'المساعد الذكي',forms:'النماذج',community:'لوحة الإعلانات',supervisor:'لوحة المتابعة',indicators:'مؤشرات الدعم المهني'};
   document.getElementById('pageTitle').textContent=T[name]||name;
   if(name==='supervisor')loadSupervisor();
   if(name==='room')loadRoom();
@@ -1962,7 +1962,7 @@ function updateNextAction(cd){
     b.textContent='افتحي مهام اليوم';}
   else if(!wrote){t.textContent='أنجزتِ مهام '+cd.name+'. اكتبي ملاحظاتك على اليوم لتطّلع عليها المشرفة.';
     b.textContent='اكتبي ملاحظات اليوم';}
-  else{t.textContent='أنجزتِ مهام '+cd.name+' وسجّلتِ ملاحظاتك.';b.textContent='مراجعة مسار الأسابيع';}
+  else{t.textContent='أنجزتِ مهام '+cd.name+' وسجّلتِ ملاحظاتك.';b.textContent='مراجعة مهام الأسبوع';}
   b.onclick=function(){go('week',null);};
   syncHeroAlt('week');}
 /* الزرّ الثانوي يقترح دائمًا وجهة مختلفة عن الزرّ الرئيسي */
