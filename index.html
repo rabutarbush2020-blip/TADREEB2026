@@ -2783,7 +2783,7 @@ function renderRoom(){const g=document.getElementById('roomGrid');const fo=docum
       +['stu','sup'].map(k=>'<button class="btn btn-ghost btn-sm" onclick="roomPick('+a.id+',\''+k+'\')">'+(isPickNow(a.id,k)?'إلغاء ':'')+PICK_LB[k]+'</button>').join('')
       +'<button class="btn btn-ghost btn-sm" onclick="if(confirm(\'حذف هذا المنشور نهائيًا؟\'))roomMod('+a.id+',{p_delete:true})">حذف</button></div>';
     h+='</div></div></div>';return h;}).join('');}
-async function roomClap(id,btn){if(supMode||!student.id){toast('سجّلي دخولك لتصفّقي');return;}
+async function roomClap(id,btn){if(supMode||!student.id){toast('سجّلي دخولك لتصوّتي');return;}
   const on=!btn.classList.contains('on');btn.classList.toggle('on',on);const s=btn.querySelector('span');const cur=Number((s.textContent||'0').replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d)));s.textContent=ar(Math.max(0,cur+(on?1:-1)));roomSetClapped(id,on);
   try{const r=await sb.rpc('guide_act_clap',{p_uid:student.id,p_id:id});if(r.error)throw r.error;s.textContent=ar(r.data);const a=ROOM.find(x=>x.id===id);if(a)a.claps=r.data;loadPicks().then(()=>{const w=btn.parentNode.querySelector('.wkc');if(w)w.textContent='هذا الأسبوع: '+ar(WEEKC[id]||0);});}catch(e){btn.classList.toggle('on',!on);roomSetClapped(id,!on);}}
 async function roomDel(id){if(!confirm('حذف منشورك من الغرفة؟'))return;try{const r=await sb.rpc('guide_act_del',{p_uid:student.id,p_id:id});if(r.error)throw r.error;ROOM=ROOM.filter(a=>a.id!==id);renderRoom();toast('حُذف المنشور');}catch(e){toast('⚠️ تعذّر الحذف');}}
@@ -2823,9 +2823,9 @@ function renderPicks(){const body=document.getElementById('roomPicksBody');if(!b
   const W=roomWeek();const wks=[...new Set(PICKS.map(p=>p.wk))].sort((a,b)=>b-a);let h='';
   if(supMode){const top=ROOM.filter(a=>a.approved&&!a.hidden&&WEEKC[a.id]).sort((a,b)=>WEEKC[b.id]-WEEKC[a.id])[0];
     h+='<div class="banner" style="margin:0 0 10px"><div class="bic">🗳️</div><div><b>'+weekLabel(W.wk)+'</b> — '
-      +(top?'الأعلى تصفيقًا هذا الأسبوع: «'+escH(top.title)+'» — '+escH(top.name||'')+' ('+ar(WEEKC[top.id])+' 👏) <button class="btn btn-ghost btn-sm" onclick="roomPick('+top.id+',\'stu\')">اعتماده اختيار الطالبات</button>':'لا تصفيقات بعد هذا الأسبوع.')
+      +(top?'الأعلى تصويتًا هذا الأسبوع: «'+escH(top.title)+'» — '+escH(top.name||'')+' ('+ar(WEEKC[top.id])+' 👏) <button class="btn btn-ghost btn-sm" onclick="roomPick('+top.id+',\'stu\')">اعتماده اختيار الطالبات</button>':'لا تصويت بعد هذا الأسبوع.')
       +'<br><span style="font-size:12px">اختاري من بطاقة أي نشاط: «⭐ اختيار الطالبات» أو «🏅 اختيار المشرفة». النشاط المختار يصبح مميّزًا ويراه الجميع.</span></div></div>';}
-  else h+='<div style="font-size:12.5px;color:var(--muted);margin-bottom:10px">صفّقي 👏 للنشاط الذي ترينه الأوضح في الهدف والتخطيط. يُحتسب التصفيق لكل أسبوع على حدة، ويُعلَن كل أسبوع <b>اختيار الطالبات</b> و<b>اختيار المشرفة</b>.</div>';
+  else h+='<div style="font-size:12.5px;color:var(--muted);margin-bottom:10px">صوّتي للنشاط الذي ترينه الأوضح في الهدف والتخطيط بالضغط على 👏 أسفل بطاقته. يُحتسب التصويت لكل أسبوع على حدة، ويُعلَن كل أسبوع <b>اختيار الطالبات</b> و<b>اختيار المشرفة</b>.</div>';
   const tile=p=>'<div class="wp" onclick="roomGoTo('+p.act_id+')"><div class="lb">'+PICK_LB[p.kind]+'</div><div class="t">'+escH(p.title)+'</div><div class="w">👩‍🎓 '+escH(p.name||'')+(p.org?' · '+escH(p.org):'')+'</div></div>';
   document.getElementById('roomPicksWk').textContent=wks.length?weekLabel(wks[0]):'';
   if(wks.length){const last=wks[0];h+='<div class="wp-grid">'+['stu','sup'].map(k=>PICKS.find(p=>p.wk===last&&p.kind===k)).filter(Boolean).map(tile).join('')+'</div>';
@@ -2840,7 +2840,7 @@ async function roomPick(id,kind){const W=roomWeek();const a=ROOM.find(x=>x.id===
   if(!confirm(off?('إلغاء «'+PICK_LB[kind]+'» عن هذا النشاط في '+weekLabel(W.wk)+'؟'):('اختيار «'+(a?a.title:'')+'»\n'+PICK_LB[kind]+' — '+weekLabel(W.wk)+'؟\nسيصبح النشاط مميّزًا ويراه الجميع.')))return;
   try{const r=await sb.rpc('guide_pick_set',{p_pass:SUP_PASS,p_wk:W.wk,p_kind:kind,p_act:off?null:id});if(r.error)throw r.error;await loadRoom();toast(off?'أُلغي الاختيار':'🏆 '+PICK_LB[kind]+' — '+weekLabel(W.wk));}catch(e){toast('⚠️ تعذّر الحفظ');}}
 function roomLightbox(src){const d=document.createElement('div');d.className='room-lb';d.innerHTML='<img src="'+src+'" alt="">';d.onclick=()=>d.remove();document.body.appendChild(d);}
-async function roomExport(){await ensureXLSX();const data=ROOM.map(a=>({'الطالبة':a.name,'الرقم الجامعي':a.uid,'المؤسسة':a.org,'العنوان':a.title,'النوع':a.kind,'الدور':a.role,'الوصف':a.body,'تعليق المشرفة':a.sup_comment||'','الحالة':a.approved?(a.featured?'مميّز للجميع':'معتمد'):'بانتظار المراجعة','تصفيق':a.claps||0,'تصفيق هذا الأسبوع':WEEKC[a.id]||0,'اختيار الأسبوع':pickOf(a.id).map(p=>PICK_LB[p.kind].slice(2)+' — '+weekLabel(p.wk)).join('، '),'مخفي':a.hidden?'نعم':'','التاريخ':new Date(a.created_at).toLocaleString('ar-EG')}));
+async function roomExport(){await ensureXLSX();const data=ROOM.map(a=>({'الطالبة':a.name,'الرقم الجامعي':a.uid,'المؤسسة':a.org,'العنوان':a.title,'النوع':a.kind,'الدور':a.role,'الوصف':a.body,'تعليق المشرفة':a.sup_comment||'','الحالة':a.approved?(a.featured?'مميّز للجميع':'معتمد'):'بانتظار المراجعة','تصفيق':a.claps||0,'تصويت هذا الأسبوع':WEEKC[a.id]||0,'اختيار الأسبوع':pickOf(a.id).map(p=>PICK_LB[p.kind].slice(2)+' — '+weekLabel(p.wk)).join('، '),'مخفي':a.hidden?'نعم':'','التاريخ':new Date(a.created_at).toLocaleString('ar-EG')}));
   if(!data.length){toast('لا أنشطة للتصدير');return;}
   const ws=XLSX.utils.json_to_sheet(data);ws['!cols']=[{wch:22},{wch:14},{wch:24},{wch:34},{wch:10},{wch:16},{wch:60},{wch:40},{wch:18},{wch:8},{wch:8},{wch:20}];
   const wb=XLSX.utils.book_new();wb.Workbook={Views:[{RTL:true}]};XLSX.utils.book_append_sheet(wb,ws,'غرفة الأنشطة');XLSX.writeFile(wb,'غرفة-الأنشطة-'+new Date().toISOString().slice(0,10)+'.xlsx');}
