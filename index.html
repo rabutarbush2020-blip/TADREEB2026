@@ -325,7 +325,16 @@ input[type=checkbox]{accent-color:var(--teal);width:auto}
 .rm .clap{border:1px solid var(--line);background:#fff;border-radius:99px;padding:4px 12px;font-size:13px;cursor:pointer;font-weight:700;font-family:inherit}
 .rm .clap.on{background:var(--teal-soft);border-color:var(--teal);color:var(--teal)}
 .rm .star{align-self:flex-start;background:var(--teal);color:#fff;font-size:11px;font-weight:800;padding:3px 9px;border-radius:99px}
-.rm .mod{display:flex;gap:4px;margin-inline-start:auto}
+.rm .mod{display:flex;gap:4px;margin-inline-start:auto;flex-wrap:wrap}
+/* اختيار الأسبوع */
+.rm.picked{border-color:#E8B93A;box-shadow:0 0 0 2px #FBE9B5}
+.rm .pick{align-self:flex-start;font-size:11px;font-weight:800;padding:3px 9px;border-radius:99px;background:#FFF4D6;color:#8A5A00;border:1px solid #F2D27A}
+.rm .wkc{font-size:11.5px;color:var(--muted)}
+.wp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+.wp{border:1px solid #F2D27A;border-radius:var(--r-s);padding:12px 14px;background:#FFFBEF;cursor:pointer}
+.wp .lb{font-size:12px;font-weight:800;color:#8A5A00}
+.wp .t{font-weight:900;font-size:14px;margin:4px 0 2px;line-height:1.5;color:#2B2B2B}
+.wp .w{font-size:12px;color:#6B6B6B}
 .rm .mod button{font-size:11.5px;padding:3px 8px}
 #rmPhotoPrev img{max-width:160px;border-radius:8px;border:1px solid var(--line)}
 .room-lb{position:fixed;inset:0;background:rgba(0,0,0,.82);display:flex;align-items:center;justify-content:center;z-index:9999;cursor:zoom-out}
@@ -1143,6 +1152,8 @@ textarea:focus,input:focus,select:focus{background:#fff;border-color:var(--teal-
             <div class="row" style="margin-top:12px;gap:8px;flex-wrap:wrap"><button class="btn btn-primary" id="rmSend" onclick="roomPost()">إرسال للمراجعة</button><span style="font-size:12px;color:var(--muted)">يصل للمشرفة الأكاديمية أولًا، ويظهر لزميلاتك بعد اعتمادها · حتى ٥ منشورات يوميًا</span></div>
           </div>
         </div>
+        <!-- ═══ اختيار الأسبوع (2026-10-17): اختيار الطالبات + اختيار المشرفة لكل أسبوع تدريبي ═══ -->
+        <div class="card card-3d" id="roomPicks"><div class="card-head"><div class="card-title">🏆 اختيار الأسبوع <span class="chip" id="roomPicksWk"></span></div></div><div id="roomPicksBody"></div></div>
         <div class="card card-3d">
           <div class="card-head"><div class="card-title">الأنشطة المنشورة <span class="chip" id="roomCount"></span><div id="roomHint" style="font-size:11.5px;font-weight:400;color:var(--muted);margin-top:4px">أنشطة مؤسستك التدريبية بعد اعتماد المشرفة — ويمكنك الاطّلاع على الأنشطة المميّزة ⭐ من جميع المؤسسات من القائمة</div></div>
             <div class="row" style="flex-wrap:wrap"><select id="roomOrg" onchange="renderRoom()" style="max-width:190px"><option value="">كل المؤسسات</option></select><select id="roomKind" onchange="renderRoom()" style="max-width:130px"><option value="">كل الأنواع</option><option>وقائي</option><option>علاجي</option><option>تنموي</option></select><button class="btn btn-ghost btn-sm" onclick="loadRoom()">تحديث</button><button class="btn btn-ghost btn-sm" id="roomExport" style="display:none" onclick="roomExport()">تنزيل إكسل</button></div></div>
@@ -1798,7 +1809,49 @@ const days=[
          {t:'إدراج خطة النشاط وتقييمه في التقرير الأسبوعي'},
          {t:'إعداد خطة الأسبوع التاسع ومناقشتها مع الأخصائية (بند ٢)'},
          {t:'توقيع سجل الحضور والانصراف'}],
-  reflect:'ما الذي تحقّق من هدف النشاط؟ وما الذي ستغيّرينه لو نفّذتِه مرة أخرى؟'}
+  reflect:'ما الذي تحقّق من هدف النشاط؟ وما الذي ستغيّرينه لو نفّذتِه مرة أخرى؟'},
+
+ /* ═══ الأسبوع التدريبي التاسع · ١٨ / ٢٠ / ٢٢ أكتوبر ٢٠٢٦ (أُضيف 2026-10-17) ═══
+    الهدف: التعرف على نظام تقييم التدخل مع الحالات الفردية والجماعية (دورة التقييم التي تبدأ
+    بتحديد خط الأساس أو المستوى المبدئي للحالة الفردية والجماعية... إلى الوصول إلى خطة التحسين). */
+ {n:19,wk:9,name:'اليوم الأول',dow:'الأحد',date:'١٨ أكتوبر',sub:'تحديد خط الأساس · ٦ ساعات',
+  tip:'هذا الأسبوع تتعرّفين على طريقة تقييم التدخل. ابدئي اليوم بالسؤال: كيف كان وضع الحالة أو المجموعة <b>قبل</b> التدخل؟',
+  note:'<b>📌 ما المطلوب هذا الأسبوع؟</b> قد تكونين تابعتِ عددًا من الحالات خلال الأسابيع الماضية، لكن المطلوب هذا الأسبوع هو <b>التركيز أكثر على صياغة الحالة</b>، و<b>التعرّف على آلية التقييم</b>. اختاري حالة واحدة تابعتِها، أو النشاط الجماعي من الأسبوع الثامن، أو حالة تختارها الأخصائية، وطبّقي عليها دورة التقييم أدناه.',
+  note2:'<b>🔄 دورة التقييم</b><br>'
+   +'<b>١) خط الأساس:</b> كيف كان الوضع قبل التدخل؟ صفيه بأمثلة أو أرقام، مثل: عدد مرات الغياب أو السلوك في الأسبوع.<br>'
+   +'<b>٢) الهدف والمؤشر:</b> ما التغيّر المطلوب؟ وما المؤشر الذي يدل عليه؟<br>'
+   +'<b>٣) التدخل والمتابعة:</b> ما الذي نُفّذ؟ وكيف تُتابَع الحالة أو المجموعة؟<br>'
+   +'<b>٤) القياس والمقارنة:</b> قارني الوضع الآن بخط الأساس.<br>'
+   +'<b>٥) خطة التحسين:</b> ما الذي يُعدَّل في التدخل بناءً على النتيجة؟',
+  tasks:[{t:'التعرّف على طريقة المؤسسة في تقييم التدخل: النماذج والسجلات المستخدمة (بند ١)'},
+         {t:'اختيار حالة فردية أو نشاط جماعي لتطبيق دورة التقييم (بند ٤)'},
+         {t:'تحديد خط الأساس: وصف المشكلة أو السلوك قبل التدخل، بأمثلة أو أرقام إن أمكن (بند ٨)'},
+         {t:'تحديد مصدر المعلومات: الملاحظة، أو السجل، أو المعلمة، أو الأسرة (بند ٤)'},
+         {t:'الحفاظ على سرّية بيانات الحالة عند التوثيق (بند ٣)'},
+         {t:'توقيع سجل الحضور والانصراف'}],
+  reflect:'كيف كان وضع الحالة أو المجموعة قبل التدخل؟ وما الدليل الذي اعتمدتِ عليه؟'},
+
+ {n:20,wk:9,name:'اليوم الثاني',dow:'الثلاثاء',date:'٢٠ أكتوبر',sub:'المؤشر وأداة القياس · ٦ ساعات',
+  tip:'يومك لتحديد ما ستقيسينه وكيف ستقيسينه. المؤشر الجيد بسيط وواضح، ويمكن ملاحظته.',
+  tasks:[{t:'صياغة مؤشر أو اثنين يقيسان التغيّر، مثل: عدد مرات السلوك في الأسبوع (بند ٤)'},
+         {t:'اختيار أداة قياس بسيطة: جدول ملاحظة، أو استبيان قصير، أو سؤال للمعلمة (بند ٥)'},
+         {t:'متابعة الحالة أو المجموعة، وتسجيل ما تلاحظينه وفق المؤشر (بند ٤)'},
+         {t:'مقارنة ما لاحظتِه بخط الأساس (بند ٨)'},
+         {t:'التأكد من أن المؤشر والأداة يناسبان عمر الحالة وظروفها (بند ٧)'},
+         {t:'توقيع سجل الحضور والانصراف'}],
+  reflect:'ما المؤشر الذي اخترتِه؟ وهل يقيس فعلًا التغيّر الذي تريدين معرفته؟'},
+
+ {n:21,wk:9,name:'اليوم الثالث',dow:'الخميس',date:'٢٢ أكتوبر',sub:'نتيجة التقييم وخطة التحسين · ٦ ساعات',
+  tip:'يومك لإكمال دورة التقييم: النتيجة، ثم خطة التحسين. ترتبط مهام هذا الأسبوع أساسًا ببند <b>طرق تنفيذ عملية المساعدة</b> وبند <b>الأنشطة</b>، وتدعم بنود المؤسسة، والسلوك الاجتماعي وبيئته، والمسؤوليات الأخلاقية، والخطة الأسبوعية.',
+  note:'<b>تذكير:</b> جهّزي تقريرك الأسبوعي — يُرفع في خانة <b>«التقرير الأسبوعي»</b> في بلاك بورد <b>يوم السبت قبل الساعة ٦:٠٠ صباحًا</b>. نموذج الوورد الرسمي في صفحة <b>النماذج</b>، وملاحظاتك اليومية تجدينها بزر <b>«تنزيل ملاحظات الأسبوع»</b>.<div style="margin-top:10px"><a href="https://elearning.qu.edu.qa/" target="_blank" rel="noopener" class="btn btn-primary btn-sm">🔗 فتح بلاك بورد</a></div>',
+  note2:'<b>واجهتكِ صعوبة هذا الأسبوع؟</b> راسلي المشرفة الأكاديمية من بطاقة «مراسلة المشرفة الأكاديمية» في الصفحة الرئيسية، أو احضري الساعات المكتبية. طلب الدعم جزء من التدريب المهني، لا ضعفًا فيه.<br><span style="font-size:12px">🕐 <b>الاثنين</b> ١١:٠٠–١٢:٠٠ &nbsp;|&nbsp; <b>الأربعاء</b> ٨:٣٠–٩:٣٠ &nbsp;·&nbsp; مكتب 237 · مبنى البنات C04</span>',
+  tasks:[{t:'كتابة نتيجة التقييم: ما الذي تغيّر؟ وما الذي لم يتغيّر؟ ولماذا؟ (بند ٤)'},
+         {t:'تقييم نشاط جماعي نفّذتِه أو شاركتِ فيه بالطريقة نفسها: الهدف، والمؤشر، والنتيجة (بند ٥)'},
+         {t:'كتابة خطة تحسين: ما الذي ستعدّلينه في التدخل أو النشاط؟ (بند ٤)'},
+         {t:'إدراج دورة التقييم في التقرير الأسبوعي: خط الأساس، والمؤشر، والنتيجة، وخطة التحسين'},
+         {t:'إعداد خطة الأسبوع العاشر (بند ٢)'},
+         {t:'توقيع سجل الحضور والانصراف'}],
+  reflect:'ما الذي كشفه لكِ التقييم ولم تلاحظيه من قبل؟'}
 ];
 /* أرقام الأيام — مشتقّة من المصفوفة أعلاه حتى لا تُنسى عند إضافة أسبوع جديد */
 function dayNums(){return days.map(function(d){return d.n;});}
@@ -2702,7 +2755,7 @@ async function loadRoom(){const g=document.getElementById('roomGrid');if(!sb){g.
     if(supMode){const orgs=[...new Set(ROOM.map(a=>a.org).filter(Boolean))].sort();
       f.innerHTML='<option value="">كل المؤسسات</option>'+orgs.map(o=>'<option'+(o===cur?' selected':'')+'>'+escH(o)+'</option>').join('');}
     else{f.innerHTML='<option value="__mine">أنشطة مؤسستي</option><option value="__feat">الأنشطة المميّزة ⭐ (كل المؤسسات)</option>';f.value=(ROOM_WANT_FEAT||cur==='__feat')?'__feat':'__mine';ROOM_WANT_FEAT=false;}
-    renderRoom();}
+    await loadPicks();renderPicks();renderRoom();}
   catch(e){g.innerHTML='<div class="empty">تعذّر تحميل الأنشطة</div>';}}
 function roomClapped(a){try{return (JSON.parse(localStorage.getItem('rafiqaClaps')||'[]')).includes(a.id);}catch(e){return false;}}
 function roomSetClapped(id,on){try{let l=JSON.parse(localStorage.getItem('rafiqaClaps')||'[]');l=l.filter(x=>x!==id);if(on)l.push(id);localStorage.setItem('rafiqaClaps',JSON.stringify(l));}catch(e){}}
@@ -2713,25 +2766,26 @@ function renderRoom(){const g=document.getElementById('roomGrid');const fo=docum
   document.getElementById('roomCount').textContent=ar(rows.length)+' نشاط'+(supMode&&pend?' · '+ar(pend)+' بانتظار المراجعة':'');
   if(!rows.length){g.innerHTML='<div class="empty" style="grid-column:1/-1">'+(ROOM.length?'لا أنشطة تطابق التصفية.':(supMode?'لم تُرسل أي طالبة نشاطًا بعد.':'الغرفة فارغة بعد — أرسلي نشاطك ليراجع ثم يظهر لزميلاتك! 🌱'))+'</div>';return;}
   g.innerHTML=rows.map(a=>{const mine=!supMode&&a.mine;const on=roomClapped(a);const other=!supMode&&a.org!==student.org;
-    let h='<div class="rm'+(a.featured?' feat':'')+'" id="rm'+a.id+'"'+((a.hidden||!a.approved)?' style="opacity:.62"':'')+'>';
+    let h='<div class="rm'+(a.featured?' feat':'')+(pickOf(a.id).length?' picked':'')+'" id="rm'+a.id+'"'+((a.hidden||!a.approved)?' style="opacity:.62"':'')+'>';
     if(a.photo)h+='<img class="ph" src="'+a.photo+'" alt="" loading="lazy" onclick="roomLightbox(this.src)">';
-    h+='<div class="bd">'+(a.featured?'<span class="star">⭐ نشاط مميّز'+(other?' · من '+escH(a.org):'')+'</span>':'')
+    h+='<div class="bd">'+pickOf(a.id).map(p=>'<span class="pick">'+PICK_LB[p.kind]+' · '+weekLabel(p.wk)+'</span>').join('')+(a.featured?'<span class="star">⭐ نشاط مميّز'+(other?' · من '+escH(a.org):'')+'</span>':'')
       +(!a.approved?'<span class="chip pink">⏳ '+(supMode?'بانتظار مراجعتك — لا يراه أحد بعد':'بانتظار مراجعة المشرفة — لا يراه زميلاتك بعد')+'</span>':'')
       +(a.hidden?'<span class="chip pink">مخفي</span>':'')+'<div class="tt">'+escH(a.title)+'</div><div class="who">👩‍🎓 '+escH(a.name||a.uid)+(a.org?' · '+escH(a.org):'')+' · '+new Date(a.created_at).toLocaleDateString('ar-EG',{day:'numeric',month:'long'})+'</div>';
     h+='<div>'+(a.kind?'<span class="chip">'+escH(a.kind)+'</span> ':'')+(a.role?'<span class="chip pink">'+escH(a.role)+'</span>':'')+'</div>';
     h+='<div class="tx" id="rmtx'+a.id+'">'+escH(a.body)+'</div>'+(a.body.length>260?'<span class="more" onclick="const t=document.getElementById(\'rmtx'+a.id+'\');t.classList.toggle(\'open\');this.textContent=t.classList.contains(\'open\')?\'أقل\':\'المزيد…\'">المزيد…</span>':'');
     if(a.sup_comment)h+='<div class="banner" style="margin:4px 0 0;padding:8px 10px;font-size:12.5px"><div class="bic">👩‍🏫</div><div><b>تعليق المشرفة:</b> '+escH(a.sup_comment)+'</div></div>';
-    h+='<div class="ft"><button class="clap'+(on?' on':'')+'" onclick="roomClap('+a.id+',this)" '+((supMode||!a.approved)?'disabled':'')+'>👏 <span>'+ar(a.claps||0)+'</span></button>';
+    h+='<div class="ft"><button class="clap'+(on?' on':'')+'" onclick="roomClap('+a.id+',this)" '+((supMode||!a.approved)?'disabled':'')+'>👏 <span>'+ar(a.claps||0)+'</span></button>'+(a.approved&&!a.hidden?'<span class="wkc">هذا الأسبوع: '+ar(WEEKC[a.id]||0)+'</span>':'');
     if(mine)h+='<button class="btn btn-ghost btn-sm" onclick="roomDel('+a.id+')">حذف</button>';
     if(supMode)h+='<div class="mod">'
       +'<button class="btn '+(a.approved?'btn-ghost':'btn-primary')+' btn-sm" onclick="roomApprove('+a.id+','+(!a.approved)+')">'+(a.approved?'سحب الاعتماد':'✅ اعتماد ونشر')+'</button>'
       +'<button class="btn btn-ghost btn-sm" onclick="roomComment('+a.id+')">💬 '+(a.sup_comment?'تعديل التعليق':'تعليق')+'</button>'
       +'<button class="btn btn-ghost btn-sm" onclick="roomFeature('+a.id+','+(!a.featured)+')">'+(a.featured?'إلغاء التمييز':'⭐ تمييز للجميع')+'</button>'
+      +['stu','sup'].map(k=>'<button class="btn btn-ghost btn-sm" onclick="roomPick('+a.id+',\''+k+'\')">'+(isPickNow(a.id,k)?'إلغاء ':'')+PICK_LB[k]+'</button>').join('')
       +'<button class="btn btn-ghost btn-sm" onclick="if(confirm(\'حذف هذا المنشور نهائيًا؟\'))roomMod('+a.id+',{p_delete:true})">حذف</button></div>';
     h+='</div></div></div>';return h;}).join('');}
 async function roomClap(id,btn){if(supMode||!student.id){toast('سجّلي دخولك لتصفّقي');return;}
   const on=!btn.classList.contains('on');btn.classList.toggle('on',on);const s=btn.querySelector('span');const cur=Number((s.textContent||'0').replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d)));s.textContent=ar(Math.max(0,cur+(on?1:-1)));roomSetClapped(id,on);
-  try{const r=await sb.rpc('guide_act_clap',{p_uid:student.id,p_id:id});if(r.error)throw r.error;s.textContent=ar(r.data);const a=ROOM.find(x=>x.id===id);if(a)a.claps=r.data;}catch(e){btn.classList.toggle('on',!on);roomSetClapped(id,!on);}}
+  try{const r=await sb.rpc('guide_act_clap',{p_uid:student.id,p_id:id});if(r.error)throw r.error;s.textContent=ar(r.data);const a=ROOM.find(x=>x.id===id);if(a)a.claps=r.data;loadPicks().then(()=>{const w=btn.parentNode.querySelector('.wkc');if(w)w.textContent='هذا الأسبوع: '+ar(WEEKC[id]||0);});}catch(e){btn.classList.toggle('on',!on);roomSetClapped(id,!on);}}
 async function roomDel(id){if(!confirm('حذف منشورك من الغرفة؟'))return;try{const r=await sb.rpc('guide_act_del',{p_uid:student.id,p_id:id});if(r.error)throw r.error;ROOM=ROOM.filter(a=>a.id!==id);renderRoom();toast('حُذف المنشور');}catch(e){toast('⚠️ تعذّر الحذف');}}
 async function roomMod(id,p){try{const r=await sb.rpc('guide_act_mod',Object.assign({p_pass:SUP_PASS,p_id:id},p));if(r.error)throw r.error;await loadRoom();toast('تم');return true;}catch(e){toast('⚠️ تعذّر التعديل');return false;}}
 /* الاعتماد = يظهر النشاط لزميلات الطالبة في مؤسستها. قبله لا يراه أحد سوى صاحبته والمشرفة */
@@ -2749,8 +2803,44 @@ async function roomComment(id){const a=ROOM.find(x=>x.id===id);if(!a)return;cons
 function roomAnnounce(a){
   const txt='🌟 نشاط مميّز من '+(a.org||'إحدى المؤسسات')+' — '+a.title+'\n'+(a.name?'نفّذته الطالبة '+a.name+'. ':'')+(a.kind?'نشاط '+a.kind+(a.role?' (دور '+a.role+')':'')+'. ':'')+'\n'+a.body.slice(0,400)+(a.body.length>400?'…':'')+'\n\nتجدنه كاملًا في «غرفة الأنشطة». شكرًا لها 🤍';
   go('community',null);setTimeout(()=>{const c=document.getElementById('composer');if(c&&c.style.display==='none')toggleComposer();const ta=document.getElementById('cText');if(ta){ta.value=txt;ta.focus();ta.scrollIntoView({block:'center'});}toast('راجعي النص ثم انشري الإعلان');},400);}
+/* ═══ اختيار الأسبوع (2026-10-17) ═══
+   اختيار الطالبات = الأعلى تصفيقًا خلال الأسبوع التدريبي (يُحتسب التصفيق لكل أسبوع على حدة؛ التصفيقات قبل 17 أكتوبر بلا تاريخ فلا تُحتسب لأي أسبوع)
+   اختيار المشرفة = تختاره المشرفة من بطاقة النشاط. الأسبوع الحالي = أسبوع آخر يوم تدريبي مضى (فيوم السبت يُختار لأسبوع ما زال يُختتم) */
+let PICKS=[],WEEKC={};
+const PICK_LB={stu:'⭐ اختيار الطالبات',sup:'🏅 اختيار المشرفة'};
+function roomWeek(){const today=new Date();today.setHours(0,0,0,0);
+  let cur=null;days.forEach(d=>{const dt=dayDate(d);if(dt&&dt<=today)cur=d;});
+  if(!cur)cur=days[0];const wk=cur.wk||2;
+  const from=dayDate(weekDays(wk)[0])||today;const nxt=days.find(d=>(d.wk||2)>wk&&dayDate(d));
+  let to=nxt?dayDate(nxt):null;if(!to||to-from>14*864e5){to=new Date(from);to.setDate(to.getDate()+7);}
+  return {wk,from,to};}
+async function loadPicks(){if(!sb)return;const W=roomWeek();
+  try{const [p,c]=await Promise.all([sb.rpc('guide_pick_list'),sb.rpc('guide_clap_week',{p_from:W.from.toISOString(),p_to:W.to.toISOString()})]);
+    if(!p.error)PICKS=p.data||[];if(!c.error){WEEKC={};(c.data||[]).forEach(r=>{WEEKC[r.act_id]=r.n;});}}catch(e){}}
+function pickOf(id){return PICKS.filter(p=>p.act_id===id);}
+function isPickNow(id,k){const w=roomWeek().wk;return PICKS.some(p=>p.wk===w&&p.kind===k&&p.act_id===id);}
+function renderPicks(){const body=document.getElementById('roomPicksBody');if(!body)return;
+  const W=roomWeek();const wks=[...new Set(PICKS.map(p=>p.wk))].sort((a,b)=>b-a);let h='';
+  if(supMode){const top=ROOM.filter(a=>a.approved&&!a.hidden&&WEEKC[a.id]).sort((a,b)=>WEEKC[b.id]-WEEKC[a.id])[0];
+    h+='<div class="banner" style="margin:0 0 10px"><div class="bic">🗳️</div><div><b>'+weekLabel(W.wk)+'</b> — '
+      +(top?'الأعلى تصفيقًا هذا الأسبوع: «'+escH(top.title)+'» — '+escH(top.name||'')+' ('+ar(WEEKC[top.id])+' 👏) <button class="btn btn-ghost btn-sm" onclick="roomPick('+top.id+',\'stu\')">اعتماده اختيار الطالبات</button>':'لا تصفيقات بعد هذا الأسبوع.')
+      +'<br><span style="font-size:12px">اختاري من بطاقة أي نشاط: «⭐ اختيار الطالبات» أو «🏅 اختيار المشرفة». النشاط المختار يصبح مميّزًا ويراه الجميع.</span></div></div>';}
+  else h+='<div style="font-size:12.5px;color:var(--muted);margin-bottom:10px">صفّقي 👏 للنشاط الذي ترينه الأوضح في الهدف والتخطيط. يُحتسب التصفيق لكل أسبوع على حدة، ويُعلَن كل أسبوع <b>اختيار الطالبات</b> و<b>اختيار المشرفة</b>.</div>';
+  const tile=p=>'<div class="wp" onclick="roomGoTo('+p.act_id+')"><div class="lb">'+PICK_LB[p.kind]+'</div><div class="t">'+escH(p.title)+'</div><div class="w">👩‍🎓 '+escH(p.name||'')+(p.org?' · '+escH(p.org):'')+'</div></div>';
+  document.getElementById('roomPicksWk').textContent=wks.length?weekLabel(wks[0]):'';
+  if(wks.length){const last=wks[0];h+='<div class="wp-grid">'+['stu','sup'].map(k=>PICKS.find(p=>p.wk===last&&p.kind===k)).filter(Boolean).map(tile).join('')+'</div>';
+    const old=wks.slice(1);
+    if(old.length)h+='<details style="margin-top:10px"><summary style="cursor:pointer;font-size:13px;font-weight:700">الأسابيع السابقة</summary>'+old.map(w=>'<div style="margin-top:8px"><div style="font-size:12.5px;font-weight:800;margin-bottom:6px">'+weekLabel(w)+'</div><div class="wp-grid">'+PICKS.filter(p=>p.wk===w).map(tile).join('')+'</div></div>').join('')+'</details>';}
+  else if(supMode)h+='<div class="empty">لم تختاري نشاطًا بعد.</div>';
+  body.innerHTML=h;}
+function roomGoTo(id){let el=document.getElementById('rm'+id);
+  if(!el){const f=document.getElementById('roomOrg');f.value=supMode?'':'__feat';document.getElementById('roomKind').value='';renderRoom();el=document.getElementById('rm'+id);}
+  if(el){el.scrollIntoView({behavior:'smooth',block:'center'});el.style.outline='3px solid #E8B93A';setTimeout(()=>{el.style.outline='';},1800);}}
+async function roomPick(id,kind){const W=roomWeek();const a=ROOM.find(x=>x.id===id);const off=isPickNow(id,kind);
+  if(!confirm(off?('إلغاء «'+PICK_LB[kind]+'» عن هذا النشاط في '+weekLabel(W.wk)+'؟'):('اختيار «'+(a?a.title:'')+'»\n'+PICK_LB[kind]+' — '+weekLabel(W.wk)+'؟\nسيصبح النشاط مميّزًا ويراه الجميع.')))return;
+  try{const r=await sb.rpc('guide_pick_set',{p_pass:SUP_PASS,p_wk:W.wk,p_kind:kind,p_act:off?null:id});if(r.error)throw r.error;await loadRoom();toast(off?'أُلغي الاختيار':'🏆 '+PICK_LB[kind]+' — '+weekLabel(W.wk));}catch(e){toast('⚠️ تعذّر الحفظ');}}
 function roomLightbox(src){const d=document.createElement('div');d.className='room-lb';d.innerHTML='<img src="'+src+'" alt="">';d.onclick=()=>d.remove();document.body.appendChild(d);}
-async function roomExport(){await ensureXLSX();const data=ROOM.map(a=>({'الطالبة':a.name,'الرقم الجامعي':a.uid,'المؤسسة':a.org,'العنوان':a.title,'النوع':a.kind,'الدور':a.role,'الوصف':a.body,'تعليق المشرفة':a.sup_comment||'','الحالة':a.approved?(a.featured?'مميّز للجميع':'معتمد'):'بانتظار المراجعة','تصفيق':a.claps||0,'مخفي':a.hidden?'نعم':'','التاريخ':new Date(a.created_at).toLocaleString('ar-EG')}));
+async function roomExport(){await ensureXLSX();const data=ROOM.map(a=>({'الطالبة':a.name,'الرقم الجامعي':a.uid,'المؤسسة':a.org,'العنوان':a.title,'النوع':a.kind,'الدور':a.role,'الوصف':a.body,'تعليق المشرفة':a.sup_comment||'','الحالة':a.approved?(a.featured?'مميّز للجميع':'معتمد'):'بانتظار المراجعة','تصفيق':a.claps||0,'تصفيق هذا الأسبوع':WEEKC[a.id]||0,'اختيار الأسبوع':pickOf(a.id).map(p=>PICK_LB[p.kind].slice(2)+' — '+weekLabel(p.wk)).join('، '),'مخفي':a.hidden?'نعم':'','التاريخ':new Date(a.created_at).toLocaleString('ar-EG')}));
   if(!data.length){toast('لا أنشطة للتصدير');return;}
   const ws=XLSX.utils.json_to_sheet(data);ws['!cols']=[{wch:22},{wch:14},{wch:24},{wch:34},{wch:10},{wch:16},{wch:60},{wch:40},{wch:18},{wch:8},{wch:8},{wch:20}];
   const wb=XLSX.utils.book_new();wb.Workbook={Views:[{RTL:true}]};XLSX.utils.book_append_sheet(wb,ws,'غرفة الأنشطة');XLSX.writeFile(wb,'غرفة-الأنشطة-'+new Date().toISOString().slice(0,10)+'.xlsx');}
