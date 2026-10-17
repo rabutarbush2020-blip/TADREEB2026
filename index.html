@@ -1136,7 +1136,7 @@ textarea:focus,input:focus,select:focus{background:#fff;border-color:var(--teal-
 
       <!-- ═══ ROOM · غرفة الأنشطة — منشورات الطالبات مرئية للجميع (جدول guide.activities) ═══ -->
       <div class="view" id="v-room">
-        <div class="banner"><div class="bic">🏛️</div><div><b>غرفة الأنشطة</b> — أرسلي نشاطًا نفّذتِه في مؤسستك، فيصل إلى <b>المشرفة الأكاديمية أولًا</b>. بعد اعتمادها يظهر لزميلاتك في مؤسستك، وقد تختاره <b>نشاطًا مميّزًا</b> فيراه الجميع وتُعلن عنه في لوحة الإعلانات. كل نشاط هنا مادة جاهزة لبند «الأنشطة الوقائية/العلاجية/التنموية» في ملف الإنجاز ولعرضك النهائي.</div></div>
+        <div class="banner"><div class="bic">🏛️</div><div><b>غرفة الأنشطة</b> — أرسلي نشاطًا نفّذتِه في مؤسستك، فيصل إلى <b>المشرفة الأكاديمية أولًا</b>. بعد اعتمادها يظهر <b>لجميع زميلاتك</b> في كل المؤسسات، وقد تختاره <b>نشاطًا مميّزًا ⭐</b> وتُعلن عنه في لوحة الإعلانات. كل نشاط هنا مادة جاهزة لبند «الأنشطة الوقائية/العلاجية/التنموية» في ملف الإنجاز ولعرضك النهائي.</div></div>
         <div class="card card-3d" id="roomCompose">
           <div class="card-head"><div class="card-title">✨ أرسلي نشاطًا</div><button class="btn btn-ghost btn-sm" id="roomToggle" onclick="roomToggleForm()">فتح النموذج</button></div>
           <div id="roomForm" style="display:none">
@@ -1149,13 +1149,13 @@ textarea:focus,input:focus,select:focus{background:#fff;border-color:var(--teal-
             <label style="font-size:12.5px;font-weight:700;display:block;margin-top:10px">ماذا فعلتِ، ولمن، وما الذي لاحظتِه؟</label>
             <textarea id="rmBody" rows="4" maxlength="1500" placeholder="الفئة المستهدفة · الهدف · الخطوات باختصار · ما نجح وما ستغيّرينه"></textarea>
             <label style="font-size:12.5px;display:flex;gap:8px;align-items:flex-start;margin-top:10px;cursor:pointer"><input type="checkbox" id="rmPriv" style="margin-top:3px"> أؤكد أن المنشور والصورة لا يتضمنان وجوه المستفيدين أو أسماءهم أو أي بيانات تكشف هويتهم.</label>
-            <div class="row" style="margin-top:12px;gap:8px;flex-wrap:wrap"><button class="btn btn-primary" id="rmSend" onclick="roomPost()">إرسال للمراجعة</button><span style="font-size:12px;color:var(--muted)">يصل للمشرفة الأكاديمية أولًا، ويظهر لزميلاتك بعد اعتمادها · حتى ٥ منشورات يوميًا</span></div>
+            <div class="row" style="margin-top:12px;gap:8px;flex-wrap:wrap"><button class="btn btn-primary" id="rmSend" onclick="roomPost()">إرسال للمراجعة</button><span style="font-size:12px;color:var(--muted)">يصل للمشرفة الأكاديمية أولًا، ويظهر لجميع زميلاتك بعد اعتمادها · حتى ٥ منشورات يوميًا</span></div>
           </div>
         </div>
         <!-- ═══ اختيار الأسبوع (2026-10-17): اختيار الطالبات + اختيار المشرفة لكل أسبوع تدريبي ═══ -->
         <div class="card card-3d" id="roomPicks"><div class="card-head"><div class="card-title">🏆 اختيار الأسبوع <span class="chip" id="roomPicksWk"></span></div></div><div id="roomPicksBody"></div></div>
         <div class="card card-3d">
-          <div class="card-head"><div class="card-title">الأنشطة المنشورة <span class="chip" id="roomCount"></span><div id="roomHint" style="font-size:11.5px;font-weight:400;color:var(--muted);margin-top:4px">أنشطة مؤسستك التدريبية بعد اعتماد المشرفة — ويمكنك الاطّلاع على الأنشطة المميّزة ⭐ من جميع المؤسسات من القائمة</div></div>
+          <div class="card-head"><div class="card-title">الأنشطة المنشورة <span class="chip" id="roomCount"></span><div id="roomHint" style="font-size:11.5px;font-weight:400;color:var(--muted);margin-top:4px">أنشطة زميلاتك من جميع المؤسسات بعد اعتماد المشرفة — ويمكنك اختيار أنشطة مؤسستك أو الأنشطة المميّزة ⭐ من القائمة</div></div>
             <div class="row" style="flex-wrap:wrap"><select id="roomOrg" onchange="renderRoom()" style="max-width:190px"><option value="">كل المؤسسات</option></select><select id="roomKind" onchange="renderRoom()" style="max-width:130px"><option value="">كل الأنواع</option><option>وقائي</option><option>علاجي</option><option>تنموي</option></select><button class="btn btn-ghost btn-sm" onclick="loadRoom()">تحديث</button><button class="btn btn-ghost btn-sm" id="roomExport" style="display:none" onclick="roomExport()">تنزيل إكسل</button></div></div>
           <div id="roomGrid" class="room-grid"><div class="empty">جارٍ التحميل…</div></div>
         </div>
@@ -2748,20 +2748,20 @@ async function roomPost(){
   finally{b.disabled=false;b.textContent='إرسال للمراجعة';}}
 async function loadRoom(){const g=document.getElementById('roomGrid');if(!sb){g.innerHTML='<div class="empty">لا اتصال بقاعدة البيانات</div>';return;}
   document.getElementById('roomCompose').style.display=supMode?'none':'';document.getElementById('roomExport').style.display=supMode?'':'none';
-  const rh=document.getElementById('roomHint');if(rh)rh.textContent=supMode?'كل المؤسسات — غير المعتمد يظهر أولًا':'أنشطة مؤسستك التدريبية بعد اعتماد المشرفة — ويمكنك الاطّلاع على الأنشطة المميّزة ⭐ من جميع المؤسسات من القائمة';
+  const rh=document.getElementById('roomHint');if(rh)rh.textContent=supMode?'كل المؤسسات — غير المعتمد يظهر أولًا':'أنشطة زميلاتك من جميع المؤسسات بعد اعتماد المشرفة — ويمكنك اختيار أنشطة مؤسستك أو الأنشطة المميّزة ⭐ من القائمة';
   /* الطالبة: أنشطة مؤسستها + المميّزة من كل المؤسسات · المشرفة: كل شيء مع تصفية بالمؤسسة */
   try{const r=supMode?await sb.rpc('guide_act_all',{p_pass:SUP_PASS}):await sb.rpc('guide_act_list',{p_uid:student.id});if(r.error)throw r.error;ROOM=r.data||[];
     const f=document.getElementById('roomOrg');const cur=f.value;
     if(supMode){const orgs=[...new Set(ROOM.map(a=>a.org).filter(Boolean))].sort();
       f.innerHTML='<option value="">كل المؤسسات</option>'+orgs.map(o=>'<option'+(o===cur?' selected':'')+'>'+escH(o)+'</option>').join('');}
-    else{f.innerHTML='<option value="__mine">أنشطة مؤسستي</option><option value="__feat">الأنشطة المميّزة ⭐ (كل المؤسسات)</option>';f.value=(ROOM_WANT_FEAT||cur==='__feat')?'__feat':'__mine';ROOM_WANT_FEAT=false;}
+    else{f.innerHTML='<option value="__all">كل الأنشطة</option><option value="__mine">أنشطة مؤسستي</option><option value="__feat">الأنشطة المميّزة ⭐</option>';f.value=ROOM_WANT_FEAT?'__feat':(cur==='__mine'||cur==='__feat'?cur:'__all');ROOM_WANT_FEAT=false;}
     await loadPicks();renderPicks();renderRoom();}
   catch(e){g.innerHTML='<div class="empty">تعذّر تحميل الأنشطة</div>';}}
 function roomClapped(a){try{return (JSON.parse(localStorage.getItem('rafiqaClaps')||'[]')).includes(a.id);}catch(e){return false;}}
 function roomSetClapped(id,on){try{let l=JSON.parse(localStorage.getItem('rafiqaClaps')||'[]');l=l.filter(x=>x!==id);if(on)l.push(id);localStorage.setItem('rafiqaClaps',JSON.stringify(l));}catch(e){}}
 function renderRoom(){const g=document.getElementById('roomGrid');const fo=document.getElementById('roomOrg').value,fk=document.getElementById('roomKind').value;
   /* الطالبة: إما أنشطة مؤسستها (ومنها منشورها غير المعتمد) أو الأنشطة المميّزة من كل المؤسسات */
-  const rows=ROOM.filter(a=>(!fk||a.kind===fk)&&(supMode?(!fo||a.org===fo):(fo==='__feat'?a.featured:(a.org===student.org||a.mine))));
+  const rows=ROOM.filter(a=>(!fk||a.kind===fk)&&(supMode?(!fo||a.org===fo):(fo==='__feat'?a.featured:fo==='__mine'?(a.org===student.org||a.mine):true)));
   const pend=ROOM.filter(a=>!a.approved&&!a.hidden).length;
   document.getElementById('roomCount').textContent=ar(rows.length)+' نشاط'+(supMode&&pend?' · '+ar(pend)+' بانتظار المراجعة':'');
   if(!rows.length){g.innerHTML='<div class="empty" style="grid-column:1/-1">'+(ROOM.length?'لا أنشطة تطابق التصفية.':(supMode?'لم تُرسل أي طالبة نشاطًا بعد.':'الغرفة فارغة بعد — أرسلي نشاطك ليراجع ثم يظهر لزميلاتك! 🌱'))+'</div>';return;}
@@ -2792,13 +2792,13 @@ async function roomMod(id,p){try{const r=await sb.rpc('guide_act_mod',Object.ass
 async function roomApprove(id,on){const a=ROOM.find(x=>x.id===id);if(!a)return;
   if(!on&&!confirm('سحب الاعتماد يُخفي النشاط عن الطالبات. متابعة؟'))return;
   const ok=await roomMod(id,on?{p_approved:true,p_hidden:false}:{p_approved:false});if(!ok)return;
-  if(on)toast('✅ اعتُمد النشاط — صار يظهر لزميلاتها في '+(a.org||'مؤسستها'));}
+  if(on)toast('✅ اعتُمد النشاط — صار يظهر لجميع الطالبات');}
 /* التمييز = يصبح النشاط مرئيًا لطالبات كل المؤسسات (ويُعتمد تلقائيًا)، ثم عرض نشر إعلان عنه */
 async function roomFeature(id,on){const a=ROOM.find(x=>x.id===id);if(!a)return;
   if(on&&a.hidden){toast('النشاط مخفي — أظهريه أولًا');return;}
   const ok=await roomMod(id,on?{p_featured:true,p_approved:true}:{p_featured:false});if(!ok||!on)return;
   if(confirm('أصبح النشاط مرئيًا لجميع الطالبات ⭐\nهل تريدين نشر إعلان عنه في لوحة الإعلانات الآن؟'))roomAnnounce(a);}
-async function roomComment(id){const a=ROOM.find(x=>x.id===id);if(!a)return;const t=prompt('تعليقك على نشاط «'+a.title+'» (يراه زميلاتها في المؤسسة'+(a.featured?' وكل الطالبات':'')+'):',a.sup_comment||'');if(t===null)return;
+async function roomComment(id){const a=ROOM.find(x=>x.id===id);if(!a)return;const t=prompt('تعليقك على نشاط «'+a.title+'» (يراه جميع الطالبات):',a.sup_comment||'');if(t===null)return;
   try{const r=await sb.rpc('guide_act_comment',{p_pass:SUP_PASS,p_id:id,p_text:t});if(r.error)throw r.error;await loadRoom();toast(t.trim()?'💬 حُفظ التعليق':'أُزيل التعليق');}catch(e){toast('⚠️ تعذّر حفظ التعليق');}}
 function roomAnnounce(a){
   const txt='🌟 نشاط مميّز من '+(a.org||'إحدى المؤسسات')+' — '+a.title+'\n'+(a.name?'نفّذته الطالبة '+a.name+'. ':'')+(a.kind?'نشاط '+a.kind+(a.role?' (دور '+a.role+')':'')+'. ':'')+'\n'+a.body.slice(0,400)+(a.body.length>400?'…':'')+'\n\nتجدنه كاملًا في «غرفة الأنشطة». شكرًا لها 🤍';
@@ -2834,7 +2834,7 @@ function renderPicks(){const body=document.getElementById('roomPicksBody');if(!b
   else if(supMode)h+='<div class="empty">لم تختاري نشاطًا بعد.</div>';
   body.innerHTML=h;}
 function roomGoTo(id){let el=document.getElementById('rm'+id);
-  if(!el){const f=document.getElementById('roomOrg');f.value=supMode?'':'__feat';document.getElementById('roomKind').value='';renderRoom();el=document.getElementById('rm'+id);}
+  if(!el){const f=document.getElementById('roomOrg');f.value=supMode?'':'__all';document.getElementById('roomKind').value='';renderRoom();el=document.getElementById('rm'+id);}
   if(el){el.scrollIntoView({behavior:'smooth',block:'center'});el.style.outline='3px solid #E8B93A';setTimeout(()=>{el.style.outline='';},1800);}}
 async function roomPick(id,kind){const W=roomWeek();const a=ROOM.find(x=>x.id===id);const off=isPickNow(id,kind);
   if(!confirm(off?('إلغاء «'+PICK_LB[kind]+'» عن هذا النشاط في '+weekLabel(W.wk)+'؟'):('اختيار «'+(a?a.title:'')+'»\n'+PICK_LB[kind]+' — '+weekLabel(W.wk)+'؟\nسيصبح النشاط مميّزًا ويراه الجميع.')))return;
