@@ -516,6 +516,19 @@ input[type=checkbox]{accent-color:var(--teal);width:auto}
 .seen-note{display:flex;align-items:center;gap:8px;margin-top:10px;padding:8px 11px;border-radius:10px;
   background:var(--teal-soft);color:var(--teal);font-size:12.5px;line-height:1.6}
 .seen-note span{font-weight:900;font-size:15px}
+/* ════ بطاقة العودة بعد الإجازة ════ */
+.back-card{position:relative;overflow:hidden}
+.back-emoji{font-size:46px;line-height:1;margin-bottom:4px;display:block;animation:backPop .7s cubic-bezier(.2,1.3,.4,1) both}
+@keyframes backPop{0%{transform:scale(.4) rotate(-12deg);opacity:0}60%{transform:scale(1.12) rotate(4deg)}100%{transform:scale(1) rotate(0);opacity:1}}
+.back-week{margin:12px 0 4px;padding:11px 14px;border-radius:12px;background:var(--sand,#F2ECE0);text-align:start}
+.back-week b{display:block;font-size:14px;color:var(--navy,#12303D);margin-bottom:2px}
+.back-week span{font-size:12.5px;opacity:.75}
+.petals{position:absolute;inset:0;pointer-events:none;overflow:hidden;border-radius:inherit}
+.petal{position:absolute;top:-24px;font-size:15px;opacity:0;animation:petalFall linear infinite}
+@keyframes petalFall{0%{transform:translateY(-10px) rotate(0);opacity:0}
+  12%{opacity:.85}
+  100%{transform:translateY(420px) rotate(260deg);opacity:0}}
+@media (prefers-reduced-motion:reduce){.petal{display:none}.back-emoji{animation:none}}
 .wk-tabs{display:flex;gap:8px;margin:12px 0 4px;flex-wrap:wrap}
 .wk-tab{flex:1;min-width:150px;display:flex;flex-direction:column;align-items:flex-start;gap:1px;
   padding:9px 13px;border-radius:12px;cursor:pointer;text-align:start;line-height:1.35;
@@ -1338,6 +1351,17 @@ textarea:focus,input:focus,select:focus{background:#fff;border-color:var(--teal-
     <button class="btn btn-primary" onclick="closeWelcome()">لنبدأ ←</button>
   </div>
 </div></div>
+<!-- Back from break modal -->
+<div class="ov" id="breakOv"><div class="login-card back-card" style="max-width:430px">
+  <div class="petals" id="breakPetals"></div>
+  <span class="back-emoji" id="breakEmoji">🌿</span>
+  <h1 id="breakTitle">أهلاً بعودتك</h1>
+  <div class="ls" id="breakMsg" style="font-size:14px;line-height:1.9"></div>
+  <div class="back-week"><b id="breakWk"></b><span id="breakAim"></span></div>
+  <div class="row" style="justify-content:center;gap:8px;margin-top:10px">
+    <button class="btn btn-primary" onclick="closeBreak()">لنبدأ أسبوعنا ←</button>
+  </div>
+</div></div>
 <!-- Supervisor password -->
 <div class="ov" id="supPassOv" style="z-index:2000"><div class="login-card" style="max-width:380px">
   <div style="font-size:40px;margin-bottom:6px">🔒</div>
@@ -1555,6 +1579,8 @@ function sfxTask(){tone(660,0,.12);tone(880,.1,.16);}
 function sfxDay(){tone(523,0,.15);tone(659,.13,.15);tone(784,.26,.15);tone(1047,.39,.4);}
 function sfxMove(){tone(440,0,.08,'triangle');tone(620,.07,.12,'triangle');}
 function sfxAnn(){tone(784,0,.14);tone(1047,.13,.18);tone(1319,.28,.3);}  /* نغمة إعلان جديد */
+/* نغمة العودة بعد الإجازة — جملة دافئة هابطة ثم صاعدة */
+function sfxBack(){tone(659,0,.2);tone(880,.16,.2);tone(784,.34,.2);tone(1047,.5,.5);tone(1319,.62,.6);}
 /* Voice */
 let arVoice=null;
 function loadVoices(){const vs=speechSynthesis.getVoices();
@@ -1573,7 +1599,65 @@ function speak(text){return false;/* الصوت الآلي مُعطّل — ال
 const WELCOME_TEXT='أهلاً وسهلاً بكِ طالبتي العزيزة في دليل التدريب الميداني. سأرافقكِ خطوة بخطوة في أسبوعكِ التدريبي.';
 function playWelcome(){document.getElementById('welcomeText').textContent=WELCOME_TEXT;document.getElementById('welcomeOv').classList.add('show');}
 function closeWelcome(){if('speechSynthesis'in window)speechSynthesis.cancel();document.getElementById('welcomeOv').classList.remove('show');
-  setTimeout(function(){try{annAlert();}catch(e){}},350);}  /* بعد الترحيب: تنبيه الإعلان الجديد إن وُجد */
+  /* بعد الترحيب: بطاقة العودة بعد الإجازة إن وُجدت، وإلا تنبيه الإعلان الجديد */
+  setTimeout(function(){try{if(breakAlert())return;}catch(e){} try{annAlert();}catch(e){}},350);}
+
+/* ════ عودة بعد الإجازة ════
+   يُكتشف الانقطاع تلقائيًا: إن كان بين آخر يوم في الأسبوع السابق وأول يوم في الأسبوع
+   الحالي أكثر من أسبوع، فهناك إجازة — فتظهر بطاقة ترحيب مرّة واحدة لكل أسبوع.
+   لا تُعرض للمشرفة، ولا تُكرَّر بعد إغلاقها (محفوظة في localStorage). */
+function breakInfo(){
+  try{
+    const dn=defaultDayByDate(); if(!dn)return null;
+    const w=weekOf(dn), list=weekDays(w); if(!list.length)return null;
+    const prev=allWeeks().filter(function(x){return x<w;}).pop(); if(!prev)return null;
+    const pl=weekDays(prev), a=dayDate(pl[pl.length-1]), b=dayDate(list[0]);
+    if(!a||!b)return null;
+    const gap=Math.round((b-a)/864e5);
+    if(gap<8)return null;                       /* الفاصل المعتاد بين أسبوعين = ٥ أيام */
+    return {wk:w,gap:gap,first:list[0],prevLabel:weekLabel(prev)};
+  }catch(e){return null;}
+}
+function breakSeen(){try{return Number(localStorage.getItem('rafiqaBreakSeen')||0)||0;}catch(e){return 0;}}
+function breakMark(w){try{localStorage.setItem('rafiqaBreakSeen',String(w));}catch(e){}}
+function breakPetals(){
+  const host=document.getElementById('breakPetals'); if(!host)return;
+  const leaves=['🌿','🌸','🍃','✨','🌼'];
+  host.innerHTML='';
+  for(let i=0;i<9;i++){
+    const el=document.createElement('span'); el.className='petal';
+    el.textContent=leaves[i%leaves.length];
+    el.style.insetInlineStart=(6+Math.random()*88)+'%';
+    el.style.animationDuration=(5.5+Math.random()*4).toFixed(1)+'s';
+    el.style.animationDelay=(Math.random()*4.5).toFixed(1)+'s';
+    el.style.fontSize=(12+Math.random()*8).toFixed(0)+'px';
+    host.appendChild(el);
+  }
+}
+/* true إن عُرضت البطاقة الآن — عندها تُؤجَّل نافذة الإعلانات حتى إغلاقها */
+function breakAlert(){
+  if(supMode)return false;
+  const b=breakInfo(); if(!b)return false;
+  if(breakSeen()>=b.wk)return false;
+  const li=document.getElementById('loginOv'),wl=document.getElementById('welcomeOv');
+  if((li&&li.classList.contains('show'))||(wl&&wl.classList.contains('show')))return false;
+  const ov=document.getElementById('breakOv'); if(!ov)return false;
+  const nm=String(student.name||'').trim().split(/\s+/)[0];
+  document.getElementById('breakTitle').textContent=nm?('أهلاً بعودتك يا '+nm):'أهلاً بعودتك';
+  document.getElementById('breakMsg').textContent=
+    'بعد إجازة '+(b.gap>=12?'طيبة':'قصيرة')+'، نعود اليوم بطاقة جديدة. نتمنّى أنكِ ارتحتِ، وأنّ يومكِ الأول يبدأ بهمّة. خطوة بخطوة، وأنتِ أقرب مما تظنّين.';
+  document.getElementById('breakWk').textContent=weekLabel(b.wk)+' · '+weekRange(b.wk);
+  document.getElementById('breakAim').textContent=(b.first.sub||'').replace(/\s*·\s*٦ ساعات\s*$/,'');
+  breakPetals();
+  ov.classList.add('show');
+  try{sfxBack();}catch(e){}
+  return true;
+}
+function closeBreak(){
+  const b=breakInfo(); if(b)breakMark(b.wk);
+  const ov=document.getElementById('breakOv'); if(ov)ov.classList.remove('show');
+  setTimeout(function(){try{annAlert();}catch(e){}},350);   /* ثم تنبيه الإعلانات إن وُجد */
+}
 
 /* ════ Navigation + gating ════ */
 const OPEN=['home','guide','map'];
@@ -1851,7 +1935,57 @@ const days=[
          {t:'إدراج دورة التقييم في التقرير الأسبوعي: خط الأساس، والمؤشر، والنتيجة، وخطة التحسين'},
          {t:'إعداد خطة الأسبوع العاشر (بند ٢)'},
          {t:'توقيع سجل الحضور والانصراف'}],
-  reflect:'ما الذي كشفه لكِ التقييم ولم تلاحظيه من قبل؟'}
+  reflect:'ما الذي كشفه لكِ التقييم ولم تلاحظيه من قبل؟'},
+
+ {n:22,wk:10,name:'اليوم الأول',dow:'الأحد',date:'١ نوفمبر',sub:'برامج المؤسسة ومبادراتها التنموية · ٦ ساعات',
+  tip:'ينتقل محور التعلّم هذا الأسبوع من مستوى <b>الحالة والنشاط</b> إلى مستوى <b>المؤسسة ومحيطها التنظيمي</b>. يتناول اليوم الأول التعرّف على البرامج والمبادرات ذات الطابع التنموي التي تقدّمها مؤسستك التدريبية، والحاجات التي وُضعت للاستجابة لها.',
+  note:'<b>📌 المطلوب هذا الأسبوع</b><br>لا يُطلب تنفيذ مشروع تنموي جديد، بل <b>التعرّف على البرامج والمبادرات التي تقدّمها المؤسسة</b>، و<b>فهم شبكة علاقاتها المهنية</b>، ثم <b>تقديم تصوّر أوّلي لفكرة تطويرية</b> ترتبط بحاجة لاحظتِها أثناء التدريب. وتُنفَّذ هذه المهام <b>ضمن مشاركتك اليومية المعتادة في المؤسسة</b>؛ فهي توجّه الملاحظة المهنية خلال اليوم التدريبي، ولا تُعدّ أعمالًا إضافية تستغرق ست ساعات من الكتابة أو البحث.<br><b>وقد تكونين تناولتِ بعض هذه المهام خلال الأسابيع الماضية</b> — فلا تكرّريها، بل ارجعي إليها ووثّقي ما لديكِ، وركّزي جهدك هذا الأسبوع على ما لم تتناوليه بعد.<br><span style="font-size:12.5px">وتختلف صورة هذه البرامج ومسمّياتها باختلاف طبيعة المؤسسة التدريبية وفئتها المستفيدة؛ فاقرئي الواقع كما هو في مؤسستك.</span>'
+   +'<div style="margin-top:10px;font-size:12.5px"><b>👤 طبيعة العمل: فردي.</b> تُعدّ كل طالبة وصفها ومخططها وتصوّرها <b>بصورة مستقلة</b>، وإن كانت مع زميلات في المؤسسة نفسها. والمناقشة مع الأخصائية أو الزميلات وسيلة لإثراء الفكرة، غير أن <b>المخرج يُقدَّم باسم الطالبة وبصياغتها الخاصة</b>.</div>'
+   +'<div style="margin-top:10px;font-size:12.5px"><b>مخرجات الأسبوع الثلاثة:</b><br>'
+   +'<b>١)</b> وصف مختصر لبرنامج أو مبادرة أو مشروع ذي طابع تنموي في المؤسسة.<br>'
+   +'<b>٢)</b> مخطط مبسّط لشبكة العلاقات المهنية الداخلية والخارجية للمؤسسة.<br>'
+   +'<b>٣)</b> تصوّر أوّلي لفكرة مبادرة أو تطوير يستجيب لحاجة لاحظتِها أثناء التدريب.</div>',
+  note2:'<b>🌱 أين تجدين البرامج ذات الطابع التنموي؟</b><br>'
+   +'قد لا تجدين «مشروعًا» بالمعنى المؤسسي الكامل، لكنكِ ستجدين حتمًا <b>برامج ومبادرات وأنشطة ذات أهداف اجتماعية أو وقائية أو تنموية</b>. ومن مجالاتها الشائعة:<br>'
+   +'<span style="font-size:12.5px">التوعية والوقاية · الدعم النفسي والاجتماعي للفئة المستفيدة وأسرتها · التكيّف والاندماج ودعم المستجدّين · تنمية المهارات الاجتماعية · التواصل مع الأسرة · العمل التطوّعي والمشاركة المجتمعية · المتابعة والرعاية اللاحقة.<br>'
+   +'تختلف هذه المجالات في مسمّياتها وصيغها من مؤسسة إلى أخرى — فابحثي عن مقابلها في مؤسستك التدريبية.</span>',
+  tasks:[{t:'التعرّف على أبرز البرامج والمبادرات ذات الطابع التنموي التي تقدّمها المؤسسة للفئة المستفيدة أو لأسرها أو لمجتمع المؤسسة (بند ١)'},
+         {t:'اختيار برنامج أو مبادرة واحدة، والتعرّف على هدفها وفئتها المستهدفة وأبرز أنشطتها (بند ١)'},
+         {t:'التعرّف على دور الأخصائية الاجتماعية فيه: التخطيط أو التنسيق أو التنفيذ أو المتابعة (بند ٤)'},
+         {t:'توضيح الحاجة الاجتماعية أو الصحية أو التربوية التي يستجيب لها البرنامج لدى الفئة المستفيدة (بند ٥)'},
+         {t:'التعرّف على الأسلوب الذي تقيس به المؤسسة نجاح البرنامج أو أثره على الفئة المستفيدة، وفق المعلومات المتاحة لكِ (بند ٥)'},
+         {t:'تسجيل أهم ما توصّلتِ إليه للاستفادة منه في ملف الإنجاز (بند ١)'},
+         {t:'توقيع سجل الحضور والانصراف'}],
+  reflect:'ما البرنامج أو المبادرة التي اخترتِها؟ وما الحاجة التي وُضع للاستجابة لها لدى الفئة المستفيدة؟'},
+
+ {n:23,wk:10,name:'اليوم الثاني',dow:'الثلاثاء',date:'٣ نوفمبر',sub:'شبكة العلاقات المهنية للمؤسسة · ٦ ساعات',
+  tip:'تقوم الممارسة المهنية في أي مؤسسة على <b>شبكة علاقات داخلية وخارجية</b> لا على جهد فردي منعزل. يتناول اليوم الثاني التعرّف على أطراف هذه الشبكة في مؤسستك، والغرض المهني من كل علاقة — فالمقصود ليس حصر الأسماء، بل إدراك <b>لماذا وُجدت العلاقة وما الذي تتيحه للفئة المستفيدة</b>.',
+  note2:'<b>🤝 الشبكة المهنية: داخلية وخارجية معًا</b><br>'
+   +'<b>داخليًا — الفريق متعدد التخصصات داخل المؤسسة:</b> الإدارة · الأخصائية النفسية أو المرشدة · الكادر المهني والفني العامل مع الفئة المستفيدة · اللجان والفرق الداخلية · الأسرة أو ولي الأمر.<br>'
+   +'<b>خارجيًا:</b> الجهات الصحية والاجتماعية والتعليمية والمجتمعية التي تتعاون معها المؤسسة، ومصادر الإحالة والدعم في المجتمع المحلي.<br>'
+   +'<span style="font-size:12.5px"><b>أشكال التعاون:</b> إحالة · تنفيذ مشترك · دعم وموارد · توعية واستضافة مختص. حدّدي شكل التعاون في كل علاقة ترصدينها.</span>',
+  tasks:[{t:'التعرّف على أبرز الجهات والأطراف التي تتعاون معها المؤسسة داخليًا وخارجيًا (بند ٦)'},
+         {t:'اختيار مثالين على علاقات التعاون، وتوضيح طبيعة التعاون في كل منهما (بند ٦)'},
+         {t:'التعرّف على دور الأخصائية الاجتماعية في التنسيق مع هذه الأطراف (بند ٤)'},
+         {t:'توضيح كيف تسهم إحدى هذه العلاقات في الاستجابة لاحتياجات الفئة المستفيدة أو أسرها (بند ٦)'},
+         {t:'إعداد مخطط مبسّط لشبكة العلاقات المهنية للمؤسسة بنفسك، يُدرج في ملف إنجازك (بند ٦)'},
+         {t:'مناقشة أثر هذه العلاقات في دعم الفئة المستفيدة وتحسين الخدمات المقدّمة لها (بند ٧)'},
+         {t:'توقيع سجل الحضور والانصراف'}],
+  reflect:'أيّ علاقة تعاون لمستِ أثرها المباشر على الفئة المستفيدة؟ وكيف ظهر هذا الأثر؟'},
+
+ {n:24,wk:10,name:'اليوم الثالث',dow:'الخميس',date:'٥ نوفمبر',sub:'العصف الذهني وفكرة تطويرية · ٦ ساعات',
+  tip:'يُستكمل محور الأسبوع اليوم بالانتقال من <b>ملاحظة الحاجة</b> إلى <b>التفكير في استجابة مهنية ممكنة</b>. والفكرة المناسبة في هذه المرحلة بسيطة وواقعية وقابلة للتنفيذ ضمن إمكانات مؤسستك: برنامج توعوي قصير حول حاجة متكرّرة رصدتِها، أو مبادرة تعريفية بخدمات الأخصائية الاجتماعية وآلية طلب المساعدة، أو نشاط لدعم المستفيدين الجدد، أو مبادرة لتحسين التواصل مع الأسرة.<br><span style="font-size:12px">ترتبط مهام هذا الأسبوع أساسًا ببند <b>شبكة العلاقات</b> وبند <b>الأنشطة</b>، وتدعم بنود المؤسسة، والمسؤوليات الأخلاقية، والتنوع الثقافي، والخطة الأسبوعية.</span>',
+  note:'<b>تذكير:</b> جهّزي تقريرك الأسبوعي — يُرفع في خانة <b>«التقرير الأسبوعي»</b> في بلاك بورد <b>يوم السبت قبل الساعة ٦:٠٠ صباحًا</b>. نموذج الوورد الرسمي في صفحة <b>النماذج</b>، وملاحظاتك اليومية تجدينها بزر <b>«تنزيل ملاحظات الأسبوع»</b>.<div style="margin-top:10px"><a href="https://elearning.qu.edu.qa/" target="_blank" rel="noopener" class="btn btn-primary btn-sm">🔗 فتح بلاك بورد</a></div>',
+  note2:'<b>واجهتكِ صعوبة هذا الأسبوع؟</b> راسلي المشرفة الأكاديمية من بطاقة «مراسلة المشرفة الأكاديمية» في الصفحة الرئيسية، أو احضري الساعات المكتبية. طلب الدعم جزء من التدريب المهني، لا ضعفًا فيه.<br><span style="font-size:12px">🕐 <b>الاثنين</b> ١١:٠٠–١٢:٠٠ &nbsp;|&nbsp; <b>الأربعاء</b> ٨:٣٠–٩:٣٠ &nbsp;·&nbsp; مكتب 237 · مبنى البنات C04</span>',
+  tasks:[{t:'تحديد حاجة أو موقف أو مجال للتحسين لاحظتِه بنفسك خلال فترة التدريب (بند ٥)'},
+         {t:'المشاركة في عصف ذهني أو مناقشة مهنية حول أفكار تستجيب لهذه الحاجة — والخروج منها <b>بفكرتك أنتِ</b> (بند ٥)'},
+         {t:'اختيار فكرة واحدة فردية قابلة للتطبيق ضمن إمكانات مؤسستك التدريبية (بند ٥)'},
+         {t:'تحديد الهدف من الفكرة والفئة المستهدفة والنشاط أو الأنشطة المقترحة، بصورة أوّلية (بند ٥)'},
+         {t:'تحديد جهة أو طرف داخل المؤسسة أو خارجها يمكن أن يسهم في دعم الفكرة، إن كان ذلك مناسبًا (بند ٦)'},
+         {t:'مناقشة الفكرة مع المشرفة الميدانية، وتدوين أبرز ملاحظاتها التي تساعدك على تطويرها (بند ٤)'},
+         {t:'إعداد خطة الأسبوع الحادي عشر ومناقشتها مع المشرفة الميدانية (بند ٢)'},
+         {t:'توقيع سجل الحضور والانصراف'}],
+  reflect:'ما الحاجة التي رصدتِها في مؤسستك؟ وما الفكرة التي اقترحتِها للاستجابة لها؟'}
 ];
 /* أرقام الأيام — مشتقّة من المصفوفة أعلاه حتى لا تُنسى عند إضافة أسبوع جديد */
 function dayNums(){return days.map(function(d){return d.n;});}
@@ -2211,8 +2345,10 @@ function annBadge(n){
 function annAlert(){
   if(supMode){annBadge(0);return;}
   /* لا تُعرض النافذة وصفحة الدخول أو الترحيب مفتوحة — تُستدعى ثانيةً بعد إغلاق الترحيب */
-  const li=document.getElementById('loginOv'),wl=document.getElementById('welcomeOv');
-  const busy=(li&&li.classList.contains('show'))||(wl&&wl.classList.contains('show'));
+  const li=document.getElementById('loginOv'),wl=document.getElementById('welcomeOv'),bk=document.getElementById('breakOv');
+  const busy=(li&&li.classList.contains('show'))||(wl&&wl.classList.contains('show'))||(bk&&bk.classList.contains('show'));
+  /* بطاقة العودة بعد الإجازة أسبق من الإعلان — وتستدعي annAlert عند إغلاقها */
+  if(!busy){try{if(breakAlert())return;}catch(e){}}
   const fresh=annNewOnes();
   annBadge(fresh.length);
   if(!fresh.length||busy)return;
@@ -2879,7 +3015,8 @@ function doLogin(){const name=document.getElementById('lName').value.trim(),id=d
      لإعادتها: استبدلي annAlert بـ playWelcome في السطر التالي. */
   toast('🌸 أهلاً بكِ '+name+'!');setTimeout(function(){try{annAlert();}catch(e){}},700);}
 (function restore(){try{const s=JSON.parse(localStorage.getItem('rafiqaStudent'));if(s&&s.name){Object.assign(student,s);applyStudent();document.getElementById('loginOv').classList.remove('show');stopLoginFX();startIdle();
-  if(student.id){rosterAdd(student);setTimeout(function(){sbStudent();sbVisit();},600);}}}catch(e){}})();
+  if(student.id){rosterAdd(student);setTimeout(function(){sbStudent();sbVisit();},600);
+    setTimeout(function(){try{breakAlert();}catch(e){}},900);}}}catch(e){}})();
 
 /* ════ Sessions: logout + idle warning ════ */
 let idleT=null,warnT=null,cdT=null;
