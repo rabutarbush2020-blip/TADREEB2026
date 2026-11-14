@@ -567,82 +567,6 @@ input[type=checkbox]{accent-color:var(--teal);width:auto}
 .tl .tl-d{font-size:12.5px;color:var(--muted)}
 .tl .tl-s{font-size:11.5px;font-weight:600;color:var(--muted);flex-shrink:0}
 .tl li.is-now .tl-s{color:var(--teal)}
-.tl .tl-t,.tl .tl-d{display:block}
-.tl li.is-late .tl-s{color:var(--warn)}
-.tl li.is-late .tl-mark{background:var(--warn-soft);color:var(--warn)}
-.tl-cap{font-size:12px;font-weight:700;color:var(--muted);margin:var(--s4) 0 0;letter-spacing:.02em}
-.tl-cap:first-child{margin-top:var(--s2)}
-.tl-wk{border:1px solid var(--line);border-radius:var(--r-s);margin-top:var(--s2);background:var(--paper)}
-.tl-wk summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:var(--s3);padding:10px var(--s3);font-size:14px;font-weight:600;color:var(--navy)}
-.tl-wk summary::-webkit-details-marker{display:none}
-.tl-wk summary::after{content:"▾";color:var(--muted);margin-inline-start:6px}
-.tl-wk[open] summary::after{content:"▴"}
-.tl-wk .tl-wk-m{font-size:12px;font-weight:500;color:var(--muted);margin-inline-start:auto}
-.tl-wk .tl{margin:0;padding:0 var(--s3) var(--s3)}
-
-/* الرأس الأكاديمي */
-.course-head{background:var(--paper);border:1px solid var(--line);border-top:4px solid var(--navy);border-radius:var(--r);
-  padding:var(--s4) var(--s5);margin-bottom:var(--s5)}
-.ch-top{display:flex;justify-content:space-between;gap:var(--s3);flex-wrap:wrap;font-size:12.5px;color:var(--muted);
-  padding-bottom:var(--s3);border-bottom:1px solid var(--line)}
-.ch-week{font-weight:700;color:var(--teal)}
-.ch-body{display:flex;justify-content:space-between;align-items:flex-start;gap:var(--s4);flex-wrap:wrap;padding-top:var(--s3)}
-.course-head h1{font-size:1.55rem;margin:0 0 2px;color:var(--navy)}
-.ch-hi{font-size:15px;font-weight:600;color:var(--ink-2);margin:0}
-.course-head .greet-sub{margin-top:4px;font-size:14px}
-.ch-meta{display:flex;gap:var(--s2) var(--s5);flex-wrap:wrap;font-size:12.5px;color:var(--muted);margin-top:var(--s3);
-  padding-top:var(--s3);border-top:1px dashed var(--line)}
-.ch-meta b{color:var(--navy)}
-
-/* المطلوب اليوم */
-.today-panel{display:grid;grid-template-columns:1fr 260px;gap:var(--s4);margin-bottom:var(--s5)}
-.tp-main,.tp-box2{background:var(--paper);border:1px solid var(--line);border-radius:var(--r)}
-.tp-main{padding:var(--s4) var(--s5)}
-.tp-head h2{font-size:1.1rem;margin:0;color:var(--navy)}
-.tp-sub{font-size:13px;color:var(--muted)}
-.tp-list{list-style:none;margin:var(--s3) 0 0;padding:0;display:grid;gap:6px}
-.tp-list button{all:unset;box-sizing:border-box;width:100%;cursor:pointer;display:flex;gap:var(--s3);align-items:flex-start;
-  padding:9px var(--s3);border:1px solid var(--line);border-radius:var(--r-s);font-size:14px;line-height:1.6;color:var(--ink)}
-.tp-list button:hover{border-color:var(--teal)}
-.tp-list button:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
-.tp-box{width:20px;height:20px;border:1.5px solid var(--sand-2);border-radius:5px;flex-shrink:0;margin-top:3px;
-  display:grid;place-items:center;font-size:13px;font-weight:700;color:#fff}
-.tp-list li.on button{background:var(--teal-soft);border-color:rgba(31,111,104,.3)}
-.tp-list li.on .tp-box{background:var(--teal);border-color:var(--teal)}
-.tp-list li.on .tp-t{color:var(--muted);text-decoration:line-through;text-decoration-color:rgba(0,0,0,.25)}
-.tp-foot{display:flex;justify-content:space-between;align-items:center;gap:var(--s3);flex-wrap:wrap;margin-top:var(--s3);font-size:13px;color:var(--ink-2)}
-.tp-side{display:grid;gap:var(--s3);align-content:start}
-.tp-box2{padding:var(--s3) var(--s4);border-inline-start:4px solid var(--clay)}
-.tp-box2.ok{border-inline-start-color:var(--teal)}
-.tp-box2.warn{border-inline-start-color:var(--warn)}
-.tp-k{font-size:12px;color:var(--muted)}
-.tp-v{font-size:16px;font-weight:700;color:var(--navy);margin:2px 0}
-.tp-d{font-size:12.5px;color:var(--ink-2)}
-.tp-d a{color:var(--teal);font-weight:600}
-
-/* سجل الإنجاز */
-.feature.prog-card{display:block;background:var(--paper);border:1px solid var(--line);color:var(--ink)}
-.feature.prog-card::after{display:none}
-.feature.prog-card h2{color:var(--navy)}
-.feature.prog-card p{color:var(--muted)}
-.prog-rows{display:grid;gap:var(--s3);margin-top:var(--s3)}
-.pr-l{display:flex;justify-content:space-between;gap:var(--s3);font-size:13px;color:var(--ink-2);margin-bottom:5px}
-.pr-l b{color:var(--navy);font-weight:600}
-.prog-rows .pbar{background:var(--sand);height:8px}
-.pr-p{color:var(--muted);font-weight:500}
-body:not(.sup-on) .nav-sup{display:none}
-.wk-notes{border:1px solid var(--line);border-radius:var(--r-s);background:var(--paper);margin:var(--s3) 0}
-.wk-notes summary{cursor:pointer;padding:10px var(--s4);font-size:14px;font-weight:600;color:var(--navy);list-style:none}
-.wk-notes summary::-webkit-details-marker{display:none}
-.wk-notes summary::before{content:"▸ ";color:var(--muted)}
-.wk-notes[open] summary::before{content:"▾ "}
-.wk-notes ul{margin:0;padding:0 var(--s5) var(--s3) var(--s4);display:grid;gap:6px;font-size:13px;line-height:1.8;color:var(--ink-2)}
-.prog-rows .pfill{background:var(--teal)}
-@media (max-width:820px){.today-panel{grid-template-columns:1fr}.course-head{padding:var(--s4)}.tp-main{padding:var(--s4)}}
-.ch-code{font-size:12.5px;font-weight:700;color:var(--teal);margin:0 0 2px;letter-spacing:.02em}
-.ch-syl{color:var(--teal);font-weight:700;text-decoration:underline;text-underline-offset:3px}
-@media (max-width:600px){.course-head .greet-sub,.ch-oh{display:none}.course-head h1{font-size:1.3rem}
-  .ch-body{padding-top:var(--s2)}.ch-meta{margin-top:var(--s2);padding-top:var(--s2)}}
 
 /* مراحل التدريب */
 .ms{list-style:none;display:grid;grid-template-columns:repeat(5,1fr);gap:var(--s3);margin-top:var(--s4)}
@@ -982,93 +906,25 @@ textarea:focus,input:focus,select:focus{background:#fff;border-color:var(--teal-
 .btn-primary:active,.btn-pink:active{box-shadow:0 1px 0 rgba(255,255,255,.15) inset,0 3px 8px -5px rgba(20,40,50,.5)}
 
 @media print{.sidebar,.topbar,.toast,.ov,.tabbar,.nav-backdrop{display:none !important}.content{max-width:none;padding-bottom:0}}
-
-/* ══════════ الطابع الجامعي البسيط (2026-11-14) ══════════
-   طبقة أخيرة تلغي التدرجات والزجاج والظلال الثقيلة. لإلغائها كلها: احذفي هذا القسم إلى نهاية الأنماط. */
-:root{--r:8px;--r-s:6px;--r-l:10px}
-body{background:#F6F5F2}
-*,*::before,*::after{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
-.card,.glass,.stat,.qa,.post,.tl li,.act li,.ms li,.note,.feature,.tp-main,.tp-box2,.course-head,.tl-wk,.wk-notes{box-shadow:none!important}
-.card,.glass,.qa,.post,.note,.stat{background:#fff!important;border:1px solid #DEDAD2!important}
-.card-3d,.qa{transform:none!important}
-.card-3d:hover,.qa:hover,.stat:hover{transform:none!important;box-shadow:none!important}
-.topbar{background:#fff!important;border-bottom:1px solid #DEDAD2!important}
-.tabbar{background:#fff!important;box-shadow:none!important;border-top:1px solid #DEDAD2!important}
-.btn,.btn-primary,.btn-pink,.btn-onnavy{box-shadow:none!important;background-image:none!important}
-.btn-primary{background:var(--navy)!important;color:#fff!important}
-.btn-primary:hover{background:#0B2230!important}
-.btn-ghost{background:#fff!important;border:1px solid #CFCAC0!important}
-.ov:not(#loginOv){background:rgba(20,30,36,.5)!important}
-
-/* شاشة الدخول: خلفية فاتحة وبطاقة بحواف بسيطة */
-#loginOv{background:#F1EFEA!important;background-image:none!important}
-#loginOv::before,#loginOv::after{display:none!important;animation:none!important}
-#loginOv canvas{display:none!important}
-#loginOv .login-card,.login-card{background:#fff!important;border:1px solid #CFCAC0!important;border-top:3px solid var(--navy)!important;
-  border-radius:4px!important;box-shadow:none!important;text-align:right}
-.lg-head{border-bottom:1px solid #DEDAD2;padding-bottom:12px;margin-bottom:6px}
-.lg-uni{font-size:12px;color:var(--muted);display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
-.lg-beta{font-size:11px;border:1px solid #CFCAC0;padding:0 8px;border-radius:3px;color:var(--ink-2)}
-.lg-head h1{font-size:1.35rem;margin:6px 0 2px;color:var(--navy)}
-.lg-code{font-size:13px;font-weight:600;color:var(--muted);margin-inline-start:6px}
-.lg-sub{font-size:13px;color:var(--ink-2)}
-
-/* القائمة الجانبية: فاتحة ونصية */
-.sidebar{background:#fff!important;border-inline-start:1px solid #DEDAD2;box-shadow:none!important}
-.logo{border-bottom:1px solid #DEDAD2!important}
-.logo-badge{display:none!important}
-.logo-code{font-size:12px;font-weight:700;color:var(--teal);letter-spacing:.04em;text-align:right}
-.logo-title{color:var(--navy)!important}
-.logo-sub{color:var(--muted)!important}
-.nav-sec{color:var(--muted)!important}
-.nav-item{color:var(--ink)!important;border-radius:0!important;border-inline-start:3px solid transparent!important;box-shadow:none!important}
-.nav-item:hover{background:#F4F2EE!important}
-.nav-item.active{background:#EEF3F2!important;color:var(--navy)!important;border-inline-start-color:var(--navy)!important}
-.nav-ic{display:none!important}
-.nav-tx small{color:var(--muted)}
-.nav-item .bdg{background:#EEF3F2!important;color:var(--teal)!important}
-.side-user{background:#F6F5F2!important;border:1px solid #DEDAD2!important}
-.side-user .un{color:var(--navy)!important}
-.side-user .ur{color:var(--muted)!important}
-.side-user .icon-btn{color:var(--navy)!important;background:#fff!important;border-color:#DEDAD2!important}
-/* ══════════ عمق خفيف (2026-11-14) ══════════
-   ظلال ناعمة للبطاقات، ارتفاع بسيط عند المرور، أزرار بارزة، ومربعات مهام تنضغط. لإلغائه: احذفي هذا القسم. */
-:root{--lift:0 1px 2px rgba(20,30,36,.06),0 6px 16px -8px rgba(20,30,36,.18);
-      --lift-h:0 2px 4px rgba(20,30,36,.07),0 12px 24px -10px rgba(20,30,36,.24)}
-.card,.glass,.post,.note,.tp-main,.tp-box2,.feature,.course-head,.tl-wk,.task,.qa{box-shadow:var(--lift)!important}
-.card,.post,.tp-box2,.tl-wk,.task,.qa{transition:transform .18s ease,box-shadow .18s ease}
-@media (hover:hover){
-  .card:hover,.post:hover,.tp-box2:hover,.tl-wk:hover,.task:hover,.qa:hover{transform:translateY(-2px)!important;box-shadow:var(--lift-h)!important}}
-.btn-primary{box-shadow:inset 0 -3px 0 rgba(0,0,0,.28),0 2px 6px -2px rgba(11,34,48,.45)!important;transition:transform .08s ease,box-shadow .08s ease}
-.btn-primary:active{transform:translateY(2px)!important;box-shadow:inset 0 -1px 0 rgba(0,0,0,.28),0 1px 2px rgba(11,34,48,.35)!important}
-.btn-ghost{box-shadow:inset 0 -2px 0 rgba(0,0,0,.06)!important}
-.btn-ghost:active{transform:translateY(1px)}
-.tcheck,.tp-box{box-shadow:0 1px 0 rgba(255,255,255,.9),0 2px 3px -1px rgba(20,30,36,.22)!important;transition:transform .12s ease,box-shadow .12s ease}
-.task.done .tcheck,.tp-list li.on .tp-box{transform:translateY(1px);box-shadow:inset 0 2px 3px rgba(0,0,0,.28)!important}
-.task:active .tcheck,.tp-list button:active .tp-box{transform:translateY(1px) scale(.94)}
-.tp-box2.end{border-top:3px solid var(--navy)!important}
-.tp-box2.end .tp-v{font-size:1.35rem}
-@media (prefers-reduced-motion:reduce){.card,.post,.tp-box2,.tl-wk,.task,.qa,.btn-primary,.tcheck,.tp-box{transition:none!important}
-  .card:hover,.post:hover,.tp-box2:hover,.tl-wk:hover,.task:hover,.qa:hover{transform:none!important}}
-
-/* شريط الإعلان الهادئ (2026-11-14) */
-#annNotice{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:#fff;border:1px solid #DEDAD2;border-inline-start:3px solid var(--navy);
-  border-radius:var(--r-s);padding:8px 12px;margin-bottom:var(--s4);font-size:13px;box-shadow:var(--lift)}
-#annNotice .an-k{font-weight:700;color:var(--navy);white-space:nowrap}
-#annNotice .an-t{flex:1;min-width:160px;color:var(--ink-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-#annNotice .an-b{display:flex;gap:6px;align-items:center;margin-inline-start:auto}
-#annNotice .an-x{all:unset;cursor:pointer;width:26px;height:26px;text-align:center;line-height:26px;color:var(--muted);font-size:18px;border-radius:4px}
-#annNotice .an-x:hover{background:#F4F2EE}
-
-/* الأسئلة الشائعة: قائمة أسئلة وأجوبة (2026-11-14) */
+/* إضافات 2026-11-14: قائمة الأسئلة الشائعة، شريط الإعلان الهادئ، العداد الختامي */
 .faq-list{display:grid;gap:8px;margin-top:10px}
-.faq-i{border:1px solid #DEDAD2;border-radius:var(--r-s);background:#fff}
+.faq-i{border:1px solid var(--line);border-radius:var(--r-s);background:var(--paper)}
 .faq-i summary{cursor:pointer;padding:12px 14px;font-weight:700;color:var(--navy);list-style:none;display:flex;justify-content:space-between;gap:10px}
 .faq-i summary::-webkit-details-marker{display:none}
 .faq-i summary::after{content:'+';color:var(--muted);font-weight:400}
 .faq-i[open] summary::after{content:'−'}
-.faq-i[open] summary{border-bottom:1px solid #EEEAE3}
+.faq-i[open] summary{border-bottom:1px solid var(--line)}
 .faq-a{padding:10px 14px 14px;font-size:14px;line-height:1.9;color:var(--ink-2)}
+#annNotice{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--paper);border:1px solid var(--line);border-inline-start:3px solid var(--navy);
+  border-radius:var(--r-s);padding:8px 12px;margin-bottom:var(--s4);font-size:13px}
+#annNotice .an-k{font-weight:700;color:var(--navy);white-space:nowrap}
+#annNotice .an-t{flex:1;min-width:160px;color:var(--ink-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#annNotice .an-b{display:flex;gap:6px;align-items:center;margin-inline-start:auto}
+#annNotice .an-x{all:unset;cursor:pointer;width:26px;height:26px;text-align:center;line-height:26px;color:var(--muted);font-size:18px;border-radius:4px}
+.end-cd{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px;margin-bottom:var(--s4)}
+.end-cd .ec-k{font-size:13px;color:var(--muted);font-weight:700}
+.end-cd .ec-v{font-size:1.25rem;font-weight:800;color:var(--navy)}
+.end-cd .ec-d{font-size:13px;color:var(--muted)}
 
 </style>
 </head>
@@ -1120,7 +976,7 @@ body{background:#F6F5F2}
         <path d="M16 4 27 11v10L16 28 5 21V11z" fill="none" stroke="#2A8A80" stroke-width="1.6" stroke-linejoin="round"/>
         <path d="M16 10.5 21.5 14v5L16 22.5 10.5 19v-5z" fill="#2A8A80" opacity=".85"/>
       </svg></div>
-      <div><div class="logo-code" dir="ltr">SOWO 444</div><div class="logo-title">التدريب الميداني</div><div class="logo-sub" id="sbWeek">الأسبوع التدريبي الثاني</div></div>
+      <div><div class="logo-title">التدريب الميداني</div><div class="logo-sub" id="sbWeek">الأسبوع التدريبي الثاني</div></div>
     </div>
     <nav class="nav">
       <div class="nav-sec">الطالبة</div>
@@ -1138,9 +994,9 @@ body{background:#F6F5F2}
       <div class="nav-item" data-v="assistant" onclick="go('assistant',this)"><span class="nav-ic"><svg viewBox="0 0 24 24"><use href="#ic-help"/></svg></span> الأسئلة الشائعة</div>
       <div class="nav-item" data-v="forms" onclick="go('forms',this)"><span class="nav-ic"><svg viewBox="0 0 24 24"><use href="#ic-doc"/></svg></span> النماذج</div>
       <div class="nav-item" data-v="community" onclick="go('community',this)"><span class="nav-ic"><svg viewBox="0 0 24 24"><use href="#ic-board"/></svg></span> لوحة الإعلانات <span class="bdg" id="annBadge" style="display:none;background:var(--clay);color:#fff"></span></div>
-      <div class="nav-sec nav-sup">المشرفة</div>
-      <div class="nav-item nav-sup" data-v="supervisor" onclick="go('supervisor',this)"><span class="nav-ic"><svg viewBox="0 0 24 24"><use href="#ic-table"/></svg></span> لوحة المتابعة</div>
-      <div class="nav-item nav-sup" data-v="indicators" onclick="go('indicators',this)"><span class="nav-ic"><svg viewBox="0 0 24 24"><use href="#ic-chart"/></svg></span> مؤشرات الدعم المهني</div>
+      <div class="nav-sec">المشرفة</div>
+      <div class="nav-item" data-v="supervisor" onclick="go('supervisor',this)"><span class="nav-ic"><svg viewBox="0 0 24 24"><use href="#ic-table"/></svg></span> لوحة المتابعة</div>
+      <div class="nav-item" data-v="indicators" onclick="go('indicators',this)"><span class="nav-ic"><svg viewBox="0 0 24 24"><use href="#ic-chart"/></svg></span> مؤشرات الدعم المهني</div>
     </nav>
     <div class="side-user">
       <div class="ui"><div class="un" id="sbName">طالبة</div><div class="ur" id="sbId">—</div></div>
@@ -1155,14 +1011,14 @@ body{background:#F6F5F2}
       <div style="position:relative">
         <button class="icon-btn" style="background:var(--sand);border-color:var(--line);color:var(--navy)" onclick="toggleAudioPop()" title="إعدادات الصوت" aria-label="إعدادات الصوت"><svg viewBox="0 0 24 24"><use href="#ic-sound"/></svg></button>
         <div class="audio-pop" id="audioPop">
-          <div style="font-weight:900;font-size:14px;margin-bottom:12px">إعدادات الصوت</div>
+          <div style="font-weight:900;font-size:14px;margin-bottom:12px">🔊 إعدادات الصوت</div>
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
             <span style="font-size:13px;font-weight:700">تشغيل الأصوات</span>
             <div class="switch on" id="audSwitch" onclick="toggleAudio()"></div>
           </div>
           <div style="font-size:13px;font-weight:700;margin-bottom:6px">مستوى الصوت</div>
           <input type="range" min="0" max="100" value="70" id="audVol" oninput="setVol(this.value)">
-          <button class="btn btn-ghost btn-sm" style="margin-top:12px;width:100%" onclick="playWelcome()">تجربة رسالة الترحيب</button>
+          <button class="btn btn-ghost btn-sm" style="margin-top:12px;width:100%" onclick="playWelcome()">▶️ تجربة رسالة الترحيب</button>
         </div>
       </div>
       <div class="page-title" id="pageTitle">الرئيسية</div>
@@ -1173,39 +1029,32 @@ body{background:#F6F5F2}
 
       <!-- ═══ HOME (minimal) ═══ -->
       <div class="view active" id="v-home">
-        <header class="course-head">
-          <div class="ch-top">
-            <span>جامعة قطر · قسم العلوم الاجتماعية · برنامج الخدمة الاجتماعية · خريف ٢٠٢٦</span>
-            <span class="ch-week" id="greetKicker">الأسبوع التدريبي الثاني</span>
+        <header class="greet">
+          <div>
+            <p class="eyebrow" id="greetKicker">الأسبوع التدريبي الثاني</p>
+            <h1 id="heroHi">أهلا بك</h1>
+            <p class="greet-sub" id="heroNext">تابعي يومك التدريبي خطوة بخطوة.</p>
           </div>
-          <div class="ch-body">
-            <div>
-              <p class="ch-code" dir="ltr" style="text-align:right">SOWO 444 · Field Practicum (1)</p>
-              <h1>تدريب ميداني ١</h1>
-              <p class="ch-hi" id="heroHi">أهلا بك</p>
-              <p class="greet-sub" id="heroNext">تابعي يومك التدريبي خطوة بخطوة.</p>
-            </div>
-            <div class="greet-side" id="greetSide"><span class="pill" id="greetPill"></span></div>
-          </div>
-          <div class="ch-meta"><span>المشرفة الأكاديمية: <b>أ. ربى أبو طربوش</b></span><span>٦ ساعات معتمدة · ٢٥٠ ساعة تدريب ميداني</span><a class="ch-syl" href="syllabus.docx" download>توصيف المقرر</a><span class="ch-oh">الساعات المكتبية: الاثنين ١١:٠٠–١٢:٠٠ · الأربعاء ٨:٣٠–٩:٣٠ · مكتب 237 مبنى البنات C04</span></div>
+          <div class="greet-side" id="greetSide"><span class="pill" id="greetPill"></span></div>
         </header>
+
+        <div class="card end-cd" id="endCd"></div>
 
         <div class="stat-strip" id="statStrip">
           <div class="skel skel-row"></div><div class="skel skel-row"></div>
           <div class="skel skel-row"></div><div class="skel skel-row"></div>
         </div>
 
-        <section class="feature prog-card">
+        <section class="feature">
           <div class="feature-txt">
-            <h2 id="featTitle">سجل الإنجاز</h2>
+            <h2 id="featTitle">تقدمك في الأسبوع التدريبي</h2>
             <p id="featSub">—</p>
-            <div class="prog-rows" id="progRows"></div>
-            <div class="row" style="flex-wrap:wrap;margin-top:14px">
-              <button class="btn btn-primary btn-sm" id="heroCta" onclick="go('week',null)">افتحي مهام اليوم</button>
-              <button class="btn btn-ghost btn-sm" id="heroAlt" onclick="go('guide',null)">دليل التدريب</button>
+            <div class="row" style="flex-wrap:wrap;margin-top:16px">
+              <button class="btn btn-primary" id="heroCta" onclick="go('week',null)">افتحي مهام اليوم</button>
+              <button class="btn btn-onnavy" id="heroAlt" onclick="go('guide',null)">دليل التدريب</button>
             </div>
           </div>
-          <div class="feature-num" style="display:none">
+          <div class="feature-num">
             <span id="featNum">٠/٠</span><small id="featUnit">مهمة</small>
             <div class="pbar"><div class="pfill" id="homeBar" style="width:0%"></div></div>
           </div>
@@ -1217,7 +1066,7 @@ body{background:#F6F5F2}
         <div class="card card-3d" id="mailCard">
           <div class="card-title">مراسلة المشرفة الأكاديمية</div>
           <p style="margin:6px 0 10px;color:var(--muted);font-size:13px">لأي <b>ظرف عاجل</b> أو <b>صعوبة تواجهك في تدريبك</b>، اكتبي رسالتك هنا وسيفتح تطبيق البريد لديك برسالة جاهزة موجهة إلى <b dir="ltr" style="color:var(--navy)">rabutarbush@qu.edu.qa</b> — ترسل من بريدك الجامعي، وردها يصلك على بريدك خلال <b>٢٤ ساعة</b> في أيام العمل.</p>
-          <div class="note" style="font-size:12px;margin:2px 0 12px"><b>ملاحظة:</b> هذه القناة للصعوبات والظروف العاجلة. أما <b>كتابة التقارير</b> و<b>شرح بنود ملف الإنجاز</b> فتناقش في <b>الاجتماعات الإشرافية</b> أو <b>الساعات المكتبية</b>، لأنها تحتاج شرحا وحوارا لا يفي به البريد.</div>
+          <div class="note" style="font-size:12px;margin:2px 0 12px"><b>📌 لاحظي:</b> هذه القناة للصعوبات والظروف العاجلة. أما <b>كتابة التقارير</b> و<b>شرح بنود ملف الإنجاز</b> فتناقش في <b>الاجتماعات الإشرافية</b> أو <b>الساعات المكتبية</b>، لأنها تحتاج شرحا وحوارا لا يفي به البريد.</div>
           <div class="lf"><label>موضوع الرسالة</label>
             <select id="mailTopic">
               <option>استفسار عام</option>
@@ -1227,15 +1076,17 @@ body{background:#F6F5F2}
             </select></div>
           <div class="lf"><label>نص الرسالة</label>
             <textarea id="mailBody" rows="4" placeholder="اكتبي رسالتك بأسلوب مهني وموجز…"></textarea></div>
-          <div class="note" style="font-size:12px;margin:2px 0 12px"><b>الساعات المكتبية:</b><br><b>الاثنين</b> ١١:٠٠–١٢:٠٠ &nbsp;|&nbsp; <b>الأربعاء</b> ٨:٣٠–٩:٣٠ &nbsp;·&nbsp; مكتب 237 · مبنى البنات C04</div>
+          <div class="note" style="font-size:12px;margin:2px 0 12px"><b>🕐 الساعات المكتبية:</b><br><b>الاثنين</b> ١١:٠٠–١٢:٠٠ &nbsp;|&nbsp; <b>الأربعاء</b> ٨:٣٠–٩:٣٠ &nbsp;·&nbsp; مكتب 237 · مبنى البنات C04</div>
           <div class="row" style="flex-wrap:wrap">
             <button class="btn btn-primary btn-sm" onclick="sendSupMail()">إرسال البريد</button>
             <button class="btn btn-ghost btn-sm" onclick="copySupMail()">نسخ عنوان المشرفة</button>
           </div>
         </div>
 
-        <section class="card"><div class="card-title">الجدول التدريبي</div><div id="upcoming"></div></section>
-        <section class="card"><div class="card-title">بيانات التدريب</div><dl class="deflist" id="traineeCard"></dl></section>
+        <div class="grid g2">
+          <section class="card"><div class="card-title">بطاقة تدريبك</div><dl class="deflist" id="traineeCard"></dl></section>
+          <section class="card"><div class="card-title">أيامك التدريبية</div><ul class="tl" id="upcoming"></ul></section>
+        </div>
 
         <section class="card"><div class="card-title" id="msTitle">مراحل التدريب</div>
           <ul class="ms" id="milestones"></ul></section>
@@ -1244,7 +1095,7 @@ body{background:#F6F5F2}
           <ul class="act" id="actList"></ul></section>
 
 
-        <div class="banner"><div class="bic"></div><div>للاطلاع على الضوابط والجدول والفيديوهات، افتحي <b>دليل التدريب</b>. ولبدء مهامك اليومية افتحي <b>مهام الأسبوع التدريبي</b>.</div></div>
+        <div class="banner pink"><div class="bic">💡</div><div>للاطلاع على الضوابط والجدول والفيديوهات، افتحي <b>دليل التدريب</b>. ولبدء مهامك اليومية افتحي <b>مهام الأسبوع التدريبي</b>.</div></div>
       </div>
 
       <!-- ═══ GUIDE ═══ -->
@@ -1299,6 +1150,8 @@ body{background:#F6F5F2}
 
       <!-- ═══ WEEK ═══ -->
       <div class="view" id="v-week">
+        <div class="banner"><div class="bic">🗺️</div><div>أرافقك يوما بيوم. المهام <b>اختيارية</b> — أكملي ما ينطبق. إجاباتك تحفظ تلقائيا.</div></div>
+        <div class="banner pink"><div class="bic">ℹ️</div><div><b>ملاحظة مهمة:</b> ليس بالضرورة أن تنجز جميع هذه المهام خلال هذا الأسبوع، وقد يكون لدى <b>الأخصائية الاجتماعية في المؤسسة</b> ترتيب آخر لها بحسب طبيعة العمل وظروف المؤسسة. اتبعي توجيهها، ودوني ما أنجزته فعلا.</div></div>
         <div class="card card-3d"><div class="card-head"><div class="card-title" id="weekTitle">الأسبوع التدريبي الثاني</div>
             <span class="chip" id="weekChip">٣٠ أغسطس — ٣ سبتمبر</span></div>
             <div class="wk-tabs" id="weekTabs"></div>
@@ -1318,7 +1171,7 @@ body{background:#F6F5F2}
       <div class="view" id="v-room">
         <div class="banner"><div class="bic">🏛️</div><div><b>غرفة الأنشطة</b> — أرسلي نشاطا نفذته في مؤسستك، فيصل إلى <b>المشرفة الأكاديمية أولا</b>. بعد اعتمادها يظهر <b>لجميع زميلاتك</b> في كل المؤسسات، وقد تختاره <b>نشاطا مميزا ⭐</b> وتعلن عنه في لوحة الإعلانات. كل نشاط هنا مادة جاهزة لبند «الأنشطة الوقائية/العلاجية/التنموية» في ملف الإنجاز ولعرضك النهائي.</div></div>
         <div class="card card-3d" id="roomCompose">
-          <div class="card-head"><div class="card-title">إرسال نشاط</div><button class="btn btn-ghost btn-sm" id="roomToggle" onclick="roomToggleForm()">فتح النموذج</button></div>
+          <div class="card-head"><div class="card-title">✨ أرسلي نشاطا</div><button class="btn btn-ghost btn-sm" id="roomToggle" onclick="roomToggleForm()">فتح النموذج</button></div>
           <div id="roomForm" style="display:none">
             <div class="grid g2" style="gap:10px">
               <div><label style="font-size:12.5px;font-weight:700">عنوان النشاط</label><input id="rmTitle" maxlength="120" placeholder="مثال: جلسة توعية عن تنظيم الوقت للصف السابع"></div>
@@ -1333,7 +1186,7 @@ body{background:#F6F5F2}
           </div>
         </div>
         <!-- ═══ اختيار الأسبوع (2026-10-17): اختيار الطالبات + اختيار المشرفة لكل أسبوع تدريبي ═══ -->
-        <div class="card card-3d" id="roomPicks"><div class="card-head"><div class="card-title">اختيار الأسبوع <span class="chip" id="roomPicksWk"></span></div></div><div id="roomPicksBody"></div></div>
+        <div class="card card-3d" id="roomPicks"><div class="card-head"><div class="card-title">🏆 اختيار الأسبوع <span class="chip" id="roomPicksWk"></span></div></div><div id="roomPicksBody"></div></div>
         <div class="card card-3d">
           <div class="card-head"><div class="card-title">الأنشطة المنشورة <span class="chip" id="roomCount"></span><div id="roomHint" style="font-size:11.5px;font-weight:400;color:var(--muted);margin-top:4px">أنشطة زميلاتك من جميع المؤسسات بعد اعتماد المشرفة — ويمكنك اختيار أنشطة مؤسستك أو الأنشطة المميزة ⭐ من القائمة</div></div>
             <div class="row" style="flex-wrap:wrap"><select id="roomOrg" onchange="renderRoom()" style="max-width:190px"><option value="">كل المؤسسات</option></select><select id="roomKind" onchange="renderRoom()" style="max-width:130px"><option value="">كل الأنواع</option><option>وقائي</option><option>علاجي</option><option>تنموي</option></select><button class="btn btn-ghost btn-sm" onclick="loadRoom()">تحديث</button><button class="btn btn-ghost btn-sm" id="roomExport" style="display:none" onclick="roomExport()">تنزيل إكسل</button></div></div>
@@ -1410,7 +1263,7 @@ body{background:#F6F5F2}
           </div>
           <!-- ═══ حذفت بطاقة «نموذج التقرير اليومي» بطلب المستخدمة (2026-09-25) ═══
                السبب: مكررة مع بطاقة «ملاحظات اليوم» داخل مسار الأسبوع، ولم تذكر في تقييم الطالبات. ═══ -->
-          <div class="card card-3d" style="border:1.5px solid var(--teal)"><div class="card-title">شرح التقرير الأسبوعي والخطة التنفيذية</div>
+          <div class="card card-3d" style="border:1.5px solid var(--teal)"><div class="card-title">🎬 شرح التقرير الأسبوعي والخطة التنفيذية</div>
             <p style="margin:6px 0 10px;color:var(--muted);font-size:12.5px">شرح مصور من المشرفة الأكاديمية: كيف تكتب بنود التقرير الأسبوعي، وكيف تعدين خطتك الأسبوعية التنفيذية قبل عرضها على مشرفتك. <b>ارجعي إليه في أي أسبوع</b> قبل كتابة تقريرك.</p>
             <video id="vidPlan" controls playsinline preload="metadata" src="weekly-plan-guide.mp4"
               controlsList="nodownload noplaybackrate noremoteplayback" disablePictureInPicture disableRemotePlayback
@@ -1436,7 +1289,7 @@ body{background:#F6F5F2}
         <div class="card card-3d" style="margin-top:14px;border:1.5px solid var(--navy)">
           <div class="card-title">بلاك بورد</div>
           <p style="margin:6px 0 12px;color:var(--muted);font-size:12.5px">مكان تسليم التقرير الأسبوعي، وتوصيف المقرر، وإعلانات المقرر الرسمية.</p>
-          <a href="https://elearning.qu.edu.qa/" target="_blank" rel="noopener" class="btn btn-primary">فتح بلاك بورد</a>
+          <a href="https://elearning.qu.edu.qa/" target="_blank" rel="noopener" class="btn btn-primary">🔗 فتح بلاك بورد</a>
         </div>
         <!-- أزيلت بطاقة «ملاحظاتي اليومية» من النماذج بطلب المستخدمة (2026-09-26):
              زر التنزيل انتقل إلى داخل بطاقة «ملاحظات اليوم» في مسار الأسابيع. -->
@@ -1456,7 +1309,7 @@ body{background:#F6F5F2}
             </div>
           </div>
           <div class="row" style="margin-bottom:12px">
-            <input id="cSearch" placeholder="بحث في الإعلانات" oninput="renderPosts()">
+            <input id="cSearch" placeholder="🔎 بحث في الإعلانات" oninput="renderPosts()">
           </div>
           <div id="composer" style="display:none;margin-bottom:14px">
             <textarea id="cText" rows="3" placeholder="اكتبي نص الإعلان الموجه لجميع الطالبات..."></textarea>
@@ -1512,7 +1365,7 @@ body{background:#F6F5F2}
 <div class="ov" id="simOv"></div>
 <!-- Welcome modal -->
 <div class="ov" id="welcomeOv"><div class="login-card" style="max-width:440px">
-  <h1>كلمة ترحيب</h1>
+  <h1>كلمة ترحيب 🌸</h1>
   <div class="ls" id="welcomeText" style="font-size:14px;line-height:1.9"></div>
   <div class="row" style="justify-content:center;gap:8px;margin-top:6px">
     <button class="btn btn-primary" onclick="closeWelcome()">لنبدأ ←</button>
@@ -1573,11 +1426,10 @@ body{background:#F6F5F2}
 <div class="ov show" id="loginOv">
   <!-- أوقف الشعاع الدوار حول واجهة الدخول بطلب المستخدمة (2026-08-19) -->
   <div class="login-card" style="position:relative;z-index:5">
-    <div class="lg-head">
-      <div class="lg-uni">جامعة قطر · برنامج الخدمة الاجتماعية <span class="lg-beta">نسخة تجريبية</span></div>
-      <h1>التدريب الميداني <span class="lg-code" dir="ltr">SOWO 444</span></h1>
-      <div class="lg-sub">دليل أسبوعك التدريبي · بإشراف الأستاذة ربى أبوطربوش</div>
-    </div>
+    <div style="display:inline-block;background:rgba(86,66,184,.1);color:var(--navy);font-size:11px;font-weight:800;padding:4px 12px;border-radius:99px;margin-bottom:8px">نسخة تجريبية</div>
+    <h1 style="margin-top:0">التدريب الميداني</h1>
+    <div class="ls" style="margin-bottom:6px">لطالبات التدريب الميداني · <b>خدمة اجتماعية</b><br>بإشراف الأستاذة <b style="color:var(--navy)">ربى أبوطربوش</b></div>
+    <div class="ls">دليل أسبوعك التدريبي</div>
     <!-- أزيلت خانة عداد اليوم التدريبي بطلب المستخدمة (2026-08-24).
          لإعادتها: أعيدي السطر التالي وأزيلي تعليق استدعاء updateCountdown في نهاية الملف.
     <div id="countdown" class="cd-chip"></div> -->
@@ -1606,15 +1458,15 @@ body{background:#F6F5F2}
       <div style="font-size:10.5px;color:var(--muted);margin-top:4px">مطلوب للدخول — يصلك عليه إشعار عند رد المشرفة على ملاحظاتك.</div>
       <div class="lerr" id="eErr">الرجاء كتابة البريد الجامعي بصيغة صحيحة (مثال: example@qu.edu.qa).</div></div>
     <input type="hidden" id="lSup" value="">
-    <label for="lConsent" style="display:flex;gap:9px;align-items:flex-start;text-align:right;background:#F6F5F2;border:1px solid #DEDAD2;border-radius:4px;padding:11px 12px;margin:4px 0 12px;cursor:pointer;font-size:11.5px;line-height:1.75;color:var(--ink)">
+    <label for="lConsent" style="display:flex;gap:9px;align-items:flex-start;text-align:right;background:rgba(86,66,184,.06);border:1.5px solid rgba(86,66,184,.2);border-radius:14px;padding:11px 12px;margin:4px 0 12px;cursor:pointer;font-size:11.5px;line-height:1.75;color:var(--ink)">
       <input type="checkbox" id="lConsent" style="width:17px;height:17px;min-width:17px;margin-top:2px;accent-color:#12303D;cursor:pointer">
       <span>أوافق على استخدام بياناتي داخل <b>التطبيق التجريبي</b> لأغراض متابعة التدريب الميداني وتطوير التطبيق. بياناتي <b>لا تستخدم في التقييم الأكاديمي</b> ولا تشارك خارج فريق الإشراف، ويمكنني طلب حذفها في أي وقت.</span>
     </label>
     <div class="lerr" id="cErr" style="margin-bottom:10px">للمتابعة، يرجى الموافقة على استخدام البيانات في النسخة التجريبية.</div>
     <button class="btn btn-primary" style="width:100%" onclick="doLogin()">دخول ←</button>
-    <div style="margin-top:16px;padding:12px 0 0;border-top:1px solid #DEDAD2">
+    <div style="margin-top:20px;padding:16px;background:linear-gradient(135deg,rgba(86,66,184,.08),rgba(124,58,237,.12));border-radius:16px;border:1.5px solid rgba(86,66,184,.2)">
       <div style="text-align:center;font-size:12px;color:var(--navy);margin-bottom:10px;font-weight:800;letter-spacing:.8px">— دخول المشرفة الأكاديمية —</div>
-      <button class="btn btn-ghost" style="width:100%;font-size:13.5px;padding:11px 20px" onclick="supLogin()">الدخول كمشرفة أكاديمية</button>
+      <button class="btn" style="width:100%;background:linear-gradient(135deg,#12303D,#2A8A80);color:#fff;font-weight:800;border:none;box-shadow:0 6px 20px rgba(86,66,184,.45);font-size:14.5px;padding:13px 20px" onclick="supLogin()">الدخول كمشرفة أكاديمية</button>
     </div>
   </div>
 </div>
@@ -1631,7 +1483,7 @@ body{background:#F6F5F2}
 <!-- نافذة «إعلان جديد» — تظهر للطالبة عند دخولها إن وجد إعلان لم تره -->
 <div class="ov" id="annOv"><div class="login-card" style="max-width:520px;text-align:right">
   <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
-    
+    <div style="font-size:30px">📢</div>
     <div style="flex:1"><div style="font-weight:900" id="annOvCount">إعلان جديد من المشرفة الأكاديمية</div>
       <div style="font-size:11.5px;color:var(--muted)" id="annOvTime"></div></div>
     <button class="icon-btn" aria-label="إغلاق" onclick="annOvClose(false)"><svg viewBox="0 0 24 24"><use href="#ic-close"/></svg></button>
@@ -1648,7 +1500,7 @@ body{background:#F6F5F2}
 const ar=n=>Number(n).toLocaleString('ar-EG');
 let toastT;
 function toggleEye(id,btn){const i=document.getElementById(id);i.type=i.type==='password'?'text':'password';btn.textContent=i.type==='password'?'👁':'🔒';}
-function toast(m){const t=document.getElementById('toast');/* الطابع الرسمي: تحذف الإيموجي وعلامات التعجب من الرسائل القصيرة */m=String(m==null?'':m).replace(/[🌀-🫿☀-➿⭐🀀-🋿]️?|‍/gu,'').replace(/!+/g,'').replace(/s{2,}/g,' ').trim();t.textContent=m;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),2700);}
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),2700);}
 function closeSidebar(){document.getElementById('sidebar').classList.remove('open');var b=document.getElementById('navBackdrop');if(b)b.classList.remove('show');}
 
 /* ════ Supabase (central save — optional) ════ */
@@ -1676,7 +1528,7 @@ function askSupPass(action){_supAction=action;const i=document.getElementById('s
 function submitSupPass(){const v=document.getElementById('supPassIn').value;if(v===SUP_PASS){supUnlocked=true;document.getElementById('supPassOv').classList.remove('show');const a=_supAction;_supAction=null;toast('🔓 تم فتح صلاحيات المشرفة');if(a)a();}else{document.getElementById('supPassErr').style.display='block';}}
 function closeSupPass(){document.getElementById('supPassOv').classList.remove('show');_supAction=null;}
 function supLogin(){askSupPass(function(){
-  student.name='المشرفة الأكاديمية';student.id='';student.org='';student.sup='';supMode=true;document.body.classList.add('sup-on');
+  student.name='المشرفة الأكاديمية';student.id='';student.org='';student.sup='';supMode=true;
   document.getElementById('sbName').textContent='المشرفة الأكاديمية';
   document.getElementById('sbId').textContent='لوحة المتابعة';
   document.getElementById('loginOv').classList.remove('show');stopLoginFX();startIdle();
@@ -1816,7 +1668,6 @@ function breakAlert(){
     'بعد إجازة '+(b.gap>=12?'طيبة':'قصيرة')+'، نعود اليوم بطاقة جديدة. نتمنى أنك ارتحت، وأن يومك الأول يبدأ بهمة. خطوة بخطوة، وأنت أقرب مما تظنين.';
   document.getElementById('breakWk').textContent=weekLabel(b.wk)+' · '+weekRange(b.wk);
   document.getElementById('breakAim').textContent=(b.first.sub||'').replace(/\s*·\s*٦ ساعات\s*$/,'');
-  /* تخفيف (2026-11-14): بلا صوت ولا مؤثرات متحركة */
   ov.classList.add('show');
   return true;
 }
@@ -2329,7 +2180,7 @@ function buildPath(){const w=document.getElementById('daypath');w.innerHTML='';
 function dayVideo(d){
   if(!d.video||!d.video.src)return '';
   return `<div class="card card-3d">
-     <div class="card-title">${d.video.title||'فيديو اليوم'}</div>
+     <div class="card-title">🎬 ${d.video.title||'فيديو اليوم'}</div>
      ${d.video.desc?`<p style="font-size:13px;color:var(--muted);margin:6px 0 12px">${d.video.desc}</p>`:''}
      <video src="${d.video.src}" controls playsinline preload="metadata"
        controlsList="nodownload noplaybackrate noremoteplayback" disablePictureInPicture disableRemotePlayback
@@ -2350,16 +2201,11 @@ function renderDay(){const d=curDay();if(!d)return;const set=state.done[d.n]||(s
   let q='';QZ_ASK.forEach(([qq,hint],qi)=>{let r='';faces.forEach((f,fi)=>{r+=`<div class="face${state.quiz[d.n+'-'+qi]===fi?' sel':''}" onclick="setQuiz(${d.n},${qi},${fi})">${f}<span>${labels[fi]}</span></div>`;});q+=`<div style="margin-bottom:12px"><div style="font-weight:700;font-size:13px;margin-bottom:2px">${qi+1}) ${qq}</div><div class="qhint">${hint}</div><div class="faces">${r}</div></div>`;});
   document.getElementById('dayPanel').innerHTML=`
    <div class="card card-3d" style="background:var(--sand)">
-     <div><div style="font-weight:900;color:var(--navy);margin-bottom:3px">إرشاد ${d.name} · ${d.dow} ${d.date}</div><div style="font-size:13px">${d.tip}</div></div>
+     <div><div style="font-weight:900;color:var(--navy);margin-bottom:3px">🧭 إرشاد ${d.name} · ${d.dow} ${d.date}</div><div style="font-size:13px">${d.tip}</div></div>
    </div>
    ${dayVideo(d)}
-   ${d.note?`<div class="banner pink"><div class="bic"></div><div>${d.note}</div></div>`:''}
-   <details class="wk-notes"><summary>تعليمات الأسبوع والتواصل مع المشرفة</summary>
-     <ul>
-       <li>المهام <b>اختيارية</b> — أكملي ما ينطبق على مؤسستك. إجاباتك تحفظ تلقائيا.</li>
-       <li>ليس بالضرورة أن تنجز جميع المهام خلال هذا الأسبوع، فقد يكون لدى <b>الأخصائية الاجتماعية في المؤسسة</b> ترتيب آخر بحسب طبيعة العمل. اتبعي توجيهها، ودوني ما أنجزته فعلا.</li>
-       ${d.note2?`<li>${d.note2}</li>`:''}
-     </ul></details>
+   ${d.note?`<div class="banner pink"><div class="bic">📌</div><div>${d.note}</div></div>`:''}
+   ${d.note2?`<div class="banner"><div class="bic">🤝</div><div>${d.note2}</div></div>`:''}
    ${dayLinks(d)}
    ${dayStages(d)}
    <div class="grid g2">
@@ -2372,7 +2218,7 @@ function renderDay(){const d=curDay();if(!d)return;const set=state.done[d.n]||(s
      <div style="margin-top:12px">${q}</div>
      <button class="btn btn-primary" onclick="finishDay(${d.n})">إنهاء ${d.name}</button></div>`;afterRenderDay(d);}
 function afterRenderDay(d){if(supMode&&document.getElementById('dayNotesList'))renderSupDay(d.n);}
-function toggleTask(n,i){const set=state.done[n]||(state.done[n]=new Set());if(set.has(i))set.delete(i);else{set.add(i);sfxTask();toast('تم تسجيل إنجاز المهمة');}renderDay();buildPath();updateHome();persist();}
+function toggleTask(n,i){const set=state.done[n]||(state.done[n]=new Set());if(set.has(i))set.delete(i);else{set.add(i);sfxTask();toast('✅ أحسنت!');}renderDay();buildPath();updateHome();persist();}
 function setQuiz(n,qi,fi){state.quiz[n+'-'+qi]=fi;renderDay();persist();}
 /* الانتقال بترتيب المصفوفة لا برقم اليوم — الأرقام غير متسلسلة بعد حذف أسبوع */
 function finishDay(n){state.fin[n]=true;sfxDay();
@@ -2380,7 +2226,14 @@ function finishDay(n){state.fin[n]=true;sfxDay();
   if(nxt){state.cur=nxt.n;sfxMove();buildPath();renderDay();toast('🎉 أنهيت '+days[i].name+'!');speak('أحسنت! أنهيت يومك بنجاح. لننتقل لليوم التالي بخطى واثقة.');}
   else{buildPath();renderDay();toast('🏆 مبروك! أكملت مهام أسبوعك التدريبي');speak('مبروك! أكملت مهام أسبوعك التدريبي. أنا فخورة بك.');}
   updateHome();persist();}
-function updateHome(){syncWeekLabels();let tot=0,dn=0;days.forEach(d=>{tot+=d.tasks.length;dn+=(state.done[d.n]?state.done[d.n].size:0);});
+/* العداد الختامي — آخر يوم تدريب: الخميس ٣ ديسمبر ٢٠٢٦ (أيام التدريب: الأحد والثلاثاء والخميس) */
+function renderEndCd(){const el=document.getElementById('endCd');if(!el)return;if(typeof supMode!=='undefined'&&supMode){el.style.display='none';return;}el.style.display='';
+  const END=new Date(2026,11,3),t=new Date();t.setHours(0,0,0,0);const cal=Math.round((END-t)/864e5);
+  if(cal<0){el.innerHTML='<div class="ec-k">انتهاء التدريب</div><div class="ec-v">اكتمل التدريب</div><div class="ec-d">الخميس ٣ ديسمبر ٢٠٢٦</div>';return;}
+  let td=0;const d=new Date(t);d.setDate(d.getDate()+1);for(;d<=END;d.setDate(d.getDate()+1)){const w=d.getDay();if(w===0||w===2||w===4)td++;}
+  const v=cal===0?'اليوم آخر يوم تدريب':'باقي '+ar(cal)+' '+(cal===1?'يوم':cal===2?'يومان':cal<=10?'أيام':'يوما');
+  el.innerHTML='<div class="ec-k">انتهاء التدريب</div><div class="ec-v">'+v+'</div><div class="ec-d">'+(cal?ar(td)+' '+(td===1?'يوم تدريبي':td<=10?'أيام تدريبية':'يوما تدريبيا')+' متبقية · ':'')+'الخميس ٣ ديسمبر ٢٠٢٦</div>';}
+function updateHome(){renderEndCd();syncWeekLabels();let tot=0,dn=0;days.forEach(d=>{tot+=d.tasks.length;dn+=(state.done[d.n]?state.done[d.n].size:0);});
   const pct=tot?Math.round(dn/tot*100):0;
   const bar=document.getElementById('homeBar');if(bar)bar.style.width=pct+'%';
   const cd=days.find(d=>d.n===state.cur);
@@ -2450,7 +2303,7 @@ const faqs=[
  // {q:'ماذا لو كانت المشرفة غائبة؟',a:'عرفي بنفسك للموظفين، واستفيدي من الوقت في الملاحظة، وتابعي مع المشرفة لاحقا — وهذا وارد في الأسبوع الأول.'}
 ];
 function buildFaq(){const c=document.getElementById('faqChips');c.innerHTML=faqs.map(f=>'<details class="faq-i"><summary>'+f.q+'</summary><div class="faq-a">'+f.a+'</div></details>').join('');return;faqs.forEach(f=>{const e=document.createElement('div');e.className='fchip';e.textContent=f.q;e.onclick=()=>ask(f.q);c.appendChild(e);});}
-function pushMsg(t,w){const b=document.getElementById('chatbox');const m=document.createElement('div');m.className='msg '+w;m.innerHTML=`<div class="mav ${w}">${w==='b'?'س':'أنت'}</div><div class="bub">${t}</div>`;b.appendChild(m);b.scrollTop=b.scrollHeight;}
+function pushMsg(t,w){const b=document.getElementById('chatbox');const m=document.createElement('div');m.className='msg '+w;m.innerHTML=`<div class="mav ${w}">${w==='b'?'🤖':'👩‍🎓'}</div><div class="bub">${t}</div>`;b.appendChild(m);b.scrollTop=b.scrollHeight;}
 function ask(q){pushMsg(q,'u');let f=faqs.find(x=>x.q===q);if(!f){const ws=q.split(/\s+/).filter(w=>w.length>2);let bs=0;faqs.forEach(x=>{let s=0;ws.forEach(w=>{if((x.q+x.a).includes(w))s++;});if(s>bs){bs=s;f=x;}});if(bs===0)f=null;}
   setTimeout(()=>pushMsg(f?f.a:'سؤال جيد! أجيب عن الأسئلة الشائعة. للاستفسارات الخاصة راسلي المشرف الأكاديمي. 🌟','b'),400);}
 function sendAsk(){const i=document.getElementById('askIn');const v=i.value.trim();if(!v)return;i.value='';ask(v);}
@@ -2635,7 +2488,7 @@ function annAlert(){
 }
 function annNotice(a){const host=document.getElementById('statStrip');if(!host||!host.parentNode)return;
   let n=document.getElementById('annNotice');if(!n){n=document.createElement('div');n.id='annNotice';host.parentNode.insertBefore(n,host);}
-  const t=String(a.text||'').replace(/[ً-ْٰ]/g,'').replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{2B50}]\uFE0F?/gu,'').replace(/\s+/g,' ').trim();
+  const t=String(a.text||'').replace(/[-]/g,'').replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{2B50}]\uFE0F?/gu,'').replace(/\s+/g,' ').trim();
   n.innerHTML='<span class="an-k">'+(ANN_OV_FEAT?'نشاط مميز من زميلاتك':'إعلان جديد من المشرفة')+'</span>'+
     '<span class="an-t">'+annEsc(t.slice(0,90))+(t.length>90?'…':'')+'</span>'+
     '<span class="an-b"><button class="btn btn-ghost btn-sm" onclick="annNoticeOpen()">عرض</button>'+
@@ -2648,7 +2501,7 @@ function annOvClose(open){document.getElementById('annOv').classList.remove('sho
   if(open){if(ANN_OV_FEAT){ROOM_WANT_FEAT=true;go('room',null);}else go('community',null);}}
 
 function toggleSup(){if(!supMode&&!supUnlocked){askSupPass(()=>toggleSup());return;}
-  supMode=!supMode;document.body.classList.toggle('sup-on',supMode);document.getElementById('supState').textContent=supMode?'مفعل ✅':'غير مفعل';
+  supMode=!supMode;document.getElementById('supState').textContent=supMode?'مفعل ✅':'غير مفعل';
   const b=document.getElementById('annNewBtn');if(b)b.style.display=supMode?'':'none';
   if(!supMode){const c=document.getElementById('composer');if(c)c.style.display='none';}
   renderPosts();toast(supMode?'وضع المشرفة مفعل — يمكنك النشر والحذف':'تم إيقاف وضع المشرفة');}
@@ -2691,7 +2544,7 @@ function renderPosts(){
   el.innerHTML=rows.map(a=>`<div class="post">
     <div class="phead"><div class="pav">📢</div>
       <div><div class="pname">المشرفة الأكاديمية</div><div class="ptime">${annFmt(a.at)}</div></div>
-      ${a.pinned?'<span class="ptag sup">مثبت</span>':'<span class="ptag sup">إعلان رسمي</span>'}</div>
+      ${a.pinned?'<span class="ptag sup">📌 مثبت</span>':'<span class="ptag sup">✔ إعلان رسمي</span>'}</div>
     <div class="pbody">${annEsc(a.text).replace(/\n/g,'<br>')}</div>
     ${supMode?`<div class="pact"><span onclick="pinPost(${a.id},${!a.pinned})">${a.pinned?'📌 إلغاء التثبيت':'📌 تثبيت'}</span><span class="del" onclick="delPost(${a.id})" title="حذف الإعلان">🗑️ حذف</span></div>`:''}
   </div>`).join('');
@@ -3262,7 +3115,7 @@ async function roomExport(){await ensureXLSX();const data=ROOM.map(a=>({'الط�
 
 /* ════ Login + student ════ */
 const student={name:'',id:'',org:'',sup:'',email:''};
-function applyStudent(){document.getElementById('sbName').textContent=student.name||'طالبة';document.getElementById('sbId').textContent=student.org?student.org:('الرقم: '+(student.id||'—'));
+function applyStudent(){document.getElementById('sbName').textContent=student.name||'طالبة';document.getElementById('sbId').textContent=student.org?'🏢 '+student.org:('الرقم: '+(student.id||'—'));
   document.getElementById('heroHi').textContent='أهلا بك'+(student.name?'، '+student.name:'');
   const m=document.getElementById('tMail');if(m)m.innerHTML=m.innerHTML.replace('(الاسم)',student.name||'(الاسم)').replace('(المؤسسة)',student.org||'(المؤسسة)');}
 /* ════ Login animated background (interactive particle network) ════ */
@@ -3319,7 +3172,7 @@ function prefillLogin(){
   }catch(e){return false;}
 }
 
-function logout(auto){persist();savePosts();clearIdle();speechSynthesis.cancel();supUnlocked=false;supMode=false;document.body.classList.remove('sup-on');try{localStorage.removeItem('rafiqaStudent');}catch(e){}
+function logout(auto){persist();savePosts();clearIdle();speechSynthesis.cancel();supUnlocked=false;supMode=false;try{localStorage.removeItem('rafiqaStudent');}catch(e){}
   document.getElementById('idleOv').classList.remove('show');
   ['lName','lId','lOrg','lSup','lEmail'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
   const filled=prefillLogin();
@@ -3334,7 +3187,7 @@ document.addEventListener('click',e=>{if(!e.target.closest('#audioPop')&&!e.targ
 let REPLIES={};
 function replyBox(n){const r=REPLIES&&REPLIES[n];if(!r||!r.text)return '';
   return '<div style="margin-top:11px;background:linear-gradient(135deg,rgba(224,89,60,.09),rgba(124,58,237,.09));border:1.5px solid rgba(224,89,60,.28);border-radius:14px;padding:11px 13px">'
-    +'<div style="font-weight:800;color:var(--clay);font-size:12px;margin-bottom:4px">رد المشرفة الأكاديمية</div>'
+    +'<div style="font-weight:800;color:var(--clay);font-size:12px;margin-bottom:4px">💬 رد المشرفة الأكاديمية</div>'
     +'<div style="font-size:13px;line-height:1.85;white-space:pre-wrap">'+escH(r.text)+'</div>'
     +(r.at?'<div style="font-size:10.5px;color:var(--muted);margin-top:5px">'+new Date(r.at).toLocaleString('ar-EG')+'</div>':'')
     +'</div>';}
@@ -3473,7 +3326,7 @@ function studentNotesCard(d){
 function dayStages(d){
   if(!d.stages||!d.stages.length)return '';
   let h='<section class="card card-3d" style="border:1.5px solid var(--teal)">'
-   +'<div class="card-title">مراحل التدخل المهني مع الحالة</div>'
+   +'<div class="card-title">🧭 مراحل التدخل المهني مع الحالة</div>'
    +'<p style="font-size:12.5px;color:var(--muted);margin:6px 0 14px">تذكير سريع بما درسته — اقرئيها قبل أن تبدئي، وحددي في نهاية كل يوم: <b>في أي مرحلة أنا الآن مع حالتي؟</b></p>';
   d.stages.forEach(function(s,i){
     h+='<div class="mstep"><div class="mwrap"><div class="mnum">'+ar(i+1)+'</div>'
@@ -3574,68 +3427,32 @@ function homeStats(){
   const replies=Object.keys(REPLIES||{}).filter(k=>REPLIES[k]&&REPLIES[k].text).length;
   return {tot:tot,dn:dn,pct:tot?Math.round(dn/tot*100):0,wtot:wtot,wdn:wdn,written:written,finished:finished,replies:replies};
 }
-/* السبت التالي لآخر يوم في الأسبوع — موعد رفع التقرير الأسبوعي */
-function nextSatLabel(d){
-  const M=['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
-  try{const s=(d&&d.date||'').replace(/[٠-٩]/g,function(c){return '٠١٢٣٤٥٦٧٨٩'.indexOf(c);}).trim().split(/\s+/);
-    const m=M.indexOf(s[1]),n=parseInt(s[0],10);if(m<0||!n)return 'السبت';
-    const dt=new Date(2026,m,n);do{dt.setDate(dt.getDate()+1);}while(dt.getDay()!==6);
-    return 'السبت '+ar(dt.getDate())+' '+M[dt.getMonth()];}catch(e){return 'السبت';}}
-/* العداد الختامي — آخر يوم تدريب: الخميس ٣ ديسمبر ٢٠٢٦ (أيام التدريب: الأحد والثلاثاء والخميس) */
-function endCountdown(){
-  const END=new Date(2026,11,3),t=new Date();t.setHours(0,0,0,0);
-  const cal=Math.round((END-t)/864e5);
-  if(cal<0)return '<div class="tp-box2 end"><div class="tp-k">انتهاء التدريب</div><div class="tp-v">اكتمل التدريب</div><div class="tp-d">الخميس ٣ ديسمبر ٢٠٢٦</div></div>';
-  let td=0;const d=new Date(t);d.setDate(d.getDate()+1);
-  for(;d<=END;d.setDate(d.getDate()+1)){const w=d.getDay();if(w===0||w===2||w===4)td++;}
-  const v=cal===0?'اليوم آخر يوم تدريب':'باقي '+ar(cal)+' '+(cal===1?'يوم':cal===2?'يومان':cal<=10?'أيام':'يوما');
-  const sub=cal===0?'':'<div class="tp-d">'+ar(td)+' '+(td===1?'يوم تدريبي':td<=10?'أيام تدريبية':'يوما تدريبيا')+' متبقية</div>';
-  return '<div class="tp-box2 end"><div class="tp-k">انتهاء التدريب</div><div class="tp-v">'+v+'</div>'+sub+'<div class="tp-d">الخميس ٣ ديسمبر ٢٠٢٦</div></div>';}
 function renderHome(){
   const strip=document.getElementById('statStrip');if(!strip)return;
-  strip.className=supMode?'stat-strip':'today-panel';document.body.classList.toggle('sup-on',!!supMode);
-  const pc=document.querySelector('#v-home .prog-card');if(pc)pc.style.display=supMode?'none':'';
   if(supMode){renderHomeSupervisor();return;}
   const st=homeStats(),cd=days.find(x=>x.n===state.cur)||days[0];
   const dayDone=(state.done[cd.n]?state.done[cd.n].size:0);
-  const cw=weekOf(cd.n),wds=weekDays(cw),dset=state.done[cd.n]||new Set();
-  const wrote=!!(answers.reflect[cd.n]&&(''+answers.reflect[cd.n]).trim());
 
-  /* «المطلوب اليوم» — أول ما تراه الطالبة، والمهام قابلة للتعليم مباشرة */
+  /* شريط الإحصاءات */
   strip.innerHTML=
-    '<div class="tp-main">'+
-      '<div class="tp-head"><h2>المطلوب اليوم</h2>'+
-        '<span class="tp-sub">'+cd.dow+' '+(cd.date||'')+' · '+cd.name+' · '+escH(cd.sub||'')+'</span></div>'+
-      '<ol class="tp-list">'+cd.tasks.map(function(t,i){const on=dset.has(i);
-        return '<li class="'+(on?'on':'')+'"><button type="button" onclick="toggleTask('+cd.n+','+i+')" aria-pressed="'+on+'">'+
-          '<span class="tp-box">'+(on?'✓':'')+'</span><span class="tp-t">'+t.t+'</span></button></li>';}).join('')+'</ol>'+
-      '<div class="tp-foot"><span>أنجزت <b>'+ar(dayDone)+' من '+ar(cd.tasks.length)+'</b> مهام اليوم</span>'+
-        '<button class="btn btn-primary btn-sm" onclick="go(\'week\',null)">صفحة مهام الأسبوع</button></div>'+
-    '</div>'+
-    '<aside class="tp-side">'+
-      endCountdown()+
-      '<div class="tp-box2"><div class="tp-k">أقرب موعد تسليم</div><div class="tp-v">التقرير الأسبوعي</div>'+
-        '<div class="tp-d">'+nextSatLabel(wds[wds.length-1])+' · قبل ٦:٠٠ صباحا</div><div class="tp-d">يرفع في بلاك بورد</div></div>'+
-      '<div class="tp-box2 '+(wrote?'ok':'warn')+'"><div class="tp-k">ملاحظات اليوم</div><div class="tp-v">'+(wrote?'مسجلة':'لم تسجل بعد')+'</div>'+
-        '<div class="tp-d"><a href="#" onclick="go(\'week\',null);return false">'+(wrote?'مراجعة الملاحظات':'كتابة الملاحظات')+'</a></div></div>'+
-    '</aside>';
+    statCard('ic-route','navy',ar(days.findIndex(x=>x.n===cd.n)+1)+' من '+ar(days.length),'يومك التدريبي')+
+    statCard('ic-check','',ar(st.wdn)+' من '+ar(st.wtot),'مهام الأسبوع')+
+    statCard('ic-pen','gold',ar(st.written)+' من '+ar(days.length),'أيام بملاحظات')+
+    statCard('ic-flag',st.finished?'':'warn',ar(st.finished)+' من '+ar(days.length),'أيام أنهيتها');
 
-  /* سجل الإنجاز — أشرطة رسمية بلا عبارات تحفيزية */
-  const bar=function(lbl,a,b){const p=b?Math.round(a/b*100):0;
-    return '<div class="pr"><div class="pr-l"><span>'+lbl+'</span><b dir="rtl">'+ar(a)+' من '+ar(b)+' <span class="pr-p">('+ar(p)+'٪)</span></b></div>'+
-      '<div class="pbar"><div class="pfill" style="width:'+p+'%"></div></div></div>';};
-  document.getElementById('featTitle').textContent='سجل الإنجاز';
-  document.getElementById('featSub').textContent=weekLabel(cw)+' · اليوم '+ar(dayIndexInWeek(cd.n))+' من '+ar(wds.length);
-  document.getElementById('progRows').innerHTML=
-    bar('مهام '+weekLabel(cw),st.wdn,st.wtot)+
-    bar('مهام الفصل كاملا',st.dn,st.tot)+
-    bar('أيام دونت فيها ملاحظات',st.written,days.length);
+  /* بطاقة التقدم */
+  document.getElementById('featTitle').textContent='تقدمك في الأسبوع التدريبي';
   document.getElementById('featNum').textContent=ar(st.dn)+'/'+ar(st.tot);
+  document.getElementById('featUnit').textContent='مهمة منجزة · '+ar(st.pct)+'٪';
+  const bar=document.getElementById('homeBar');if(bar)bar.style.width=st.pct+'%';
+  document.getElementById('featSub').textContent=
+    st.pct===100?('أكملت مهام '+weekLabel(weekOf(state.cur))+'.'):
+    'المتبقي '+ar(st.wtot-st.wdn)+' مهمة في '+weekLabel(weekOf(state.cur))+'.';
 
   /* الإجراءات السريعة */
   document.getElementById('qaGrid').innerHTML=
-    qaCard('ic-doc','navy','النماذج الرسمية','نموذج التقرير الأسبوعي والنماذج المعتمدة',"go('forms',null)")+
-    qaCard('ic-board','gold','لوحة الإعلانات','تعليمات المشرفة وآخر المستجدات',"go('community',null)")+
+    qaCard('ic-route','navy','مهام '+cd.name,ar(dayDone)+' من '+ar(cd.tasks.length)+' منجزة',"go('week',null)")+
+    qaCard('ic-pen','gold','ملاحظات اليوم',(answers.reflect[cd.n]&&(''+answers.reflect[cd.n]).trim())?'مسجلة — يمكنك تعديلها':'لم تسجل بعد',"go('week',null)")+
     qaCard('ic-mail','clay','مراسلة المشرفة','استفسار أو ظرف طارئ',"go('home',null);setTimeout(function(){var m=document.getElementById('mailCard');if(m)m.scrollIntoView({block:'center'});},120)")+
     qaCard('ic-book','sand','دليل التدريب','الضوابط والجدول والفيديوهات',"go('guide',null)");
     /* بطاقة «تدريب على مواقف محتملة» أزيلت بطلب المستخدمة (2026-08-29) — الميزة نفسها محفوظة بالكود.
@@ -3651,24 +3468,15 @@ function renderHome(){
 
   /* الأيام التدريبية */
   /* الأسبوع الحالي أولا ثم بقية الأسابيع كاملة — لا يحذف أي يوم سابق */
-  /* الأسبوع الحالي ظاهر، والأسابيع السابقة مطوية — الحالة تحسب بالترتيب الزمني */
-  const _cw=weekOf(state.cur),_ci=days.findIndex(function(x){return x.n===state.cur;});
-  const tlItem=function(d){
-    const done=!!state.fin[d.n],now=d.n===state.cur,past=days.findIndex(function(x){return x.n===d.n;})<_ci;
-    const cls=done?'is-done':(now?'is-now':(past?'is-late':''));
-    const status=done?'مكتمل':(now?'اليوم الحالي':(past?'غير مكتمل':'قادم'));
+  const _cw=weekOf(state.cur);
+  const _ordered=weekDays(_cw).concat(days.filter(function(d){return (d.wk||2)!==_cw;}));
+  document.getElementById('upcoming').innerHTML=_ordered.map(function(d){
+    const done=!!state.fin[d.n],now=d.n===state.cur;
+    const cls=done?'is-done':(now?'is-now':'');
+    const status=done?'منهى':(now?'يومك الحالي':'قادم');
     return '<li class="'+cls+'"><span class="tl-mark">'+(done?'✓':ar(dayIndexInWeek(d.n)))+'</span>'+
-      '<span class="tl-b"><span class="tl-t">'+d.name+' · '+d.dow+' '+(d.date||'')+'</span>'+
-      '<span class="tl-d">'+d.sub+'</span></span><span class="tl-s">'+status+'</span></li>';};
-  const _wks=[];days.forEach(function(d){const w=d.wk||2;if(_wks.indexOf(w)<0)_wks.push(w);});
-  const _cur=weekDays(_cw),_prev=_wks.filter(function(w){return w<_cw;}).reverse(),_next=_wks.filter(function(w){return w>_cw;});
-  const wkBlock=function(w){const ds=weekDays(w),fin=ds.filter(function(d){return state.fin[d.n];}).length;
-    return '<details class="tl-wk"><summary><span>'+weekLabel(w)+'</span><span class="tl-wk-m">'+ar(fin)+' من '+ar(ds.length)+' أيام مكتملة</span></summary>'+
-      '<ul class="tl">'+ds.map(tlItem).join('')+'</ul></details>';};
-  document.getElementById('upcoming').innerHTML=
-    '<div class="tl-cap">'+weekLabel(_cw)+'</div><ul class="tl">'+_cur.map(tlItem).join('')+'</ul>'+
-    (_next.length?'<div class="tl-cap">الأسابيع القادمة</div>'+_next.map(wkBlock).join(''):'')+
-    (_prev.length?'<div class="tl-cap">الأسابيع السابقة</div>'+_prev.map(wkBlock).join(''):'');
+      '<span class="tl-b"><span class="tl-t">'+weekLabel(d.wk||2)+' · '+d.name+' · '+d.dow+' '+(d.date||'')+'</span>'+
+      '<span class="tl-d">'+d.sub+'</span></span><span class="tl-s">'+status+'</span></li>';}).join('');
 
   /* مراحل التدريب */
   const ms=[
