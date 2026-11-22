@@ -950,6 +950,14 @@ textarea:focus,input:focus,select:focus{background:#fff;border-color:var(--teal-
 @media (max-width:767px){.tk{margin:8px 12px 0}.tk-msg{font-size:13.5px}}
 @media (prefers-reduced-motion:reduce){.tk-msg,.tk-msg.out{transform:none}}
 </style>
+<style>
+/* روابط الصفحة الرئيسية إلى المهام (2026-11-22) */
+.tl li.tl-go,.stat.stat-go{cursor:pointer;transition:transform .15s,box-shadow .15s,border-color .15s}
+.tl li.tl-go:hover,.stat.stat-go:hover{border-color:var(--teal-2);box-shadow:0 4px 14px rgba(18,48,61,.10);transform:translateY(-1px)}
+.tl li.tl-go:focus-visible,.stat.stat-go:focus-visible{outline:2px solid var(--teal-2);outline-offset:2px}
+.tl-arrow{font-weight:900;margin-inline-start:4px;color:var(--teal)}
+.tl .tl-t,.tl .tl-d{display:block}
+</style>
 </head>
 <body>
 <h2 class="sr-only">التدريب الميداني — دليل تعليمي حديث لطالبات التدريب الميداني في الخدمة الاجتماعية</h2>
@@ -3494,9 +3502,13 @@ async function sendDayReply(uid,day){
 /* ════════ الشاشة الرئيسية: تجربة تطبيق تتكيف مع الدور ════════
    كل الأرقام مشتقة من حالة التطبيق الفعلية — لا بيانات مفترضة. */
 function ico(id){return '<svg viewBox="0 0 24 24"><use href="#'+id+'"/></svg>';}
-function statCard(icon,tone,val,label){
-  return '<div class="stat"><div class="stat-ic '+tone+'">'+ico(icon)+'</div>'+
+function statCard(icon,tone,val,label,fn){
+  return '<div class="stat'+(fn?' stat-go':'')+'"'+(fn?' role="button" tabindex="0" onclick="'+fn+'" onkeydown="if(event.key===\'Enter\'){'+fn+'}"':'')+'><div class="stat-ic '+tone+'">'+ico(icon)+'</div>'+
     '<div><div class="stat-v">'+val+'</div><div class="stat-l">'+label+'</div></div></div>';}
+/* فتح مهام يوم محدد من الصفحة الرئيسية */
+function homeOpenDay(n){if(!days.some(function(d){return d.n===n;}))return;
+  if(state.cur!==n){state.cur=n;persist();}
+  go('week',null);try{buildPath();renderDay();}catch(e){}window.scrollTo(0,0);}
 function qaCard(icon,tone,title,sub,fn,badge){
   return '<button class="qa" onclick="'+fn+'">'+(badge?'<span class="badge">'+badge+'</span>':'')+
     '<span class="qa-ic '+tone+'">'+ico(icon)+'</span>'+
@@ -3520,8 +3532,8 @@ function renderHome(){
 
   /* شريط الإحصاءات */
   strip.innerHTML=
-    statCard('ic-route','navy',ar(days.findIndex(x=>x.n===cd.n)+1)+' من '+ar(days.length),'يومك التدريبي')+
-    statCard('ic-check','',ar(st.wdn)+' من '+ar(st.wtot),'مهام الأسبوع')+
+    statCard('ic-route','navy',ar(days.findIndex(x=>x.n===cd.n)+1)+' من '+ar(days.length),'يومك التدريبي',"go('week',null)")+
+    statCard('ic-check','',ar(st.wdn)+' من '+ar(st.wtot),'مهام الأسبوع',"go('week',null)")+
     statCard('ic-pen','gold',ar(st.written)+' من '+ar(days.length),'أيام بملاحظات')+
     statCard('ic-flag',st.finished?'':'warn',ar(st.finished)+' من '+ar(days.length),'أيام أنهيتها');
 
@@ -3560,9 +3572,9 @@ function renderHome(){
     const done=!!state.fin[d.n],now=d.n===state.cur;
     const cls=done?'is-done':(now?'is-now':'');
     const status=done?'منهى':(now?'يومك الحالي':'قادم');
-    return '<li class="'+cls+'"><span class="tl-mark">'+(done?'✓':ar(dayIndexInWeek(d.n)))+'</span>'+
+    return '<li class="'+cls+' tl-go" role="button" tabindex="0" title="افتحي مهام هذا اليوم" onclick="homeOpenDay('+d.n+')" onkeydown="if(event.key===\'Enter\')homeOpenDay('+d.n+')"><span class="tl-mark">'+(done?'✓':ar(dayIndexInWeek(d.n)))+'</span>'+
       '<span class="tl-b"><span class="tl-t">'+weekLabel(d.wk||2)+' · '+d.name+' · '+d.dow+' '+(d.date||'')+'</span>'+
-      '<span class="tl-d">'+d.sub+'</span></span><span class="tl-s">'+status+'</span></li>';}).join('');
+      '<span class="tl-d">'+d.sub+'</span></span><span class="tl-s">'+status+' <span class="tl-arrow">‹</span></span></li>';}).join('');
 
   /* مراحل التدريب */
   const ms=[
