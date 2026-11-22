@@ -351,14 +351,14 @@ input[type=checkbox]{accent-color:var(--teal);width:auto}
 /* ═══ الدخول ═══ */
 #loginOv{background:#0A1E28;background-image:
     radial-gradient(120% 90% at 15% 0%,rgba(42,138,128,.42) 0%,transparent 55%),
-    radial-gradient(100% 80% at 90% 10%,rgba(86,66,184,.40) 0%,transparent 58%),
+    radial-gradient(100% 80% at 90% 10%,rgba(31,111,104,.38) 0%,transparent 58%),
     radial-gradient(120% 100% at 50% 110%,rgba(176,85,46,.30) 0%,transparent 60%),
     linear-gradient(160deg,#0B2431 0%,#12303D 38%,#173F52 68%,#0A1E28 100%);
   background-attachment:fixed}
 #loginOv::before{content:"";position:absolute;inset:-20%;pointer-events:none;z-index:0;
   background:
     radial-gradient(38% 30% at 22% 28%,rgba(42,138,128,.55) 0%,transparent 62%),
-    radial-gradient(34% 28% at 78% 24%,rgba(124,58,237,.45) 0%,transparent 62%),
+    radial-gradient(34% 28% at 78% 24%,rgba(42,138,128,.40) 0%,transparent 62%),
     radial-gradient(40% 32% at 60% 82%,rgba(31,111,104,.45) 0%,transparent 62%);
   filter:blur(42px);opacity:.85;animation:loginAurora 22s ease-in-out infinite alternate}
 #loginOv::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:0;opacity:.14;
@@ -927,6 +927,29 @@ textarea:focus,input:focus,select:focus{background:#fff;border-color:var(--teal-
 .end-cd .ec-d{font-size:13px;color:var(--muted)}
 
 </style>
+<style>
+/* ═══ لمسات تشطيب بصرية (2026-11-21) — للتراجع: احذفي هذا الوسم كاملا ═══ */
+.nav-item .bdg{white-space:nowrap;flex:none;line-height:1.5}
+#weekBdg{display:none}
+.wk-tabs{flex-wrap:nowrap;overflow-x:auto;scroll-snap-type:x proximity;padding-bottom:6px;scrollbar-width:thin;-webkit-overflow-scrolling:touch}
+.wk-tab{flex:0 0 auto;min-width:150px;scroll-snap-align:center}
+.login-card .lf div[style*="font-size:10.5px"]{font-size:12px!important;line-height:1.6}
+@media (max-width:767px){.feature-num{order:-1;margin-bottom:6px}}
+</style>
+<style>
+/* شريط تذكير العروض (2026-11-21): رسالة تدخل من اليمين، تتوقف، ثم تخرج إلى اليسار */
+.tk{position:relative;align-items:stretch;margin:10px var(--s5,20px) 0;border-radius:12px;overflow:hidden;
+  background:linear-gradient(90deg,#B0552E,#C8663A);color:#fff;box-shadow:0 4px 14px rgba(176,85,46,.25)}
+.tk-lb{flex:none;display:flex;align-items:center;padding:0 14px;font-weight:900;font-size:13.5px;background:rgba(0,0,0,.18);white-space:nowrap;z-index:1}
+.tk-win{flex:1;display:grid;overflow:hidden;padding:10px 14px}
+.tk-msg{grid-area:1/1;align-self:center;font-size:14.5px;font-weight:600;line-height:1.6;
+  transform:translateX(110%);opacity:0;transition:transform .8s cubic-bezier(.2,.7,.2,1),opacity .8s}
+.tk-msg b{color:#FFF3D6;font-weight:900}
+.tk-msg.in{transform:translateX(0);opacity:1}
+.tk-msg.out{transform:translateX(-110%);opacity:0}
+@media (max-width:767px){.tk{margin:8px 12px 0}.tk-msg{font-size:13.5px}}
+@media (prefers-reduced-motion:reduce){.tk-msg,.tk-msg.out{transform:none}}
+</style>
 </head>
 <body>
 <h2 class="sr-only">التدريب الميداني — دليل تعليمي حديث لطالبات التدريب الميداني في الخدمة الاجتماعية</h2>
@@ -1025,6 +1048,14 @@ textarea:focus,input:focus,select:focus{background:#fff;border-color:var(--teal-
       <button class="btn btn-ghost btn-sm" onclick="logout()">تسجيل الخروج</button>
     </div>
 
+    <div class="tk" id="presTicker" style="display:none" role="status" aria-live="polite" aria-label="تذكير بعروض التدريب الميداني">
+      <div class="tk-lb">🎤 تذكير</div>
+      <div class="tk-win">
+        <div class="tk-msg">تبدأ <b>عروض التدريب الميداني</b> في <b>الأسبوع التدريبي الرابع عشر</b>، من <b>الأحد ٢٩ نوفمبر</b>. ابدئي الاستعداد لعرضك من الآن.</div>
+        <div class="tk-msg">راعي السرية في عرضك: لا تعرضي أي حالة أو تدخل مهني سري، ولا أي بيانات تعريفية.</div>
+        <div class="tk-msg">تابعي خانة <b>العروض</b> في بلاك بورد، ويبلغ بموعد كل عرض ومكانه لاحقا.</div>
+      </div>
+    </div>
     <div class="content">
 
       <!-- ═══ HOME (minimal) ═══ -->
@@ -1150,8 +1181,7 @@ textarea:focus,input:focus,select:focus{background:#fff;border-color:var(--teal-
 
       <!-- ═══ WEEK ═══ -->
       <div class="view" id="v-week">
-        <div class="banner"><div class="bic">🗺️</div><div>أرافقك يوما بيوم. المهام <b>اختيارية</b> — أكملي ما ينطبق. إجاباتك تحفظ تلقائيا.</div></div>
-        <div class="banner pink"><div class="bic">ℹ️</div><div><b>ملاحظة مهمة:</b> ليس بالضرورة أن تنجز جميع هذه المهام خلال هذا الأسبوع، وقد يكون لدى <b>الأخصائية الاجتماعية في المؤسسة</b> ترتيب آخر لها بحسب طبيعة العمل وظروف المؤسسة. اتبعي توجيهها، ودوني ما أنجزته فعلا.</div></div>
+        <div class="banner"><div class="bic">🗺️</div><div>المهام <b>اختيارية</b> وإجاباتك تحفظ تلقائيا. قد يكون لدى <b>الأخصائية الاجتماعية في المؤسسة</b> ترتيب آخر بحسب ظروف العمل، فاتبعي توجيهها ودوني ما أنجزته فعلا.</div></div>
         <div class="card card-3d"><div class="card-head"><div class="card-title" id="weekTitle">الأسبوع التدريبي الثاني</div>
             <span class="chip" id="weekChip">٣٠ أغسطس — ٣ سبتمبر</span></div>
             <div class="wk-tabs" id="weekTabs"></div>
@@ -1426,10 +1456,9 @@ textarea:focus,input:focus,select:focus{background:#fff;border-color:var(--teal-
 <div class="ov show" id="loginOv">
   <!-- أوقف الشعاع الدوار حول واجهة الدخول بطلب المستخدمة (2026-08-19) -->
   <div class="login-card" style="position:relative;z-index:5">
-    <div style="display:inline-block;background:rgba(86,66,184,.1);color:var(--navy);font-size:11px;font-weight:800;padding:4px 12px;border-radius:99px;margin-bottom:8px">نسخة تجريبية</div>
+    <div style="display:inline-block;background:var(--teal-soft);color:var(--teal);font-size:11px;font-weight:800;padding:4px 12px;border-radius:99px;margin-bottom:8px">نسخة تجريبية</div>
     <h1 style="margin-top:0">التدريب الميداني</h1>
-    <div class="ls" style="margin-bottom:6px">لطالبات التدريب الميداني · <b>خدمة اجتماعية</b><br>بإشراف الأستاذة <b style="color:var(--navy)">ربى أبوطربوش</b></div>
-    <div class="ls">دليل أسبوعك التدريبي</div>
+    <div class="ls" style="margin-bottom:6px">دليل أسبوعك التدريبي · <b>برنامج الخدمة الاجتماعية</b><br>بإشراف الأستاذة <b style="color:var(--navy)">ربى أبوطربوش</b></div>
     <!-- أزيلت خانة عداد اليوم التدريبي بطلب المستخدمة (2026-08-24).
          لإعادتها: أعيدي السطر التالي وأزيلي تعليق استدعاء updateCountdown في نهاية الملف.
     <div id="countdown" class="cd-chip"></div> -->
@@ -1455,18 +1484,18 @@ textarea:focus,input:focus,select:focus{background:#fff;border-color:var(--teal-
       <div class="lerr" id="lErr">الرجاء تعبئة الحقول المطلوبة (الرقم الجامعي ٦ أرقام على الأقل).</div></div>
     <div class="lf"><label for="lEmail">البريد الجامعي <span class="req">*</span></label>
       <input id="lEmail" type="email" dir="ltr" style="text-align:left" placeholder="example@qu.edu.qa" onkeydown="if(event.key==='Enter')doLogin()">
-      <div style="font-size:10.5px;color:var(--muted);margin-top:4px">مطلوب للدخول — يصلك عليه إشعار عند رد المشرفة على ملاحظاتك.</div>
-      <div class="lerr" id="eErr">الرجاء كتابة البريد الجامعي بصيغة صحيحة (مثال: example@qu.edu.qa).</div></div>
+      <div style="font-size:10.5px;color:var(--muted);margin-top:4px">بريد جامعة قطر فقط (ينتهي بـ @qu.edu.qa) — يصلك عليه إشعار عند رد المشرفة على ملاحظاتك.</div>
+      <div class="lerr" id="eErr">الدخول بالبريد الجامعي لجامعة قطر فقط، وينتهي بـ <b dir="ltr">@qu.edu.qa</b>. لا يقبل أي بريد آخر.</div></div>
     <input type="hidden" id="lSup" value="">
-    <label for="lConsent" style="display:flex;gap:9px;align-items:flex-start;text-align:right;background:rgba(86,66,184,.06);border:1.5px solid rgba(86,66,184,.2);border-radius:14px;padding:11px 12px;margin:4px 0 12px;cursor:pointer;font-size:11.5px;line-height:1.75;color:var(--ink)">
+    <label for="lConsent" style="display:flex;gap:9px;align-items:flex-start;text-align:right;background:rgba(42,138,128,.06);border:1.5px solid rgba(42,138,128,.22);border-radius:14px;padding:11px 12px;margin:4px 0 12px;cursor:pointer;font-size:11.5px;line-height:1.75;color:var(--ink)">
       <input type="checkbox" id="lConsent" style="width:17px;height:17px;min-width:17px;margin-top:2px;accent-color:#12303D;cursor:pointer">
       <span>أوافق على استخدام بياناتي داخل <b>التطبيق التجريبي</b> لأغراض متابعة التدريب الميداني وتطوير التطبيق. بياناتي <b>لا تستخدم في التقييم الأكاديمي</b> ولا تشارك خارج فريق الإشراف، ويمكنني طلب حذفها في أي وقت.</span>
     </label>
     <div class="lerr" id="cErr" style="margin-bottom:10px">للمتابعة، يرجى الموافقة على استخدام البيانات في النسخة التجريبية.</div>
     <button class="btn btn-primary" style="width:100%" onclick="doLogin()">دخول ←</button>
-    <div style="margin-top:20px;padding:16px;background:linear-gradient(135deg,rgba(86,66,184,.08),rgba(124,58,237,.12));border-radius:16px;border:1.5px solid rgba(86,66,184,.2)">
+    <div style="margin-top:20px;padding:16px;background:rgba(42,138,128,.07);border-radius:16px;border:1.5px solid rgba(42,138,128,.22)">
       <div style="text-align:center;font-size:12px;color:var(--navy);margin-bottom:10px;font-weight:800;letter-spacing:.8px">— دخول المشرفة الأكاديمية —</div>
-      <button class="btn" style="width:100%;background:linear-gradient(135deg,#12303D,#2A8A80);color:#fff;font-weight:800;border:none;box-shadow:0 6px 20px rgba(86,66,184,.45);font-size:14.5px;padding:13px 20px" onclick="supLogin()">الدخول كمشرفة أكاديمية</button>
+      <button class="btn" style="width:100%;background:linear-gradient(135deg,#12303D,#2A8A80);color:#fff;font-weight:800;border:none;box-shadow:0 6px 18px rgba(18,48,61,.30);font-size:14.5px;padding:13px 20px" onclick="supLogin()">الدخول كمشرفة أكاديمية</button>
     </div>
   </div>
 </div>
@@ -2083,7 +2112,43 @@ const days=[
          {t:'اكتبي توصية عملية واحدة لتحسين أحد النشاطين استنادا إلى التحليل، وناقشي قابليتها للتطبيق مع الأخصائية'},
          {t:'أضيفي التقييم المختصر والمصفوفة والتوصية إلى ملف الإنجاز، ولخصي ما تعلمته في التقرير الأسبوعي، وأعدي خطة الأسبوع الثالث عشر'},
          {t:'استكملي توقيع سجل الحضور والانصراف'}],
-  reflect:'ما التحسين الذي تقترحينه؟ وأي نتيجة من التحليل تدعم اقتراحك؟'}
+  reflect:'ما التحسين الذي تقترحينه؟ وأي نتيجة من التحليل تدعم اقتراحك؟'},
+
+ /* ═══ الأسبوع التدريبي الثالث عشر · ٢٢ / ٢٤ / ٢٦ نوفمبر ٢٠٢٦ (أضيف 2026-11-20، وعدل بطلب المشرفة) ═══
+    الهدف: القيام بعملية الإنهاء مع وضع المقترحات والتوصيات لتنمية وتطوير الجوانب الإيجابية في كافة الأنشطة المهنية،
+    وكيفية تلافي السلبيات أثناء التدريب الميداني. تكليف الطلاب بكتابة التقارير النهائية لتنمية قدراتهم على تقديم
+    المقترحات والتوصيات وعرض الإنجازات. */
+ {n:31,wk:13,name:'اليوم الأول',dow:'الأحد',date:'٢٢ نوفمبر',sub:'مؤشرات الإنهاء للحالات والأنشطة · ٦ ساعات',
+  tip:'<b>ما المقصود بمؤشرات الإنهاء؟</b><br>علامات واضحة تدل على أن الحالة أو النشاط وصل إلى مرحلة يمكن فيها الإنهاء أو التسليم.'
+   +'<div style="margin-top:8px;font-size:12.5px"><b>مؤشرات الإنهاء مع الحالة، مثل:</b><br>• تحقق الهدف المتفق عليه أو جزء واضح منه.<br>• قدرة العميل على التعامل مع المشكلة بدعم أقل.<br>• وجود من يواصل المتابعة بعد انتهاء تدريبك.<br>• انتهاء مدة التدريب، فيكون الإنهاء مخططا مع تحويل المتابعة للأخصائية.</div>'
+   +'<div style="margin-top:8px;font-size:12.5px"><b>مؤشرات الإنهاء للنشاط، مثل:</b><br>• تنفيذ ما خطط له.<br>• معرفة أثره على المستفيدين، بملاحظة أو استبيان.<br>• توثيقه، وتسليم مواده أو نتائجه للمؤسسة.</div>'
+   +'<div style="margin-top:8px;font-size:12.5px"><b>أمثلة إرشادية:</b><br><b>في المدرسة:</b> تحسن حضور الطالبة أو تفاعلها في الصف، واستعدادها لمواصلة المتابعة مع الأخصائية.<br><b>في المستشفى:</b> استقرار وضع المريض الاجتماعي، أو إحالته إلى جهة مناسبة، أو قرب موعد خروجه.</div>',
+  note:'<b>هدف الأسبوع</b><br>القيام بعملية الإنهاء، ووضع المقترحات والتوصيات لتنمية الجوانب الإيجابية في الأنشطة المهنية وتلافي السلبيات، وكتابة التقرير النهائي وعرض الإنجازات.'
+   +'<div style="margin-top:10px;font-size:12.5px"><b>إرشادات الأسبوع</b><br>نفذي المهام ضمن مشاركتك اليومية المعتادة. والإنهاء مرحلة مهنية لها خطوات، وليس مجرد توقف عن الحضور: يبدأ مبكرا، ويتدرج، ويوثق، وتسلم فيه المتابعة للأخصائية. ولا تعدي العميل بالتواصل بعد انتهاء التدريب، ولا تتبادلي معه أرقاما أو حسابات شخصية.</div>'
+   +'<div style="margin-top:10px;font-size:12.5px"><b>👤 طبيعة العمل: فردي.</b> تكتب كل طالبة تقريرها وتوصياتها بصياغتها الخاصة.</div>',
+  tasks:[{t:'حددي مؤشرات الإنهاء لكل حالة تتابعينها: ما الذي يدل على أنها جاهزة للإنهاء؟ دون بيانات تعريفية'},
+         {t:'حددي مؤشرات الإنهاء لكل نشاط شاركت فيه: ما الذي يدل على أنه اكتمل؟'},
+         {t:'ناقشي مع الأخصائية خطة الإنهاء لكل حالة: متى تبدئين، وكيف'},
+         {t:'استكملي توقيع سجل الحضور والانصراف'}],
+  reflect:'أي مؤشر جعلك تشعرين أن إحدى الحالات أصبحت جاهزة للإنهاء؟'},
+
+ {n:32,wk:13,name:'اليوم الثاني',dow:'الثلاثاء',date:'٢٤ نوفمبر',sub:'نموي المهني · ٦ ساعات',
+  tip:'<b>كيف تنفذين مهام اليوم:</b><ol style="margin:6px 0 0;padding-inline-start:20px;display:grid;gap:4px"><li>ارجعي إلى ملاحظاتك في الأسابيع الأولى، وقارنيها بما تستطيعين فعله الآن.</li><li>لكل مهارة اسألي: ما الذي أصبحت أفعله بثقة أكبر؟ وما الذي ما زال صعبا؟</li><li>صيغي التوصية لنفسك بحيث تجيب عن: ماذا سأفعل؟ ومتى؟ وكيف أعرف أنني تحسنت؟</li></ol><div style="margin-top:8px;font-size:12.5px"><b>أمثلة إرشادية:</b><br><b>جانب إيجابي وتنميته:</b> «أصبحت أطرح أسئلة مفتوحة بسهولة، وسأطور ذلك بالتدرب على عكس المشاعر».<br><b>سلبية وتلافيها:</b> «كنت أتأخر في توثيق المقابلة، وسأدون ملاحظاتي في اليوم نفسه».</div>',
+  tasks:[{t:'قارني أداءك بين الأسبوع الأول والآن في ثلاث مهارات: المقابلة، والتواصل، والتوثيق'},
+         {t:'اسألي الأخصائية عن جانب تميزت فيه، وجانب تحتاجين إلى تطويره'},
+         {t:'حولي ذلك إلى توصيتين لنفسك: كيف أنمي ما أجيده؟ وكيف أتلافى ما أخطأت فيه؟'},
+         {t:'استكملي توقيع سجل الحضور والانصراف'}],
+  reflect:'ما الذي تغير فيك مهنيا منذ الأسبوع الأول؟'},
+
+ {n:33,wk:13,name:'اليوم الثالث',dow:'الخميس',date:'٢٦ نوفمبر',sub:'الإنجازات وإتمام الإنهاء · ٦ ساعات',
+  tip:'<b>كيف تنفذين مهام اليوم:</b><ol style="margin:6px 0 0;padding-inline-start:20px;display:grid;gap:4px"><li>في اللقاء الختامي راجعي مع العميل ما تحقق، واستمعي لشعوره تجاه الإنهاء، وأكدي له أن المتابعة مستمرة مع الأخصائية.</li><li>اختاري لعرضك إنجازا موثقا في ملف الإنجاز، لا وصفا عاما.</li><li>لا يكون العرض باختيار حالة تدخل مهني سرية، واحذفي أي اسم أو صورة أو معلومة تكشف الهوية.</li><li>التزمي بتعليمات التقرير النهائي المعلنة في بلاك بورد.</li></ol>',
+  note:'<b>مواعيد مهمة:</b><br>• التقرير الأسبوعي: يرفع في بلاك بورد يوم <b>السبت ٢٨ نوفمبر قبل الساعة السادسة صباحا</b>.<br>• العروض: تبدأ يوم <b>الأحد ٢٩ نوفمبر</b>، ويبلغ بموعد كل عرض ومكانه لاحقا. راجعي خانة العروض في بلاك بورد.<br>• الدوام في المؤسسات: حتى نهاية يوم <b>الخميس ٣ ديسمبر</b>.<div style="margin-top:10px"><a href="https://elearning.qu.edu.qa/" target="_blank" rel="noopener" class="btn btn-primary btn-sm">فتح بلاك بورد</a></div>',
+  note2:'<b>واجهتك صعوبة هذا الأسبوع؟</b> راسلي المشرفة الأكاديمية من بطاقة «مراسلة المشرفة الأكاديمية» في الصفحة الرئيسية، أو احضري الساعات المكتبية. طلب الدعم جزء من التدريب المهني، لا ضعفا فيه.<br><span style="font-size:12px">🕐 <b>الاثنين</b> ١١:٠٠–١٢:٠٠ &nbsp;|&nbsp; <b>الأربعاء</b> ٨:٣٠–٩:٣٠ &nbsp;·&nbsp; مكتب 237 · مبنى البنات C04</span>',
+  tasks:[{t:'أجري لقاء ختاميا مع حالة واحدة على الأقل، وسلمي الأخصائية ملخصا بما أنجز وما يحتاج إلى متابعة'},
+         {t:'اختاري إنجازا واحدا لعرضك، واكتبي: ما الحاجة؟ وماذا فعلت؟ وما الأثر؟'},
+         {t:'اكتبي توصية واحدة للمؤسسة'},
+         {t:'لخصي ما تعلمته في التقرير الأسبوعي، واستكملي توقيع سجل الحضور والانصراف'}],
+  reflect:'ما الإنجاز الذي اخترته لعرضك؟ ولماذا؟'}
 ];
 /* أرقام الأيام — مشتقة من المصفوفة أعلاه حتى لا تنسى عند إضافة أسبوع جديد */
 function dayNums(){return days.map(function(d){return d.n;});}
@@ -2167,6 +2232,7 @@ function buildWeekTabs(){
     return '<button class="wk-tab'+(w===cur?' on':'')+'" onclick="goWeek('+w+')">'+
       weekLabel(w)+'<small>'+weekRange(w)+(fin?' · '+ar(fin)+' من '+ar(list.length)+' ✓':'')+'</small></button>';
   }).join('');
+  try{const on=host.querySelector('.wk-tab.on');if(on&&host.offsetParent)on.scrollIntoView({block:'nearest',inline:'center'});}catch(e){}
 }
 function buildPath(){const w=document.getElementById('daypath');w.innerHTML='';
   buildWeekTabs();
@@ -2464,7 +2530,22 @@ function annNewOnes(){const seen=annSeenId();return posts.filter(a=>Number(a.id)
 function annBadge(n){
   const el=document.getElementById('annBadge');if(el){el.textContent=n?ar(n)+' جديد':'';el.style.display=n?'':'none';}
   const tb=document.getElementById('annDot');if(tb)tb.style.display=n?'':'none';}
+/* شريط تذكير العروض (2026-11-21): للطالبات فقط، من بداية الأسبوع 13 (الأحد 22 نوفمبر) حتى مساء الخميس 26 نوفمبر (6 مساء بتوقيت قطر) */
+const PRES_FROM=new Date('2026-11-22T00:00:00+03:00').getTime(),PRES_END=new Date('2026-11-26T18:00:00+03:00').getTime();
+function presTicker(){const el=document.getElementById('presTicker');if(!el)return;
+  const now=new Date().getTime();
+  const on=!supMode&&!!student.id&&now>=PRES_FROM&&now<PRES_END;el.style.display=on?'flex':'none';presRun(on);}
+let PRES_T=null,PRES_I=-1;
+function presStep(){if(new Date().getTime()>=PRES_END){presTicker();return;}
+  const ms=document.querySelectorAll('#presTicker .tk-msg');if(!ms.length)return;
+  const prev=ms[PRES_I]||null;PRES_I=(PRES_I+1)%ms.length;const cur=ms[PRES_I];
+  if(prev&&prev!==cur){prev.classList.remove('in');prev.classList.add('out');}
+  cur.classList.remove('out');void cur.offsetWidth;cur.classList.add('in');
+  setTimeout(function(){ms.forEach(function(x){if(x!==cur)x.classList.remove('out');});},900);}
+function presRun(on){if(on&&!PRES_T){PRES_I=-1;presStep();PRES_T=setInterval(presStep,7000);}
+  if(!on&&PRES_T){clearInterval(PRES_T);PRES_T=null;}}
 function annAlert(){
+  try{presTicker();}catch(e){}
   if(supMode){annBadge(0);return;}
   /* لا تعرض النافذة وصفحة الدخول أو الترحيب مفتوحة — تستدعى ثانية بعد إغلاق الترحيب */
   const li=document.getElementById('loginOv'),wl=document.getElementById('welcomeOv'),bk=document.getElementById('breakOv');
@@ -3100,6 +3181,7 @@ function renderPicks(){const body=document.getElementById('roomPicksBody');if(!b
     const old=wks.slice(1);
     if(old.length)h+='<details style="margin-top:10px"><summary style="cursor:pointer;font-size:13px;font-weight:700">الأسابيع السابقة</summary>'+old.map(w=>'<div style="margin-top:8px"><div style="font-size:12.5px;font-weight:800;margin-bottom:6px">'+weekLabel(w)+'</div><div class="wp-grid">'+PICKS.filter(p=>p.wk===w).map(tile).join('')+'</div></div>').join('')+'</details>';}
   else if(supMode)h+='<div class="empty">لم تختاري نشاطا بعد.</div>';
+  else h+='<div class="empty">يعلن اختيار هذا الأسبوع قريبا.</div>';
   body.innerHTML=h;}
 function roomGoTo(id){let el=document.getElementById('rm'+id);
   if(!el){const f=document.getElementById('roomOrg');f.value=supMode?'':'__all';document.getElementById('roomKind').value='';renderRoom();el=document.getElementById('rm'+id);}
@@ -3117,6 +3199,7 @@ async function roomExport(){await ensureXLSX();const data=ROOM.map(a=>({'الط�
 const student={name:'',id:'',org:'',sup:'',email:''};
 function applyStudent(){document.getElementById('sbName').textContent=student.name||'طالبة';document.getElementById('sbId').textContent=student.org?'🏢 '+student.org:('الرقم: '+(student.id||'—'));
   document.getElementById('heroHi').textContent='أهلا بك'+(student.name?'، '+student.name:'');
+  try{presTicker();}catch(e){}
   const m=document.getElementById('tMail');if(m)m.innerHTML=m.innerHTML.replace('(الاسم)',student.name||'(الاسم)').replace('(المؤسسة)',student.org||'(المؤسسة)');}
 /* ════ Login animated background (interactive particle network) ════ */
 /* حركة أشعة صفحة الدخول — تعمل فقط أثناء ظهور الصفحة وتتوقف تلقائيا بعد الدخول */
@@ -3124,10 +3207,12 @@ const _rays={raf:0,timer:null,sp:null,head:0,angle:0};
 function startLoginFX(){/* أوقف الشعاع الدوار — لإعادته: استرجعي عنصر loginRays والنسخة السابقة من هذه الدالة من النسخة الاحتياطية */}
 function stopLoginFX(){cancelAnimationFrame(_rays.raf);clearInterval(_rays.timer);}
 
-function doLogin(){const name=document.getElementById('lName').value.trim(),id=document.getElementById('lId').value.trim(),org=document.getElementById('lOrg').value.trim(),sup=document.getElementById('lSup').value.trim(),email=document.getElementById('lEmail').value.trim();
+/* الدخول بالبريد الجامعي فقط: ينتهي بـ @qu.edu.qa (أضيف 2026-11-21 بطلب المشرفة؛ يطبق على كل دخول جديد) */
+function isQuEmail(e){return /^[a-z0-9._%+-]+@qu\.edu\.qa$/.test(String(e||'').trim().toLowerCase());}
+function doLogin(){const name=document.getElementById('lName').value.trim(),id=document.getElementById('lId').value.trim(),org=document.getElementById('lOrg').value.trim(),sup=document.getElementById('lSup').value.trim(),email=document.getElementById('lEmail').value.trim().toLowerCase();
   if(name.length<2||!/^[0-9]{6,}$/.test(id)||org.length<2){document.getElementById('lErr').style.display='block';return;}
   document.getElementById('lErr').style.display='none';
-  if(!email||!/^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(email)){document.getElementById('eErr').style.display='block';return;}
+  if(!isQuEmail(email)){document.getElementById('eErr').style.display='block';return;}
   document.getElementById('eErr').style.display='none';
   var _cs=document.getElementById('lConsent');
   if(_cs&&!_cs.checked){document.getElementById('cErr').style.display='block';return;}
@@ -3186,7 +3271,7 @@ document.addEventListener('click',e=>{if(!e.target.closest('#audioPop')&&!e.targ
 /* ════ ملاحظات الطالبة وردود المشرفة ════ */
 let REPLIES={};
 function replyBox(n){const r=REPLIES&&REPLIES[n];if(!r||!r.text)return '';
-  return '<div style="margin-top:11px;background:linear-gradient(135deg,rgba(224,89,60,.09),rgba(124,58,237,.09));border:1.5px solid rgba(224,89,60,.28);border-radius:14px;padding:11px 13px">'
+  return '<div style="margin-top:11px;background:rgba(224,89,60,.08);border:1.5px solid rgba(224,89,60,.28);border-radius:14px;padding:11px 13px">'
     +'<div style="font-weight:800;color:var(--clay);font-size:12px;margin-bottom:4px">💬 رد المشرفة الأكاديمية</div>'
     +'<div style="font-size:13px;line-height:1.85;white-space:pre-wrap">'+escH(r.text)+'</div>'
     +(r.at?'<div style="font-size:10.5px;color:var(--muted);margin-top:5px">'+new Date(r.at).toLocaleString('ar-EG')+'</div>':'')
@@ -3442,11 +3527,12 @@ function renderHome(){
 
   /* بطاقة التقدم */
   document.getElementById('featTitle').textContent='تقدمك في الأسبوع التدريبي';
-  document.getElementById('featNum').textContent=ar(st.dn)+'/'+ar(st.tot);
-  document.getElementById('featUnit').textContent='مهمة منجزة · '+ar(st.pct)+'٪';
-  const bar=document.getElementById('homeBar');if(bar)bar.style.width=st.pct+'%';
+  const wpct=st.wtot?Math.round(st.wdn/st.wtot*100):0;
+  document.getElementById('featNum').textContent=ar(st.wdn)+'/'+ar(st.wtot);
+  document.getElementById('featUnit').textContent='مهمة منجزة · '+ar(wpct)+'٪';
+  const bar=document.getElementById('homeBar');if(bar)bar.style.width=wpct+'%';
   document.getElementById('featSub').textContent=
-    st.pct===100?('أكملت مهام '+weekLabel(weekOf(state.cur))+'.'):
+    wpct===100?('أكملت مهام '+weekLabel(weekOf(state.cur))+'.'):
     'المتبقي '+ar(st.wtot-st.wdn)+' مهمة في '+weekLabel(weekOf(state.cur))+'.';
 
   /* الإجراءات السريعة */
