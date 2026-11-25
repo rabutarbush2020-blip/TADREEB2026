@@ -958,6 +958,95 @@ textarea:focus,input:focus,select:focus{background:#fff;border-color:var(--teal-
 .tl-arrow{font-weight:900;margin-inline-start:4px;color:var(--teal)}
 .tl .tl-t,.tl .tl-d{display:block}
 </style>
+<style>
+/* ═══ حركة ناعمة للواجهة والرئيسية (2026-11-25) — للتراجع: احذفي هذا الوسم كاملا ═══ */
+:root{--m-ease:cubic-bezier(.2,.8,.2,1)}
+@keyframes mRise{from{opacity:0;transform:translateY(18px) scale(.985);filter:blur(6px)}to{opacity:1;transform:none;filter:none}}
+@keyframes mCard{from{opacity:0;transform:translateY(26px) scale(.96);filter:blur(10px)}to{opacity:1;transform:none;filter:none}}
+@keyframes mSweep{0%{transform:translateX(-120%) skewX(-18deg)}22%,100%{transform:translateX(220%) skewX(-18deg)}}
+@keyframes mGlow{0%,100%{opacity:.55;transform:translate(0,0) scale(1)}50%{opacity:.9;transform:translate(-4%,3%) scale(1.08)}}
+@keyframes mBreath{0%,100%{text-shadow:0 0 18px rgba(127,227,212,.35)}50%{text-shadow:0 0 34px rgba(127,227,212,.75)}}
+
+/* شاشة الدخول: البطاقة تظهر ثم العناصر واحدا بعد الآخر */
+#loginOv.show .login-card{animation:mCard .9s var(--m-ease) both}
+#loginOv.show .login-card>*{animation:mRise .7s var(--m-ease) backwards}
+#loginOv.show .login-card>*:nth-child(1){animation-delay:.18s}
+#loginOv.show .login-card>*:nth-child(2){animation-delay:.26s}
+#loginOv.show .login-card>*:nth-child(3){animation-delay:.34s}
+#loginOv.show .login-card>*:nth-child(4){animation-delay:.42s}
+#loginOv.show .login-card>*:nth-child(5){animation-delay:.48s}
+#loginOv.show .login-card>*:nth-child(6){animation-delay:.54s}
+#loginOv.show .login-card>*:nth-child(7){animation-delay:.60s}
+#loginOv.show .login-card>*:nth-child(8){animation-delay:.66s}
+#loginOv.show .login-card>*:nth-child(n+9){animation-delay:.72s}
+#loginOv .login-card input,#loginOv .login-card select{transition:border-color .25s var(--m-ease),box-shadow .25s var(--m-ease),transform .25s var(--m-ease)}
+#loginOv .login-card input:focus,#loginOv .login-card select:focus{box-shadow:0 0 0 4px rgba(42,138,128,.16);transform:translateY(-1px)}
+
+/* الصفحة الرئيسية: الأقسام تصعد بالتتابع عند فتحها */
+#v-home.active>*{animation:mRise .8s var(--m-ease) backwards}
+#v-home.active>*:nth-child(1){animation-delay:.02s}
+#v-home.active>*:nth-child(2){animation-delay:.10s}
+#v-home.active>*:nth-child(3){animation-delay:.16s}
+#v-home.active>*:nth-child(4){animation-delay:.24s}
+#v-home.active>*:nth-child(5){animation-delay:.32s}
+#v-home.active>*:nth-child(6){animation-delay:.38s}
+#v-home.active>*:nth-child(n+7){animation-delay:.44s}
+#v-home.active .stat-strip>*,#v-home.active .qa-grid>*{animation:mRise .7s var(--m-ease) backwards}
+#v-home.active .stat-strip>*:nth-child(1){animation-delay:.20s}
+#v-home.active .stat-strip>*:nth-child(2){animation-delay:.27s}
+#v-home.active .stat-strip>*:nth-child(3){animation-delay:.34s}
+#v-home.active .stat-strip>*:nth-child(4){animation-delay:.41s}
+#v-home.active .qa-grid>*:nth-child(1){animation-delay:.40s}
+#v-home.active .qa-grid>*:nth-child(2){animation-delay:.46s}
+#v-home.active .qa-grid>*:nth-child(3){animation-delay:.52s}
+#v-home.active .qa-grid>*:nth-child(n+4){animation-delay:.58s}
+
+/* بطاقة التقدم: لمعة تمر كل بضع ثوان، وتوهج هادئ، ورقم يتنفس */
+.feature::before{content:"";position:absolute;inset:-20% auto -20% 0;width:38%;pointer-events:none;z-index:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.13),transparent);animation:mSweep 7s var(--m-ease) 1.2s infinite}
+.feature>*{position:relative;z-index:1}
+.feature-num{isolation:isolate}
+.feature-num::before{content:"";position:absolute;inset:-30% -20%;z-index:-1;border-radius:50%;pointer-events:none;
+  background:radial-gradient(closest-side,rgba(47,188,172,.35),transparent);animation:mGlow 6s ease-in-out infinite}
+#featNum{animation:mBreath 4.5s ease-in-out infinite;font-variant-numeric:tabular-nums}
+.feature .pfill{transition:width 1.3s var(--m-ease) .35s}
+
+/* أزرار: ضغطة ناعمة */
+.btn{transition:transform .18s var(--m-ease),box-shadow .25s var(--m-ease),filter .2s}
+.btn:hover{filter:brightness(1.05)}
+.btn:active{transform:scale(.97)}
+
+@media (prefers-reduced-motion:reduce){
+  #loginOv.show .login-card,#loginOv.show .login-card>*,#v-home.active>*,#v-home.active .stat-strip>*,#v-home.active .qa-grid>*,
+  .feature::before,.feature-num::before,#featNum{animation:none!important}
+  .feature .pfill{transition:none}
+}
+</style>
+<style>
+/* البطاقات: تنفتح عند ظهورها، وتتمدد عند الضغط (2026-11-25) */
+@keyframes mUnfold{from{opacity:0;transform:perspective(1100px) rotateX(-62deg) translateY(24px);filter:blur(4px)}
+  60%{opacity:1;filter:none}to{opacity:1;transform:none;filter:none}}
+#v-home.active .qa-grid>*{transform-origin:50% 0;animation:mUnfold .85s cubic-bezier(.2,.8,.2,1) backwards}
+.qa .qa-ic{transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+@media(hover:hover) and (pointer:fine){.qa:hover .qa-ic{transform:translateY(-3px) scale(1.08) rotate(-4deg)}}
+.qa.qa-pressed{transform:scale(.96)!important;transition:transform .15s}
+.qa-open{position:fixed;z-index:3000;pointer-events:none;background:var(--paper);border:1px solid var(--line);
+  box-shadow:0 30px 80px -20px rgba(12,40,52,.45);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.qa-open-ic{transform:scale(1.6);animation:mIcon .5s cubic-bezier(.2,.8,.2,1) forwards}
+@keyframes mIcon{to{transform:scale(2.4);opacity:.0}}
+@media (prefers-reduced-motion:reduce){#v-home.active .qa-grid>*{animation:none!important}.qa-open{display:none}}
+</style>
+<style>
+/* حساب الزائر التجريبي (2026-11-25) */
+.demo-tag{display:inline-block;background:#FFF1D6;color:#9A5B00;border:1px solid #F2D39A;border-radius:99px;font-size:11px;font-weight:800;padding:1px 9px;vertical-align:middle}
+tr.demo-row td{background:#FFFBF2}
+body.is-demo .topbar::after{content:"زائر";position:absolute;inset-inline-start:50%;transform:translateX(50%);top:8px;
+  background:#FFF1D6;color:#9A5B00;border:1px solid #F2D39A;border-radius:99px;font-size:11.5px;font-weight:800;padding:3px 12px;pointer-events:none}
+body.is-demo .topbar{position:relative}
+</style>
+<style>
+.demo-ph{display:flex;align-items:center;justify-content:center;height:120px;background:var(--sand,#F3EEE4);color:var(--muted);font-size:12.5px;font-weight:700}
+</style>
 </head>
 <body>
 <h2 class="sr-only">التدريب الميداني — دليل تعليمي حديث لطالبات التدريب الميداني في الخدمة الاجتماعية</h2>
@@ -1466,7 +1555,7 @@ textarea:focus,input:focus,select:focus{background:#fff;border-color:var(--teal-
   <div class="login-card" style="position:relative;z-index:5">
     <div style="display:inline-block;background:var(--teal-soft);color:var(--teal);font-size:11px;font-weight:800;padding:4px 12px;border-radius:99px;margin-bottom:8px">نسخة تجريبية</div>
     <h1 style="margin-top:0">التدريب الميداني</h1>
-    <div class="ls" style="margin-bottom:6px">دليل أسبوعك التدريبي · <b>برنامج الخدمة الاجتماعية</b><br>بإشراف الأستاذة <b style="color:var(--navy)">ربى أبوطربوش</b></div>
+    <div class="ls" style="margin-bottom:6px">لطالبات التدريب الميداني · <b>خدمة اجتماعية</b><br>بإشراف الأستاذة <b style="color:var(--navy)">ربى أبوطربوش</b></div>
     <!-- أزيلت خانة عداد اليوم التدريبي بطلب المستخدمة (2026-08-24).
          لإعادتها: أعيدي السطر التالي وأزيلي تعليق استدعاء updateCountdown في نهاية الملف.
     <div id="countdown" class="cd-chip"></div> -->
@@ -1493,14 +1582,16 @@ textarea:focus,input:focus,select:focus{background:#fff;border-color:var(--teal-
     <div class="lf"><label for="lEmail">البريد الجامعي <span class="req">*</span></label>
       <input id="lEmail" type="email" dir="ltr" style="text-align:left" placeholder="example@qu.edu.qa" onkeydown="if(event.key==='Enter')doLogin()">
       <div style="font-size:10.5px;color:var(--muted);margin-top:4px">بريد جامعة قطر فقط (ينتهي بـ @qu.edu.qa) — يصلك عليه إشعار عند رد المشرفة على ملاحظاتك.</div>
-      <div class="lerr" id="eErr">الدخول بالبريد الجامعي لجامعة قطر فقط، وينتهي بـ <b dir="ltr">@qu.edu.qa</b>. لا يقبل أي بريد آخر.</div></div>
+      <div class="lerr" id="eErr">الدخول بالبريد الجامعي لجامعة قطر فقط، وينتهي بـ <b dir="ltr">@qu.edu.qa</b>. لا يقبل أي بريد آخر، ويجب أن يحتوي البريد رقمك الجامعي نفسه.</div></div>
     <input type="hidden" id="lSup" value="">
     <label for="lConsent" style="display:flex;gap:9px;align-items:flex-start;text-align:right;background:rgba(42,138,128,.06);border:1.5px solid rgba(42,138,128,.22);border-radius:14px;padding:11px 12px;margin:4px 0 12px;cursor:pointer;font-size:11.5px;line-height:1.75;color:var(--ink)">
       <input type="checkbox" id="lConsent" style="width:17px;height:17px;min-width:17px;margin-top:2px;accent-color:#12303D;cursor:pointer">
-      <span>أوافق على استخدام بياناتي داخل <b>التطبيق التجريبي</b> لأغراض متابعة التدريب الميداني وتطوير التطبيق. بياناتي <b>لا تستخدم في التقييم الأكاديمي</b> ولا تشارك خارج فريق الإشراف، ويمكنني طلب حذفها في أي وقت.</span>
+      <span>أوافق على استخدام بياناتي داخل <b>التطبيق التجريبي</b> لأغراض متابعة التدريب الميداني وتطوير التطبيق. بياناتي <b>لا تستخدم في التقييم الأكاديمي</b>، ويمكنني طلب حذفها في أي وقت.</span>
     </label>
     <div class="lerr" id="cErr" style="margin-bottom:10px">للمتابعة، يرجى الموافقة على استخدام البيانات في النسخة التجريبية.</div>
     <button class="btn btn-primary" style="width:100%" onclick="doLogin()">دخول ←</button>
+    <div class="lerr" id="pauseErr" style="margin:10px 0 0;line-height:1.8">دخول الطالبات متوقف مؤقتا حتى الخميس الساعة ٢ ظهرا.<br>للتجربة اضغطي «تجربة التطبيق كزائر». وإن كنتِ طالبة وتحتاجين الدخول الآن فراسلي المشرفة.</div>
+    <button class="btn" id="demoBtn" style="width:100%;margin-top:10px;background:#fff;color:var(--teal);border:1.5px dashed var(--teal-2);font-weight:800" onclick="demoLogin()">تجربة التطبيق كزائر <span dir="ltr" style="font-weight:600;opacity:.75;font-size:12.5px">· Try as a visitor</span></button>
     <div style="margin-top:20px;padding:16px;background:rgba(42,138,128,.07);border-radius:16px;border:1.5px solid rgba(42,138,128,.22)">
       <div style="text-align:center;font-size:12px;color:var(--navy);margin-bottom:10px;font-weight:800;letter-spacing:.8px">— دخول المشرفة الأكاديمية —</div>
       <button class="btn" style="width:100%;background:linear-gradient(135deg,#12303D,#2A8A80);color:#fff;font-weight:800;border:none;box-shadow:0 6px 18px rgba(18,48,61,.30);font-size:14.5px;padding:13px 20px" onclick="supLogin()">الدخول كمشرفة أكاديمية</button>
@@ -1635,6 +1726,12 @@ function tone(freq,start,dur,type){if(!audio.on)return;const c=ac();if(!c)return
 function sfxTask(){tone(660,0,.12);tone(880,.1,.16);}
 function sfxDay(){tone(523,0,.15);tone(659,.13,.15);tone(784,.26,.15);tone(1047,.39,.4);}
 function sfxMove(){tone(440,0,.08,'triangle');tone(620,.07,.12,'triangle');}
+/* نغمة خفيفة مع الإعلان عند الدخول (2026-11-25): مرة واحدة في كل دخول، وبنصف قوة الأصوات الأخرى */
+let ANN_CHIMED=false;
+function softTone(freq,start,dur){if(!audio.on)return;const c=ac();if(!c)return;const o=c.createOscillator(),g=c.createGain();o.type='sine';o.frequency.value=freq;
+  const t=c.currentTime+start;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(audio.vol*.18,t+.04);g.gain.exponentialRampToValueAtTime(.0008,t+dur);
+  o.connect(g);g.connect(c.destination);o.start(t);o.stop(t+dur);}
+function annChime(){if(ANN_CHIMED)return;ANN_CHIMED=true;try{softTone(784,0,.7);softTone(1175,.16,.9);}catch(e){}}
 function sfxAnn(){tone(784,0,.14);tone(1047,.13,.18);tone(1319,.28,.3);}  /* نغمة إعلان جديد */
 /* نغمة العودة بعد الإجازة — جملة دافئة هابطة ثم صاعدة */
 function sfxBack(){tone(659,0,.2);tone(880,.16,.2);tone(784,.34,.2);tone(1047,.5,.5);tone(1319,.62,.6);}
@@ -2542,7 +2639,7 @@ function annBadge(n){
 const PRES_FROM=new Date('2026-11-22T00:00:00+03:00').getTime(),PRES_END=new Date('2026-11-26T18:00:00+03:00').getTime();
 function presTicker(){const el=document.getElementById('presTicker');if(!el)return;
   const now=new Date().getTime();
-  const on=!supMode&&!!student.id&&now>=PRES_FROM&&now<PRES_END;el.style.display=on?'flex':'none';presRun(on);}
+  const on=!supMode&&!!student.id&&now>=PRES_FROM&&now<PRES_END;el.style.display=on?'flex':'none';presRun(on);if(on)annChime();}
 let PRES_T=null,PRES_I=-1;
 function presStep(){if(new Date().getTime()>=PRES_END){presTicker();return;}
   const ms=document.querySelectorAll('#presTicker .tk-msg');if(!ms.length)return;
@@ -2575,13 +2672,13 @@ function annAlert(){
   /* تخفيف (2026-11-14): لا نافذة مفاجئة ولا صوت — شريط هادئ أعلى الرئيسية، والنافذة تفتح عند الضغط على «عرض» */
   annNotice(a);
 }
-function annNotice(a){const host=document.getElementById('statStrip');if(!host||!host.parentNode)return;
+function annNotice(a){if(isDemo())return;const host=document.getElementById('statStrip');if(!host||!host.parentNode)return;
   let n=document.getElementById('annNotice');if(!n){n=document.createElement('div');n.id='annNotice';host.parentNode.insertBefore(n,host);}
   const t=String(a.text||'').replace(/[-]/g,'').replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{2B50}]\uFE0F?/gu,'').replace(/\s+/g,' ').trim();
   n.innerHTML='<span class="an-k">'+(ANN_OV_FEAT?'نشاط مميز من زميلاتك':'إعلان جديد من المشرفة')+'</span>'+
     '<span class="an-t">'+annEsc(t.slice(0,90))+(t.length>90?'…':'')+'</span>'+
     '<span class="an-b"><button class="btn btn-ghost btn-sm" onclick="annNoticeOpen()">عرض</button>'+
-    '<button class="an-x" aria-label="إخفاء" onclick="annNoticeHide()">×</button></span>';n.style.display='';}
+    '<button class="an-x" aria-label="إخفاء" onclick="annNoticeHide()">×</button></span>';n.style.display='';if(!supMode)annChime();}
 function annNoticeOpen(){const n=document.getElementById('annNotice');if(n)n.style.display='none';document.getElementById('annOv').classList.add('show');}
 function annNoticeHide(){const n=document.getElementById('annNotice');if(n)n.style.display='none';annMarkSeen();}
 let ANN_OV_FEAT=false,ROOM_WANT_FEAT=false;
@@ -2627,9 +2724,12 @@ async function pinPost(id,v){
 
 function renderPosts(){
   const el=document.getElementById('postList');if(!el)return;
+  /* الزائر يرى إعلانين مختارين فقط: «من مهمل إلى مذهل» و«لوحة لمبات المشاعر» (2026-11-25) */
   const qEl=document.getElementById('cSearch');const q=((qEl&&qEl.value)||'').trim();
-  const rows=posts.filter(a=>!q||(a.text||'').includes(q));
+  const DEMO_ANNS=[53,56];
+  const rows=posts.filter(a=>(!isDemo()||DEMO_ANNS.includes(a.id))&&(!q||(a.text||'').includes(q)));
   if(!rows.length){el.innerHTML='<div class="empty">'+(q?'لا توجد إعلانات مطابقة لبحثك.':'لا توجد إعلانات بعد — ستظهر هنا تذكيرات المشرفة الأكاديمية.')+'</div>';return;}
+  if(isDemo())rows.forEach(function(a){a.text=String(a.text||'').replace(/نفّ?ذته الطالبة [^.\n]+\./g,'نفّذته إحدى الطالبات المتدربات.');});
   el.innerHTML=rows.map(a=>`<div class="post">
     <div class="phead"><div class="pav">📢</div>
       <div><div class="pname">المشرفة الأكاديمية</div><div class="ptime">${annFmt(a.at)}</div></div>
@@ -2809,7 +2909,7 @@ function renderSupTable(){const rows=supRows();const tb=document.getElementById(
   rows.forEach(r=>{const ind=computeInd(r.reflect,indWeekDays());if(ind.written>=2)reg++;if(ind.overall==='يحتاج دعما')need++;
     if(ind.chal>0)CHAL.filter(k=>Object.values(r.reflect).join(' ').includes(k)).forEach(k=>chalCount[k]=(chalCount[k]||0)+1);
     const wcls=ind.writeLvl==='منتظمة'?'high':ind.writeLvl==='جزئية'?'mid':'low';
-    body+=`<tr><td data-l="الطالبة">${r.name}${r.consent?' <span title="وافقت على استخدام بياناتها في النسخة التجريبية" style="color:#2E7D68;font-weight:900">✓</span>':''}${quizChips(r.progress,r.seen,r.uid)}</td><td data-l="الرقم الجامعي" style="direction:ltr;text-align:start">${r.uid||'—'}</td><td data-l="المؤسسة">${r.org}</td><td data-l="اليوم">${ind.day?ar(ind.day):'—'}</td><td data-l="الملاحظات"><span class="lvl ${wcls}">${ind.writeLvl}</span></td><td data-l="الدعم المهني">${levelTag(ind.overall)}</td><td data-l="إجراءات"><button class="btn btn-ghost btn-sm" onclick="viewReflect('${r.uid}')">الملاحظات</button> <button class="btn ${ind.overall==='يحتاج دعما'?'btn-pink':'btn-ghost'} btn-sm" onclick="go('indicators',null)">المؤشرات</button> <button class="btn btn-sm btn-danger" onclick="deleteStudent('${r.uid}')" title="أرشفة الطالبة (البيانات تبقى محفوظة)" aria-label="أرشفة الطالبة"><svg viewBox="0 0 24 24"><use href="#ic-trash"/></svg></button></td></tr>`;});
+    body+=`<tr${isDemo(r.uid)?' class="demo-row"':''}><td data-l="الطالبة">${r.name}${isDemo(r.uid)?' <span class="demo-tag">تجريبي</span>':''}${r.consent?' <span title="وافقت على استخدام بياناتها في النسخة التجريبية" style="color:#2E7D68;font-weight:900">✓</span>':''}${quizChips(r.progress,r.seen,r.uid)}</td><td data-l="الرقم الجامعي" style="direction:ltr;text-align:start">${r.uid||'—'}</td><td data-l="المؤسسة">${r.org}</td><td data-l="اليوم">${ind.day?ar(ind.day):'—'}</td><td data-l="الملاحظات"><span class="lvl ${wcls}">${ind.writeLvl}</span></td><td data-l="الدعم المهني">${levelTag(ind.overall)}</td><td data-l="إجراءات"><button class="btn btn-ghost btn-sm" onclick="viewReflect('${r.uid}')">الملاحظات</button> <button class="btn ${ind.overall==='يحتاج دعما'?'btn-pink':'btn-ghost'} btn-sm" onclick="go('indicators',null)">المؤشرات</button> <button class="btn btn-sm btn-danger" onclick="deleteStudent('${r.uid}')" title="أرشفة الطالبة (البيانات تبقى محفوظة)" aria-label="أرشفة الطالبة"><svg viewBox="0 0 24 24"><use href="#ic-trash"/></svg></button></td></tr>`;});
   tb.innerHTML=body;
   document.getElementById('supTot').textContent=ar(tot);
   document.getElementById('supReg').textContent=ar(reg);
@@ -3082,13 +3182,17 @@ function simMicToggle(){const SR=window.SpeechRecognition||window.webkitSpeechRe
 
 /* ════ غرفة الأنشطة — منشورات الطالبات مرئية للجميع (guide.activities) ════ */
 let ROOM=[],roomPhoto=null;
+/* الزائر يرى الأنشطة والمدارس دون أسماء الطالبات وتعليقات المشرفة (2026-11-25) */
+/* يرى الزائر تعليق المشرفة على ثلاثة أنشطة فقط: «مو كل مزحة تضحك» (83) و«صندوقك مساحة آمنة» (89) و«مذكرات حضوري» (96)، لأنها بلا أسماء */
+const DEMO_COMMENT_ACTS=[83,89,96];
+function demoNoName(a){return Object.assign({},a,{name:'طالبة متدربة',sup_comment:DEMO_COMMENT_ACTS.includes(a.id)?a.sup_comment:''});}
 function roomToggleForm(){const f=document.getElementById('roomForm'),b=document.getElementById('roomToggle');const open=f.style.display==='none';f.style.display=open?'block':'none';b.textContent=open?'إغلاق النموذج':'فتح النموذج';if(open)document.getElementById('rmTitle').focus();}
 async function roomPickPhoto(inp){const f=inp.files&&inp.files[0];inp.value='';roomPhoto=null;const pv=document.getElementById('rmPhotoPrev');pv.innerHTML='';if(!f)return;
   if(!/^image\//.test(f.type)){toast('⚠️ يقبل رفع الصور فقط');return;}
   pv.innerHTML='<span style="font-size:12px;color:var(--muted)">⏳ جار تصغير الصورة…</span>';
   try{roomPhoto=await shrinkImage(f,900,380000);pv.innerHTML='<img src="'+roomPhoto+'" alt=""> <button class="btn btn-ghost btn-sm" onclick="roomPhoto=null;document.getElementById(\'rmPhotoPrev\').innerHTML=\'\'">إزالة</button>';}
   catch(e){pv.innerHTML='';toast('⚠️ '+e.message);}}
-async function roomPost(){
+async function roomPost(){if(isDemo()){toast('إرسال الأنشطة غير متاح للزائر');return;}
   if(supMode||!student.id){toast('⚠️ النشر للطالبات بعد تسجيل الدخول');return;}
   const title=document.getElementById('rmTitle').value.trim(),kind=document.getElementById('rmKind').value,role=document.getElementById('rmRole').value,body=document.getElementById('rmBody').value.trim();
   if(!title){toast('اكتبي عنوان النشاط');return;}
@@ -3107,7 +3211,7 @@ async function loadRoom(){const g=document.getElementById('roomGrid');if(!sb){g.
   document.getElementById('roomCompose').style.display=supMode?'none':'';document.getElementById('roomExport').style.display=supMode?'':'none';
   const rh=document.getElementById('roomHint');if(rh)rh.textContent=supMode?'كل المؤسسات — غير المعتمد يظهر أولا':'أنشطة زميلاتك من جميع المؤسسات بعد اعتماد المشرفة — ويمكنك اختيار أنشطة مؤسستك أو الأنشطة المميزة ⭐ من القائمة';
   /* الطالبة: أنشطة مؤسستها + المميزة من كل المؤسسات · المشرفة: كل شيء مع تصفية بالمؤسسة */
-  try{const r=supMode?await sb.rpc('guide_act_all',{p_pass:SUP_PASS}):await sb.rpc('guide_act_list',{p_uid:student.id});if(r.error)throw r.error;ROOM=r.data||[];
+  try{const r=supMode?await sb.rpc('guide_act_all',{p_pass:SUP_PASS}):await sb.rpc('guide_act_list',{p_uid:student.id});if(r.error)throw r.error;ROOM=r.data||[];if(isDemo())ROOM=ROOM.map(demoNoName);
     const f=document.getElementById('roomOrg');const cur=f.value;
     if(supMode){const orgs=[...new Set(ROOM.map(a=>a.org).filter(Boolean))].sort();
       f.innerHTML='<option value="">كل المؤسسات</option>'+orgs.map(o=>'<option'+(o===cur?' selected':'')+'>'+escH(o)+'</option>').join('');}
@@ -3118,7 +3222,9 @@ function roomClapped(a){try{return (JSON.parse(localStorage.getItem('rafiqaClaps
 function roomSetClapped(id,on){try{let l=JSON.parse(localStorage.getItem('rafiqaClaps')||'[]');l=l.filter(x=>x!==id);if(on)l.push(id);localStorage.setItem('rafiqaClaps',JSON.stringify(l));}catch(e){}}
 function renderRoom(){const g=document.getElementById('roomGrid');const fo=document.getElementById('roomOrg').value,fk=document.getElementById('roomKind').value;
   /* الطالبة: إما أنشطة مؤسستها (ومنها منشورها غير المعتمد) أو الأنشطة المميزة من كل المؤسسات */
-  const rows=ROOM.filter(a=>(!fk||a.kind===fk)&&(supMode?(!fo||a.org===fo):(fo==='__feat'?a.featured:fo==='__mine'?(a.org===student.org||a.mine):true)));
+  let rows=ROOM.filter(a=>(!fk||a.kind===fk)&&(supMode?(!fo||a.org===fo):(fo==='__feat'?a.featured:fo==='__mine'?(a.org===student.org||a.mine):true)));
+  /* الزائر: الأنشطة التي عليها تعليق المشرفة تظهر أولا */
+  if(isDemo()){const rk=function(x){const i=DEMO_COMMENT_ACTS.indexOf(x.id);return i<0?999:i;};rows=rows.slice().sort(function(x,y){return rk(x)-rk(y);});}
   const pend=ROOM.filter(a=>!a.approved&&!a.hidden).length;
   document.getElementById('roomCount').textContent=ar(rows.length)+' نشاط'+(supMode&&pend?' · '+ar(pend)+' بانتظار المراجعة':'');
   if(!rows.length){g.innerHTML='<div class="empty" style="grid-column:1/-1">'+(ROOM.length?'لا أنشطة تطابق التصفية.':(supMode?'لم ترسل أي طالبة نشاطا بعد.':'الغرفة فارغة بعد — أرسلي نشاطك ليراجع ثم يظهر لزميلاتك! 🌱'))+'</div>';return;}
@@ -3141,6 +3247,7 @@ function renderRoom(){const g=document.getElementById('roomGrid');const fo=docum
       +'<button class="btn btn-ghost btn-sm" onclick="if(confirm(\'حذف هذا المنشور نهائيا؟\'))roomMod('+a.id+',{p_delete:true})">حذف</button></div>';
     h+='</div></div></div>';return h;}).join('');}
 async function roomClap(id,btn){if(supMode||!student.id){toast('سجلي دخولك لتصوتي');return;}
+  if(isDemo()){toast('التصويت غير متاح للزائر');return;}
   const on=!btn.classList.contains('on');btn.classList.toggle('on',on);const s=btn.querySelector('span');const cur=Number((s.textContent||'0').replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d)));s.textContent=ar(Math.max(0,cur+(on?1:-1)));roomSetClapped(id,on);
   try{const r=await sb.rpc('guide_act_clap',{p_uid:student.id,p_id:id});if(r.error)throw r.error;s.textContent=ar(r.data);const a=ROOM.find(x=>x.id===id);if(a)a.claps=r.data;loadPicks().then(()=>{const w=btn.parentNode.querySelector('.wkc');if(w)w.textContent='هذا الأسبوع: '+ar(WEEKC[id]||0);});}catch(e){btn.classList.toggle('on',!on);roomSetClapped(id,!on);}}
 async function roomDel(id){if(!confirm('حذف منشورك من الغرفة؟'))return;try{const r=await sb.rpc('guide_act_del',{p_uid:student.id,p_id:id});if(r.error)throw r.error;ROOM=ROOM.filter(a=>a.id!==id);renderRoom();toast('حذف المنشور');}catch(e){toast('⚠️ تعذر الحذف');}}
@@ -3173,7 +3280,7 @@ function roomWeek(){const today=new Date();today.setHours(0,0,0,0);
   return {wk,from,to};}
 async function loadPicks(){if(!sb)return;const W=roomWeek();
   try{const [p,c]=await Promise.all([sb.rpc('guide_pick_list'),sb.rpc('guide_clap_week',{p_from:W.from.toISOString(),p_to:W.to.toISOString()})]);
-    if(!p.error)PICKS=p.data||[];if(!c.error){WEEKC={};(c.data||[]).forEach(r=>{WEEKC[r.act_id]=r.n;});}}catch(e){}}
+    if(!p.error)PICKS=(p.data||[]).map(function(x){return isDemo()?Object.assign({},x,{name:'طالبة متدربة'}):x;});if(!c.error){WEEKC={};(c.data||[]).forEach(r=>{WEEKC[r.act_id]=r.n;});}}catch(e){}}
 function pickOf(id){return PICKS.filter(p=>p.act_id===id);}
 function isPickNow(id,k){const w=roomWeek().wk;return PICKS.some(p=>p.wk===w&&p.kind===k&&p.act_id===id);}
 function renderPicks(){const body=document.getElementById('roomPicksBody');if(!body)return;
@@ -3205,8 +3312,8 @@ async function roomExport(){await ensureXLSX();const data=ROOM.map(a=>({'الط�
 
 /* ════ Login + student ════ */
 const student={name:'',id:'',org:'',sup:'',email:''};
-function applyStudent(){document.getElementById('sbName').textContent=student.name||'طالبة';document.getElementById('sbId').textContent=student.org?'🏢 '+student.org:('الرقم: '+(student.id||'—'));
-  document.getElementById('heroHi').textContent='أهلا بك'+(student.name?'، '+student.name:'');
+function applyStudent(){try{document.body.classList.toggle('is-demo',isDemo());}catch(e){}try{if(isDemo())setTimeout(demoJump,60);}catch(e){}document.getElementById('sbName').textContent=student.name||'طالبة';document.getElementById('sbId').textContent=student.org?'🏢 '+student.org:('الرقم: '+(student.id||'—'));
+  document.getElementById('heroHi').textContent='أهلا بك'+(student.name&&!isDemo()?'، '+student.name:'');
   try{presTicker();}catch(e){}
   const m=document.getElementById('tMail');if(m)m.innerHTML=m.innerHTML.replace('(الاسم)',student.name||'(الاسم)').replace('(المؤسسة)',student.org||'(المؤسسة)');}
 /* ════ Login animated background (interactive particle network) ════ */
@@ -3217,10 +3324,36 @@ function stopLoginFX(){cancelAnimationFrame(_rays.raf);clearInterval(_rays.timer
 
 /* الدخول بالبريد الجامعي فقط: ينتهي بـ @qu.edu.qa (أضيف 2026-11-21 بطلب المشرفة؛ يطبق على كل دخول جديد) */
 function isQuEmail(e){return /^[a-z0-9._%+-]+@qu\.edu\.qa$/.test(String(e||'').trim().toLowerCase());}
-function doLogin(){const name=document.getElementById('lName').value.trim(),id=document.getElementById('lId').value.trim(),org=document.getElementById('lOrg').value.trim(),sup=document.getElementById('lSup').value.trim(),email=document.getElementById('lEmail').value.trim().toLowerCase();
+/* البريد الجامعي يجب أن يحتوي الرقم الجامعي (2026-11-25): أرقام البريد (7 على الأقل) تطابق آخر الرقم الجامعي.
+   استثناء: طالبات مسجلات سابقا كتبن الرقم بخطأ بسيط، حتى لا يمنعن من الدخول. */
+const EMAIL_ID_OK={'202004679':1,'2021260':1,'2023096931':1,'20234148':1,'101203061':1};
+function emailHasId(e,id){id=String(id||'');if(id===DEMO_UID||EMAIL_ID_OK[id])return true;
+  const d=String(e||'').split('@')[0].replace(/[^0-9]/g,'');return d.length>=7&&id.slice(-d.length)===d;}
+/* الدخول كزائر (2026-11-25): حساب طالبة تجريبي واحد مشترك، يظهر في لوحة المتابعة بعلامة «تجريبي»
+   ويستبعد من إحصاءات البحث. التصويت وإرسال الأنشطة معطلان فيه حتى لا يؤثر في أنشطة الطالبات. */
+const DEMO_UID='9999999';
+function isDemo(uid){return String(uid===undefined?student.id:uid)===DEMO_UID;}
+function demoLogin(){
+  const n=document.getElementById('lName'),i=document.getElementById('lId'),o=document.getElementById('lOrg'),e=document.getElementById('lEmail'),c=document.getElementById('lConsent');
+  if(o&&!Array.from(o.options).some(function(x){return x.value==='زيارة';})){const op=document.createElement('option');op.textContent='زيارة';op.value='زيارة';o.appendChild(op);}
+  n.value='زائر';i.value=DEMO_UID;o.value='زيارة';e.value='demo@qu.edu.qa';if(c)c.checked=true;
+  doLogin();demoJump();setTimeout(demoJump,1500);setTimeout(demoJump,4000);
+  /* الزائر يبدأ بالصفحة الرئيسية، ومنها إلى مهام الأسبوع 13 */
+  if(isDemo()){try{demoJump();go('home',null);window.scrollTo(0,0);}catch(e){}}}
+/* الزائر يبدأ من آخر أسبوع تدريبي في التطبيق (الأسبوع 13) */
+function demoJump(){if(!isDemo())return;const last=Math.max.apply(null,days.map(function(d){return d.wk||2;}));
+  if(weekOf(state.cur)===last)return;const d=weekDays(last)[0];if(!d)return;state.cur=d.n;try{persist();}catch(e){}
+  try{buildWeekTabs();buildPath();renderDay();}catch(e){}try{renderHome();}catch(e){}}
+/* يوم المؤتمر: إيقاف الدخول الجديد للطالبات مؤقتا، الخميس 26 نوفمبر من 6 صباحا إلى 2 ظهرا بتوقيت قطر.
+   الطالبات المسجلات دخولهن على أجهزتهن لا يتأثرن، وزر الزائر ودخول المشرفة يعملان. يعود الدخول تلقائيا. */
+const PAUSE_FROM=new Date('2026-11-25T00:00:00+03:00').getTime(),PAUSE_TO=new Date('2026-11-26T14:00:00+03:00').getTime();
+function loginPaused(){const now=new Date().getTime();return now>=PAUSE_FROM&&now<PAUSE_TO;}
+function doLogin(){ANN_CHIMED=false;
+  if(loginPaused()&&String(document.getElementById('lId').value.trim())!==DEMO_UID){
+    const pe=document.getElementById('pauseErr');if(pe){pe.style.display='block';pe.scrollIntoView({block:'nearest'});}return;}const name=document.getElementById('lName').value.trim(),id=document.getElementById('lId').value.trim(),org=document.getElementById('lOrg').value.trim(),sup=document.getElementById('lSup').value.trim(),email=document.getElementById('lEmail').value.trim().toLowerCase();
   if(name.length<2||!/^[0-9]{6,}$/.test(id)||org.length<2){document.getElementById('lErr').style.display='block';return;}
   document.getElementById('lErr').style.display='none';
-  if(!isQuEmail(email)){document.getElementById('eErr').style.display='block';return;}
+  if(!isQuEmail(email)||!emailHasId(email,id)){document.getElementById('eErr').style.display='block';return;}
   document.getElementById('eErr').style.display='none';
   var _cs=document.getElementById('lConsent');
   if(_cs&&!_cs.checked){document.getElementById('cErr').style.display='block';return;}
@@ -3465,7 +3598,7 @@ async function renderSupDay(day,force){
     const prev=(rp[r.uid]&&rp[r.uid][day])?rp[r.uid][day]:null;
     return '<article class="note">'+
       '<header class="note-h"><span class="note-av">'+escH((r.name||'ط').charAt(0))+'</span>'+
-        '<span class="note-i"><span class="note-n">'+escH(r.name||'طالبة')+'</span>'+
+        '<span class="note-i"><span class="note-n">'+escH(r.name||'طالبة')+(isDemo(r.uid)?' <span class="demo-tag">تجريبي</span>':'')+'</span>'+
         '<span class="note-o">'+escH(r.org||'—')+'</span></span>'+
         (prev?'<span class="chip '+(prev.seen?'':'pink')+'">'+(prev.seen?'قرأته الطالبة':'رد غير مقروء')+'</span>':'')+
       '</header>'+
@@ -3506,11 +3639,33 @@ function statCard(icon,tone,val,label,fn){
   return '<div class="stat'+(fn?' stat-go':'')+'"'+(fn?' role="button" tabindex="0" onclick="'+fn+'" onkeydown="if(event.key===\'Enter\'){'+fn+'}"':'')+'><div class="stat-ic '+tone+'">'+ico(icon)+'</div>'+
     '<div><div class="stat-v">'+val+'</div><div class="stat-l">'+label+'</div></div></div>';}
 /* فتح مهام يوم محدد من الصفحة الرئيسية */
+/* عداد متحرك لرقم التقدم (2026-11-25): يتحرك فقط حين تتغير القيمة */
+function homeCount(el,a,b){if(!el)return;const key=a+'/'+b;
+  if(el.dataset.v===key){el.textContent=ar(a)+'/'+ar(b);return;}el.dataset.v=key;
+  let still=false;try{still=matchMedia('(prefers-reduced-motion: reduce)').matches;}catch(e){}
+  if(still||!window.requestAnimationFrame){el.textContent=ar(a)+'/'+ar(b);return;}
+  const t0=performance.now(),d=1100;
+  (function f(now){const k=Math.min(1,(now-t0)/d),e=1-Math.pow(1-k,3);
+    el.textContent=ar(Math.round(a*e))+'/'+ar(Math.round(b*e));if(k<1)requestAnimationFrame(f);})(t0);}
 function homeOpenDay(n){if(!days.some(function(d){return d.n===n;}))return;
   if(state.cur!==n){state.cur=n;persist();}
   go('week',null);try{buildPath();renderDay();}catch(e){}window.scrollTo(0,0);}
+/* فتح البطاقة: تتمدد البطاقة لتملأ الشاشة ثم تفتح صفحتها (2026-11-25) */
+function qaOpen(btn,run){
+  let still=false;try{still=matchMedia('(prefers-reduced-motion: reduce)').matches;}catch(e){}
+  if(still||!btn||!btn.animate){run();return;}
+  const r=btn.getBoundingClientRect(),cs=getComputedStyle(btn),ov=document.createElement('div');
+  ov.className='qa-open';ov.style.cssText='left:'+r.left+'px;top:'+r.top+'px;width:'+r.width+'px;height:'+r.height+'px;border-radius:'+cs.borderRadius;
+  const ic=btn.querySelector('.qa-ic');if(ic){const c=ic.cloneNode(true);c.classList.add('qa-open-ic');ov.appendChild(c);}
+  document.body.appendChild(ov);btn.classList.add('qa-pressed');
+  const W=innerWidth,H=innerHeight;
+  ov.animate([{left:r.left+'px',top:r.top+'px',width:r.width+'px',height:r.height+'px',borderRadius:cs.borderRadius},
+              {left:'0px',top:'0px',width:W+'px',height:H+'px',borderRadius:'0px'}],{duration:520,easing:'cubic-bezier(.2,.8,.2,1)',fill:'forwards'});
+  setTimeout(function(){try{run();}catch(e){}window.scrollTo(0,0);btn.classList.remove('qa-pressed');
+    ov.animate([{opacity:1},{opacity:0}],{duration:380,easing:'ease-out',fill:'forwards'}).onfinish=function(){ov.remove();};},480);}
 function qaCard(icon,tone,title,sub,fn,badge){
-  return '<button class="qa" onclick="'+fn+'">'+(badge?'<span class="badge">'+badge+'</span>':'')+
+  const act=/^go\('(?!home)/.test(fn)?"qaOpen(this,function(){"+fn+"})":fn;
+  return '<button class="qa" onclick="'+act+'">'+(badge?'<span class="badge">'+badge+'</span>':'')+
     '<span class="qa-ic '+tone+'">'+ico(icon)+'</span>'+
     '<span class="qa-t">'+title+'</span><span class="qa-s">'+sub+'</span></button>';}
 
@@ -3540,9 +3695,9 @@ function renderHome(){
   /* بطاقة التقدم */
   document.getElementById('featTitle').textContent='تقدمك في الأسبوع التدريبي';
   const wpct=st.wtot?Math.round(st.wdn/st.wtot*100):0;
-  document.getElementById('featNum').textContent=ar(st.wdn)+'/'+ar(st.wtot);
+  homeCount(document.getElementById('featNum'),st.wdn,st.wtot);
   document.getElementById('featUnit').textContent='مهمة منجزة · '+ar(wpct)+'٪';
-  const bar=document.getElementById('homeBar');if(bar)bar.style.width=wpct+'%';
+  const bar=document.getElementById('homeBar');if(bar&&bar.dataset.w!==String(wpct)){bar.dataset.w=wpct;bar.style.width='0%';requestAnimationFrame(function(){requestAnimationFrame(function(){bar.style.width=wpct+'%';});});}
   document.getElementById('featSub').textContent=
     wpct===100?('أكملت مهام '+weekLabel(weekOf(state.cur))+'.'):
     'المتبقي '+ar(st.wtot-st.wdn)+' مهمة في '+weekLabel(weekOf(state.cur))+'.';
