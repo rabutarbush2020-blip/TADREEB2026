@@ -1048,6 +1048,9 @@ body.is-demo .topbar{position:relative}
 .demo-ph{display:flex;align-items:center;justify-content:center;height:120px;background:var(--sand,#F3EEE4);color:var(--muted);font-size:12.5px;font-weight:700}
 </style>
 <style>
+#appClosed{position:fixed;inset:0;z-index:99999;background:rgba(247,244,238,.97);display:none;align-items:center;justify-content:center;padding:16px}
+#appClosed .ac-card{background:#fff;border:1px solid var(--line,#e5e0d6);border-radius:20px;padding:32px 26px;max-width:380px;text-align:center;box-shadow:0 20px 60px -20px rgba(12,40,52,.3)}
+#appClosed .ac-ic{font-size:40px}#appClosed h2{margin:10px 0 6px;color:var(--teal,#0E5A63)}#appClosed p{margin:0;color:var(--muted,#6b7280);line-height:1.8}
 /* عدد الزوار في لوحة المشرفة (2026-11-25) */
 .demo-stats{align-items:center;gap:12px;margin:12px 0;padding:12px 16px;background:#FFFBF2;border:1px solid #F2D39A;border-radius:14px}
 .demo-stats .ds-ic{font-size:22px}
@@ -2819,6 +2822,12 @@ async function demoStatsLoad(){const el=document.getElementById('demoStats');if(
       '<span>متوسط مدة التصفح '+(t.avg_min||0)+' دقيقة · مجموع الزوار '+total+'</span></div>'+
       '<button class="btn" onclick="demoStatsLoad()">تحديث</button>';el.style.display='flex';}
   catch(e){el.style.display='none';}}
+/* إيقاف التطبيق عن الجميع (2026-11-26): يفتح ويغلق من قاعدة البيانات (guide.config app_closed) دون رفع ملف جديد */
+async function appClosedCheck(){if(!sb)return;try{const r=await sb.rpc('guide_app_closed');
+  let ov=document.getElementById('appClosed');
+  if(r&&r.data===true){if(!ov){ov=document.createElement('div');ov.id='appClosed';
+      ov.innerHTML='<div class="ac-card"><div class="ac-ic">🔒</div><h2>التطبيق متوقف مؤقتا</h2><p>سيعود التطبيق للعمل قريبا. شكرا لتفهمكن.</p></div>';document.body.appendChild(ov);}
+    ov.style.display='flex';}else if(ov)ov.style.display='none';}catch(e){}}
 let DEMO_PING_T=null;
 function demoDev(){let d='';try{d=localStorage.getItem('rafiqaDev')||'';}catch(e){}
   if(!/^[a-z0-9]{10}$/.test(d)){d=Math.random().toString(36).slice(2,12).padEnd(10,'0');try{localStorage.setItem('rafiqaDev',d);}catch(e){}}return d;}
@@ -3833,7 +3842,7 @@ function syncTabbar(name){const tb=document.getElementById('tabbar');if(!tb)retu
   Array.prototype.forEach.call(tb.querySelectorAll('button'),function(b){b.classList.toggle('on',b.dataset.v===name);});}
 
 /* ════ Init ════ */
-initSB();loadRoster();initAudio();loadGate();loadAnswers();loadPosts();
+initSB();appClosedCheck();loadRoster();initAudio();loadGate();loadAnswers();loadPosts();
 setTimeout(function(){sbFlushPending();},1500);
 window.addEventListener('online',function(){sbFlushPending();});
 (function(){if(gate.readSyl){const c=document.getElementById('sylCheck');if(c){c.classList.add('done');c.textContent='✓';document.getElementById('sylTask').classList.add('done');}}})();
