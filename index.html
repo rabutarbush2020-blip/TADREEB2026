@@ -1051,6 +1051,7 @@ body.is-demo .topbar{position:relative}
 #appClosed{position:fixed;inset:0;z-index:99999;background:rgba(247,244,238,.97);display:none;align-items:center;justify-content:center;padding:16px}
 #appClosed .ac-card{background:#fff;border:1px solid var(--line,#e5e0d6);border-radius:20px;padding:32px 26px;max-width:380px;text-align:center;box-shadow:0 20px 60px -20px rgba(12,40,52,.3)}
 #appClosed .ac-ic{font-size:40px}#appClosed h2{margin:10px 0 6px;color:var(--teal,#0E5A63)}#appClosed p{margin:0;color:var(--muted,#6b7280);line-height:1.8}
+.quick-hint{margin:0 0 12px;padding:8px 12px;border-radius:12px;background:rgba(42,138,128,.08);border:1px solid rgba(42,138,128,.22);color:var(--teal,#0E5A63);font-size:12.5px;font-weight:700;text-align:center}
 #celebCv{position:fixed;inset:0;width:100vw;height:100vh;z-index:6000;pointer-events:none}
 /* ترحيب الأسبوع الأخير (2026-11-28) */
 #finalWelcome{position:fixed;inset:0;z-index:5000;background:rgba(12,40,52,.45);display:flex;align-items:center;justify-content:center;padding:16px;animation:fwIn .35s ease-out}
@@ -1597,6 +1598,7 @@ body.is-demo .topbar{position:relative}
     <!-- أزيلت خانة عداد اليوم التدريبي بطلب المستخدمة (2026-08-24).
          لإعادتها: أعيدي السطر التالي وأزيلي تعليق استدعاء updateCountdown في نهاية الملف.
     <div id="countdown" class="cd-chip"></div> -->
+    <div class="quick-hint">مسجلة سابقا؟ يكفي الرقم الجامعي والبريد الجامعي ثم «دخول».</div>
     <div class="lf"><label for="lName">اسم الطالبة <span class="req">*</span></label><input id="lName" placeholder="الاسم الكامل" onkeydown="if(event.key==='Enter')document.getElementById('lId').focus()"></div>
     <div class="lf"><label for="lId">الرقم الجامعي <span class="req">*</span></label>
       <div class="eye-wrap"><input id="lId" type="password" inputmode="numeric" placeholder="مثال: 202012345" onkeydown="if(event.key==='Enter')document.getElementById('lOrg').focus()">
@@ -2877,6 +2879,7 @@ const ACCESS_TXT={
   rejected:'لم تتم الموافقة على الدخول بهذه البيانات. للاستفسار راسلي المشرفة الأكاديمية.',
   mismatch:'البريد الجامعي لا يطابق البريد المسجل لهذا الرقم الجامعي. اكتبي بريدك المسجل نفسه.',
   busy:'هناك طلبات كثيرة الآن، حاولي بعد قليل.',
+  newfull:'لا يوجد تسجيل سابق بهذا الرقم الجامعي والبريد. أكملي الاسم والمؤسسة التدريبية لإرسال طلب الدخول.',
   error:'تعذر التحقق الآن. تأكدي من الاتصال وحاولي مرة أخرى.'};
 function accessShow(k){const el=document.getElementById('accessMsg');if(!el)return;
   if(!k){el.style.display='none';return;}el.innerHTML=ACCESS_TXT[k]||ACCESS_TXT.error;el.className='access-msg am-'+k;el.style.display='block';
@@ -2886,6 +2889,18 @@ async function accessGate(name,id,org,email){accessShow('');if(!sb){accessShow('
     if(st==='new'){r=await sb.rpc('guide_access_request',{p_uid:id,p_name:name,p_org:org,p_email:email});if(r.error)throw r.error;st=r.data;}
     if(st==='ok'){ACCESS_PASS=id;doLogin();return;}
     accessShow(st);}
+  catch(e){accessShow('error');}}
+async function quickLogin(id,email){accessShow('');document.getElementById('lErr').style.display='none';document.getElementById('eErr').style.display='none';
+  if(!sb){accessShow('error');return;}
+  try{const r=await sb.rpc('guide_access_lookup',{p_uid:id,p_email:email});if(r.error)throw r.error;const d=r.data||{};
+    if(d.status==='ok'){const n=document.getElementById('lName'),o=document.getElementById('lOrg'),c=document.getElementById('lConsent');
+      n.value=d.name||'طالبة';
+      if(o){if(d.org&&!Array.from(o.options).some(function(x){return x.value===d.org;})){const op=document.createElement('option');op.textContent=d.org;op.value=d.org;o.appendChild(op);}o.value=d.org||'';}
+      if(c&&d.consent)c.checked=true;
+      if(!(d.org||'').trim()){document.getElementById('lErr').style.display='block';return;}
+      ACCESS_PASS=id;doLogin();return;}
+    if(d.status==='new'){accessShow('newfull');return;}
+    accessShow(d.status);}
   catch(e){accessShow('error');}}
 /* لوحة المشرفة: طلبات الدخول */
 async function accessLoad(){const el=document.getElementById('accessReqs');if(!el||!sb)return;
@@ -3492,6 +3507,8 @@ function loginPaused(){const now=new Date().getTime();return now>=PAUSE_FROM&&no
 function doLogin(){ANN_CHIMED=false;
   if(loginPaused()&&String(document.getElementById('lId').value.trim())!==DEMO_UID){
     const pe=document.getElementById('pauseErr');if(pe){pe.style.display='block';pe.scrollIntoView({block:'nearest'});}return;}const name=document.getElementById('lName').value.trim(),id=document.getElementById('lId').value.trim(),org=document.getElementById('lOrg').value.trim(),sup=document.getElementById('lSup').value.trim(),email=document.getElementById('lEmail').value.trim().toLowerCase();
+  /* دخول سريع للمسجلات (2026-11-28): الرقم الجامعي والبريد فقط، ويعبأ الاسم والمؤسسة من التسجيل السابق */
+  if((name.length<2||org.length<2)&&/^[0-9]{6,}$/.test(id)&&isQuEmail(email)&&emailHasId(email,id)&&!isDemo(id)){quickLogin(id,email);return;}
   if(name.length<2||!/^[0-9]{6,}$/.test(id)||org.length<2){document.getElementById('lErr').style.display='block';return;}
   document.getElementById('lErr').style.display='none';
   if(!isQuEmail(email)||!emailHasId(email,id)){document.getElementById('eErr').style.display='block';return;}
