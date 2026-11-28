@@ -192,7 +192,7 @@ body.simple #stage,body.simple #overlay,body.simple #vign,body.simple #intro{dis
 <div id="simple" aria-live="polite"><div class="spread" id="spread"></div></div>
 
 <header class="bar">
-  <a class="tb" href="index.html" aria-label="العودة إلى بوابة المعرض"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg><span class="hide-s">البوابة</span></a>
+  <a class="tb" href="portal.html" aria-label="الانتقال إلى بوابة المعرض"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg><span class="hide-s">البوابة</span></a>
   <div class="brand">معرض إنجازات التدريب الميداني<small>الخدمة الاجتماعية · جامعة قطر</small></div>
   <button class="tb" id="btnToc" aria-controls="toc" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h10"/></svg>الفهرس</button>
   <button class="tb" id="btnMode" aria-pressed="false"><span id="modeTxt">عرض مبسّط</span></button>
@@ -393,7 +393,7 @@ function pageHTML(p,src){
   }else if(x.t==='filler'){
     h+='<div class="ab center" style="top:360px;font:400 30px Amiri,serif;color:#B8933F">✦</div><div class="ab center ink" style="top:410px;font:400 20px/1.9 Amiri,serif;color:#6A5F63">التعلّم في الميدان يبدأ من الإصغاء</div>';
   }else if(x.t==='end'){
-    h+='<div class="ab lab ink">الخاتمة</div>'+emblemSVG()+'<div class="ab oname ink" style="top:310px">شكراً لشركائنا في الميدان</div><div class="ab obio ink">هذا المعرض حصيلة شراكة بين القسم والمؤسسات التدريبية والمشرفات الميدانيات، وثمرة جهد طالبات حملن المهنة إلى الناس.</div><div class="ab center" style="top:662px;font:500 14px \'IBM Plex Sans Arabic\';color:#6A5F63">قسم العلوم الاجتماعية · كلية الآداب والعلوم · جامعة قطر</div>';
+    h+='<div class="ab lab ink">الخاتمة</div>'+emblemSVG()+'<div class="ab oname ink" style="top:310px">شكراً لشركائنا في الميدان</div><div class="ab obio ink">هذا المعرض حصيلة شراكة بين القسم والمؤسسات التدريبية، وثمرة جهد طالبات قدّمن خدماتهن المهنية لعملاء هذه المؤسسات. شكراً جزيلاً للمشرفات ولفريق العمل في كل مؤسسة على احتضانهن الطالبات وتوجيههن.</div><div class="ab center" style="top:662px;font:500 14px \'IBM Plex Sans Arabic\';color:#6A5F63">قسم العلوم الاجتماعية · كلية الآداب والعلوم · جامعة قطر</div>';
   }
   return h+(src?'':num)+corner;
 }
@@ -429,7 +429,7 @@ function drawPage(g,p,redraw){
     g.strokeStyle='#B8933F';g.lineWidth=2;g.beginPath();g.arc(300,210,56,0,7);g.stroke();g.lineWidth=.8;g.beginPath();g.arc(300,210,48,0,7);g.stroke();
     g.strokeStyle='#7E1532';g.lineWidth=2.4;g.beginPath();g.moveTo(274,232);g.lineTo(274,200);g.lineTo(300,186);g.lineTo(326,200);g.lineTo(326,232);g.moveTo(270,234);g.lineTo(330,234);[284,294,306,316].forEach(xx=>{g.moveTo(xx,232);g.lineTo(xx,208)});g.moveTo(274,202);g.lineTo(326,202);g.stroke();
     g.font='700 31px "Noto Kufi Arabic"';g.fillStyle='#7E1532';txt(g,x.t==='org'?x.org:'شكراً لشركائنا في الميدان',300,x.t==='org'?306:316,480,48,2,'center');
-    g.font='400 17px "IBM Plex Sans Arabic"';g.fillStyle='#3a3034';txt(g,x.t==='org'?x.bio:'هذا المعرض حصيلة شراكة بين القسم والمؤسسات التدريبية والمشرفات الميدانيات، وثمرة جهد طالبات حملن المهنة إلى الناس.',300,436,460,32,7,'center');
+    g.font='400 17px "IBM Plex Sans Arabic"';g.fillStyle='#3a3034';txt(g,x.t==='org'?x.bio:'هذا المعرض حصيلة شراكة بين القسم والمؤسسات التدريبية، وثمرة جهد طالبات قدّمن خدماتهن المهنية لعملاء هذه المؤسسات. شكراً جزيلاً للمشرفات ولفريق العمل في كل مؤسسة على احتضانهن الطالبات وتوجيههن.',300,436,460,32,7,'center');
     g.textAlign='center';
     if(x.t==='org'){g.font='600 13px "IBM Plex Sans Arabic"';g.fillStyle='#7E1532';g.fillText(AR(x.count)+' '+(x.count===1?'نشاط':'أنشطة')+'      ·      كلمة الأخصائيات',300,662);g.font=F.sm;g.fillStyle='#6A5F63';g.fillText('اسحبي زاوية الصفحة لتصفّح الأنشطة',300,730)}
     else{g.font='500 14px "IBM Plex Sans Arabic"';g.fillStyle='#6A5F63';g.fillText('قسم العلوم الاجتماعية · كلية الآداب والعلوم · جامعة قطر',300,664)}
