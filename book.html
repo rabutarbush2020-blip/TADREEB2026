@@ -1,0 +1,1035 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>المعرض الافتراضي</title>
+<meta name="description" content="معرض افتراضي ثلاثي الأبعاد لإنجازات التدريب الميداني في الخدمة الاجتماعية — جامعة قطر">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Aref+Ruqaa:wght@400;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Noto+Kufi+Arabic:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--m:#7E1532;--m2:#9E2543;--g:#B8933F;--g2:#E4D5B0;--ink:#191417;--mu:#6A5F63;--paper:#F7F3EC;--card:#FFFDFA;--line:#E0D7CB;--danger:#A52A21;--desk:#120c09}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:var(--desk);color:var(--ink);font-family:"IBM Plex Sans Arabic",system-ui,sans-serif;-webkit-tap-highlight-color:transparent}
+button,input,textarea,select{font:inherit}
+#stage{position:fixed;inset:0}
+#stage canvas{display:block;width:100%;height:100%;touch-action:none;cursor:grab}
+#stage canvas.drag{cursor:grabbing}
+#vign{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 45%,transparent 55%,rgba(0,0,0,.55))}
+#overlay{position:fixed;inset:0;pointer-events:none;overflow:hidden}
+.pg{position:absolute;left:0;top:0;width:600px;height:840px;transform-origin:0 0;pointer-events:none;color:var(--ink);direction:rtl}
+.pg .ab{position:absolute}
+.pg .ink{mix-blend-mode:multiply}
+.pg .lab{top:40px;right:48px;left:48px;font:500 13px "IBM Plex Sans Arabic";color:var(--mu);border-bottom:1px solid rgba(184,147,63,.45);padding-bottom:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pg .num{bottom:28px;left:0;right:0;text-align:center;font:500 13px "IBM Plex Sans Arabic";color:var(--mu)}
+.pg .ttl{top:88px;right:48px;left:48px;font:700 26px/1.5 "Noto Kufi Arabic";color:var(--ink)}
+.pg button,.pg a,.pg .hit{pointer-events:auto;cursor:pointer}
+.pg .demo{top:4px;left:48px;font:600 11px "IBM Plex Sans Arabic";color:#fff;background:var(--g);padding:4px 10px;border-radius:6px}
+.pg .poster{top:150px;right:48px;width:504px;height:284px;border-radius:10px;overflow:hidden;background:#2b2126;border:0;padding:0}
+.pg .poster img{width:100%;height:100%;object-fit:cover;display:block}
+.pg .poster .pl{position:absolute;inset:0;display:grid;place-items:center;background:linear-gradient(180deg,rgba(0,0,0,0) 40%,rgba(0,0,0,.55))}
+.pg .poster .pl i{width:76px;height:76px;border-radius:50%;background:rgba(255,253,250,.94);display:grid;place-items:center;box-shadow:0 6px 24px rgba(0,0,0,.35);transition:transform .2s}
+.pg .poster:hover .pl i,.pg .poster:focus-visible .pl i{transform:scale(1.08)}
+.pg .poster .pl i:after{content:"";border-style:solid;border-width:14px 0 14px 22px;border-color:transparent transparent transparent var(--m);margin-left:6px}
+.pg .poster .cap{position:absolute;bottom:14px;right:18px;color:#fff;font:600 14px "IBM Plex Sans Arabic"}
+.pg .quote{right:48px;left:48px;font:400 19px/34px Amiri,serif;color:#2a2226;text-align:justify}
+.pg .who{right:48px;font:600 16px "Noto Kufi Arabic"}
+.pg .whos{right:48px;font:400 13px "IBM Plex Sans Arabic";color:var(--mu)}
+.pg .sub{top:140px;right:48px;left:48px;font:400 14px "IBM Plex Sans Arabic";color:var(--mu)}
+.pg .row{right:42px;left:42px;height:44px;display:flex;align-items:center;gap:12px;border:0;background:transparent;padding:0 6px;border-radius:8px;text-align:right;color:var(--ink)}
+.pg .row:hover,.pg .row:focus-visible{background:rgba(126,21,50,.07);outline:none}
+.pg .row .n{flex:none;width:28px;height:28px;border-radius:50%;border:1.5px solid var(--g);display:grid;place-items:center;font:600 12px "IBM Plex Sans Arabic";color:var(--m)}
+.pg .row .t{font:600 16px "Noto Kufi Arabic";white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pg .row .d{flex:1;border-bottom:1.5px dotted #c9bba5;transform:translateY(5px)}
+.pg .row .p{font:500 14px "IBM Plex Sans Arabic";color:var(--mu)}
+.pg .emb{top:150px;left:50%;margin-left:-60px;width:120px;height:120px}
+.pg .oname{top:300px;right:60px;left:60px;text-align:center;font:700 31px/1.55 "Noto Kufi Arabic";color:var(--m)}
+.pg .obio{top:430px;right:70px;left:70px;text-align:center;font:400 17px/32px "IBM Plex Sans Arabic";color:#3a3034}
+.pg .chips{top:656px;right:0;left:0;display:flex;justify-content:center;gap:10px}
+.pg .chip{position:static;font:600 13px "IBM Plex Sans Arabic";color:var(--m);border:1.5px solid rgba(126,21,50,.35);border-radius:999px;padding:4px 14px;background:transparent}
+.pg .hint{top:728px;right:0;left:0;text-align:center;font:400 13px "IBM Plex Sans Arabic";color:var(--mu)}
+.pg .card{width:248px;height:300px;border:1px solid var(--line);border-radius:10px;background:rgba(255,253,250,.6);padding:0;overflow:hidden;text-align:right;color:var(--ink)}
+.pg .card:hover,.pg .card:focus-visible{border-color:var(--g);box-shadow:0 6px 18px rgba(60,30,20,.14);outline:none}
+.pg .card img{display:block;width:100%;height:180px;object-fit:cover}
+.pg .card .noimg{display:grid;place-items:center;height:180px;background:linear-gradient(135deg,#7E1532,#5a0f25);color:#E4D5B0;font:600 18px "Noto Kufi Arabic";border-bottom:3px solid #B8933F}
+.pg .card .k{display:block;margin:12px 14px 0;font:600 12px "IBM Plex Sans Arabic";color:var(--g)}
+.pg .card .h{margin:4px 14px 0;font:600 16px/26px "Noto Kufi Arabic";display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.pg .qm{top:128px;right:40px;font:700 92px/1 Amiri,serif;color:var(--g);opacity:.8}
+.pg .wbody{top:200px;right:48px;left:48px;height:430px;overflow:auto;font:400 19px/34px Amiri,serif;color:#2a2226;text-align:justify;pointer-events:auto;scrollbar-width:thin}
+.pg .wsub{top:134px;right:48px;left:48px;font:600 16px "Noto Kufi Arabic";color:var(--m);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pg .vbox{top:190px;right:48px;left:48px;display:flex;flex-direction:column;gap:8px;pointer-events:auto;font:600 13px "IBM Plex Sans Arabic";color:var(--g);background:rgba(126,21,50,.06);border:1px solid rgba(126,21,50,.18);border-radius:12px;padding:12px 14px}
+.pg .vbox audio{width:100%;height:40px}
+.pg .sep{top:650px;right:48px;left:48px;border-top:1px solid rgba(184,147,63,.5)}
+.pg .sig{left:48px;top:668px;width:230px;height:84px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.pg .sig .st{font:400 32px/1.2 "Aref Ruqaa",serif;color:var(--m)}
+.pg .sig img{max-width:220px;max-height:66px;mix-blend-mode:multiply}
+.pg .sig small{font:400 11px "IBM Plex Sans Arabic";color:var(--mu)}
+.pg .mbtn{bottom:56px;right:48px;border:0;background:transparent;color:var(--m);font:600 12px "IBM Plex Sans Arabic";text-decoration:underline;text-underline-offset:3px;padding:4px}
+.pg .empty{top:300px;right:60px;left:60px;text-align:center}
+.pg .empty p{font:400 17px/30px "IBM Plex Sans Arabic";color:var(--mu);margin:0 0 22px}
+.pg .btnm{background:var(--m);color:#fff;border:0;border-radius:999px;padding:10px 22px;font:600 14px "IBM Plex Sans Arabic"}
+.pg .center{right:60px;left:60px;text-align:center}
+.pg .corner{width:46px;height:46px;bottom:0;pointer-events:none;opacity:.6}
+.bar{position:fixed;top:0;right:0;left:0;height:56px;display:flex;align-items:center;gap:8px;padding:0 16px;background:linear-gradient(180deg,rgba(14,9,7,.85),rgba(14,9,7,0));color:#f3ebdf;z-index:5}
+.bar .brand{font:700 15px "Noto Kufi Arabic";white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;min-width:0}
+.bar .brand small{display:block;font:400 11px "IBM Plex Sans Arabic";color:#c9b99f}
+.tb{border:1px solid rgba(228,213,176,.35);background:rgba(20,13,10,.55);color:#f3ebdf;border-radius:999px;height:36px;padding:0 14px;display:inline-flex;align-items:center;gap:6px;cursor:pointer;font-size:13px;white-space:nowrap;text-decoration:none}
+.tb:hover,.tb:focus-visible{border-color:var(--g);outline:none}
+.tb svg{width:16px;height:16px}
+.nav{position:fixed;bottom:0;right:0;left:0;height:72px;padding-bottom:env(safe-area-inset-bottom);display:flex;align-items:center;justify-content:center;gap:14px;z-index:5;background:linear-gradient(0deg,rgba(14,9,7,.85),rgba(14,9,7,0));color:#f3ebdf}
+.nav .rb{width:46px;height:46px;border-radius:50%;border:1px solid rgba(228,213,176,.4);background:rgba(20,13,10,.6);color:#f3ebdf;display:grid;place-items:center;cursor:pointer}
+.nav .rb:disabled{opacity:.3;cursor:default}
+.nav .rb:not(:disabled):hover{border-color:var(--g)}
+.nav .where{min-width:170px;text-align:center;font:500 13px "IBM Plex Sans Arabic";line-height:1.4}
+.nav .where b{display:block;font:600 14px "Noto Kufi Arabic";max-width:46vw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin:0 auto}
+#intro{position:fixed;left:0;right:0;bottom:92px;text-align:center;color:#f6efe3;z-index:4;transition:opacity .6s;padding:0 16px}
+#intro h1{font:700 clamp(22px,3.4vw,34px)/1.4 "Noto Kufi Arabic";margin:0 0 6px;text-shadow:0 2px 18px rgba(0,0,0,.6)}
+#intro p{margin:0 0 18px;color:#d9ccb6;font-size:15px}
+.cta{background:var(--g);color:#1d140f;border:0;border-radius:999px;padding:13px 30px;font:700 15px "Noto Kufi Arabic";cursor:pointer;box-shadow:0 8px 30px rgba(184,147,63,.35)}
+.cta:hover,.cta:focus-visible{background:#c9a44e;outline:none}
+#intro.hide{opacity:0;pointer-events:none}
+#loader{position:fixed;inset:0;display:grid;place-items:center;background:var(--desk);color:#e9dfcf;z-index:50;transition:opacity .5s}
+#loader .bx{text-align:center}
+#loader .bk{width:64px;height:46px;margin:0 auto 18px;border:2px solid var(--g);border-radius:3px 3px 6px 6px;position:relative}
+#loader .bk:after{content:"";position:absolute;top:0;bottom:0;left:50%;border-left:2px solid var(--g);animation:fl 1.1s ease-in-out infinite;transform-origin:left}
+@keyframes fl{50%{transform:scaleX(-1)}}
+#loader b{font:600 15px "Noto Kufi Arabic"}#loader small{display:block;margin-top:6px;color:#a8977f}
+#toast{position:fixed;bottom:86px;left:50%;transform:translateX(-50%);background:#241a16;color:#f3ebdf;border:1px solid rgba(228,213,176,.3);padding:10px 18px;border-radius:10px;font-size:14px;z-index:60;opacity:0;transition:opacity .3s;pointer-events:none;max-width:90vw;text-align:center}
+#toast.on{opacity:1}
+.ov{position:fixed;inset:0;background:rgba(10,6,4,.72);z-index:30;display:none;align-items:center;justify-content:center;padding:16px}
+.ov.on{display:flex}
+.dlg{background:var(--card);color:var(--ink);border-radius:14px;width:min(760px,100%);max-height:calc(100vh - 32px);overflow:auto;box-shadow:0 30px 80px rgba(0,0,0,.5);position:relative}
+.dlg header{position:sticky;top:0;background:var(--card);padding:18px 22px 12px;border-bottom:1px solid var(--line);display:flex;align-items:flex-start;gap:12px;z-index:2}
+.dlg header h2{margin:0;font:700 19px/1.5 "Noto Kufi Arabic";flex:1}
+.dlg header small{display:block;font:500 12px "IBM Plex Sans Arabic";color:var(--g);margin-bottom:2px}
+.x{width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:#fff;cursor:pointer;font-size:18px;line-height:1;flex:none}
+.x:hover,.x:focus-visible{border-color:var(--m);outline:none}
+.dlg .bd{padding:18px 22px 24px}
+.sec{margin:0 0 18px}.sec h3{margin:0 0 6px;font:600 14px "Noto Kufi Arabic";color:var(--m)}.sec p{margin:0;line-height:1.9;font-size:15.5px;white-space:pre-line}
+.media-main{background:#1c1517;border-radius:10px;overflow:hidden;aspect-ratio:16/10;display:grid;place-items:center;margin-bottom:10px}
+.media-main img,.media-main video{width:100%;height:100%;object-fit:contain;display:block}
+.thumbs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.thumbs button{width:74px;height:54px;border-radius:6px;overflow:hidden;border:2px solid transparent;padding:0;cursor:pointer;background:#333}
+.thumbs button.on{border-color:var(--g)}
+.thumbs img{width:100%;height:100%;object-fit:cover}
+.mcap{font-size:13px;color:var(--mu);margin:-4px 0 14px}
+#vidOv .dlg{width:min(1100px,100%);background:#0d0a0b;color:#eee}
+#vidOv header{background:#0d0a0b;border-color:#2c2326}
+#vidOv .x{background:#1d1719;color:#eee;border-color:#3a2f33}
+.vwrap{position:relative;background:#000;aspect-ratio:16/9}
+.vwrap video{width:100%;height:100%;display:block;background:#000}
+.vtools{display:flex;gap:8px;padding:12px 22px 18px;flex-wrap:wrap;align-items:center}
+.vtools button{background:#211a1c;color:#eee;border:1px solid #3a2f33;border-radius:999px;padding:7px 14px;cursor:pointer;font-size:13px}
+.vtools button[aria-pressed=true]{border-color:var(--g);color:var(--g2)}
+.vtools span{color:#9c8f88;font-size:12px;margin-inline-start:auto}
+#toc{position:fixed;top:0;bottom:0;right:0;width:min(340px,88vw);background:var(--card);z-index:31;transform:translateX(105%);transition:transform .35s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column;box-shadow:-20px 0 60px rgba(0,0,0,.4)}
+#toc.on{transform:none}
+#toc header{padding:18px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center}
+#toc header h2{flex:1;margin:0;font:700 18px "Noto Kufi Arabic"}
+#toc ol{list-style:none;margin:0;padding:8px 10px;overflow:auto;flex:1}
+#toc li button{width:100%;display:flex;gap:10px;align-items:center;text-align:right;border:0;background:transparent;padding:11px 10px;border-radius:8px;cursor:pointer;color:var(--ink)}
+#toc li button:hover,#toc li button:focus-visible{background:rgba(126,21,50,.07);outline:none}
+#toc li button.cur{background:rgba(184,147,63,.16)}
+#toc li b{font:600 14.5px "Noto Kufi Arabic";flex:1}
+#toc li small{color:var(--mu)}
+#toc footer{padding:12px 16px;border-top:1px solid var(--line);display:flex;gap:8px;flex-wrap:wrap}
+#toc footer button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 12px;font-size:12.5px;cursor:pointer;color:var(--mu)}
+#scrim{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:30;display:none}#scrim.on{display:block}
+.f{display:grid;gap:12px}
+.f label{display:grid;gap:5px;font:600 13px "IBM Plex Sans Arabic";color:#3a3034}
+.f input:not([type=checkbox]):not([type=file]),.f textarea,.f select{border:1px solid var(--line);border-radius:9px;padding:10px 12px;background:#fff;font-weight:400;font-size:15px;color:var(--ink);width:100%}
+.f textarea{min-height:110px;resize:vertical;line-height:1.8}
+.f input:focus,.f textarea:focus,.f select:focus{outline:2px solid rgba(184,147,63,.5);border-color:var(--g)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:560px){.row2{grid-template-columns:1fr}}
+.btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.b{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:9px 18px;cursor:pointer;font:600 14px "IBM Plex Sans Arabic"}
+.b.p{background:var(--m);border-color:var(--m);color:#fff}
+.b.d{color:var(--danger);border-color:rgba(165,42,33,.4)}
+.b:disabled{opacity:.5;cursor:default}
+.note{font-size:13px;color:var(--mu);line-height:1.8;font-weight:400}
+.msg{font-size:13.5px;min-height:20px}.msg.err{color:var(--danger)}.msg.ok{color:#2d6a3e}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.seg button{border:0;background:#fff;padding:7px 14px;cursor:pointer;font-size:13px}
+.seg button.on{background:var(--m);color:#fff}
+.sigprev{min-height:70px;border:1px dashed var(--line);border-radius:10px;display:grid;place-items:center;background:var(--paper)}
+.sigprev .st{font:400 34px "Aref Ruqaa",serif;color:var(--m)}
+.sigprev img{max-height:64px;max-width:240px}
+.pvwrap{background:#e9e1d4;border-radius:10px;padding:12px;display:flex;justify-content:center}
+.pvbox{position:relative;width:300px;height:420px;background:var(--paper);box-shadow:0 6px 20px rgba(0,0,0,.15);overflow:hidden}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;border-bottom:1px solid var(--line);padding-bottom:10px}
+.tabs button{border:0;background:transparent;padding:8px 12px;border-radius:8px;cursor:pointer;font:600 13.5px "IBM Plex Sans Arabic";color:var(--mu)}
+.tabs button.on{background:rgba(126,21,50,.09);color:var(--m)}
+.lst{display:grid;gap:8px}
+.it{border:1px solid var(--line);border-radius:10px;padding:10px 12px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;background:#fff}
+.it b{font:600 14px "Noto Kufi Arabic";flex:1;min-width:160px}
+.it small{color:var(--mu);font-weight:400}
+.tag{font-size:11px;border-radius:999px;padding:2px 8px;background:#efe7da;color:#6a5a40}
+.tag.pub{background:#e2f0e5;color:#2d6a3e}.tag.dm{background:#f5ead2;color:#8a6a1f}
+.mlist{display:flex;gap:8px;flex-wrap:wrap}
+.mitem{width:120px;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#fff;font-size:12px}
+.mitem img,.mitem video{width:100%;height:76px;object-fit:cover;display:block;background:#222}
+.mitem input{border:0!important;border-top:1px solid var(--line)!important;border-radius:0!important;width:100%;padding:5px 6px!important;font-size:12px!important}
+.mitem button{width:100%;border:0;border-top:1px solid var(--line);background:#fff;color:var(--danger);cursor:pointer;padding:4px}
+#simple{position:fixed;inset:56px 0 72px;display:none;align-items:center;justify-content:center;background:radial-gradient(ellipse at center,#3a2a20,#120c09)}
+body.simple #simple{display:flex}
+body.simple #stage,body.simple #overlay,body.simple #vign,body.simple #intro{display:none}
+.spread{display:flex;flex-direction:row;flex:none;transform-origin:center;box-shadow:0 30px 60px rgba(0,0,0,.5)}
+.spage{position:relative;width:600px;height:840px;background:var(--paper);overflow:hidden;flex:none}
+.spage.r{background:linear-gradient(90deg,rgba(0,0,0,.10),rgba(0,0,0,0) 7%),var(--paper)}
+.spage.l{background:linear-gradient(270deg,rgba(0,0,0,.10),rgba(0,0,0,0) 7%),var(--paper)}
+.spage.cover{background:var(--m);display:grid;place-items:center;color:var(--g2);text-align:center}
+.spage.cover h1{font:700 40px/1.5 "Noto Kufi Arabic";margin:0 40px 10px}.spage.cover p{margin:0;color:#e9d9b2}
+:focus-visible{outline:2px solid var(--g);outline-offset:2px}
+@media(max-width:640px){.bar .hide-s{display:none}.nav .where{min-width:120px}}
+</style>
+</head>
+<body>
+<div id="loader" role="status"><div class="bx"><div class="bk"></div><b>يُجهَّز المعرض…</b><small id="ldMsg">تحميل الخطوط</small></div></div>
+<div id="stage"></div>
+<div id="vign"></div>
+<div id="overlay"><div class="pg" id="pgR"></div><div class="pg" id="pgL"></div></div>
+<div id="simple" aria-live="polite"><div class="spread" id="spread"></div></div>
+
+<header class="bar">
+  <a class="tb" href="index.html" aria-label="العودة إلى بوابة المعرض"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg><span class="hide-s">البوابة</span></a>
+  <div class="brand">معرض إنجازات التدريب الميداني<small>الخدمة الاجتماعية · جامعة قطر</small></div>
+  <button class="tb" id="btnToc" aria-controls="toc" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h10"/></svg>الفهرس</button>
+  <button class="tb" id="btnMode" aria-pressed="false"><span id="modeTxt">عرض مبسّط</span></button>
+</header>
+
+<div id="intro"><h1>معرض إنجازات التدريب الميداني</h1><p>معرض افتراضي يجمع أنشطة الطالبات وكلمات شركائنا في الميدان</p><button class="cta" id="btnOpen">ادخلي المعرض</button></div>
+
+<nav class="nav" aria-label="التنقل بين الصفحات">
+  <button class="rb" id="btnPrev" aria-label="الصفحة السابقة"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></button>
+  <div class="where" id="where"><b>الغلاف</b><span>&nbsp;</span></div>
+  <button class="rb" id="btnNext" aria-label="الصفحة التالية"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 6l-6 6 6 6"/></svg></button>
+</nav>
+
+<div id="scrim"></div>
+<aside id="toc" aria-label="فهرس المعرض" aria-hidden="true">
+  <header><h2>فهرس المعرض</h2><button class="x" data-close="toc" aria-label="إغلاق">×</button></header>
+  <ol id="tocList"></ol>
+  <footer><button id="btnMentorAny">للأخصائيات: إضافة كلمة مكتوبة أو صوتية</button><button id="btnAdmin">لوحة التحكم</button></footer>
+</aside>
+
+<div class="ov" id="vidOv" role="dialog" aria-modal="true" aria-labelledby="vidTtl"><div class="dlg">
+  <header><div style="flex:1"><small>كلمة الافتتاح</small><h2 id="vidTtl">كلمة رئيس القسم</h2></div><button class="x" data-close="vidOv" aria-label="إغلاق الفيديو">×</button></header>
+  <div class="vwrap" id="vwrap"><video id="vid" controls playsinline preload="metadata" crossorigin="anonymous"></video></div>
+  <div class="vtools"><button id="vCC" aria-pressed="true">الترجمة النصية</button><button id="vFS">ملء الشاشة</button><span id="vNote"></span></div>
+</div></div>
+<div class="ov" id="actOv" role="dialog" aria-modal="true" aria-labelledby="actTtl"><div class="dlg">
+  <header><div style="flex:1"><small id="actOrg"></small><h2 id="actTtl"></h2></div><button class="x" data-close="actOv" aria-label="إغلاق">×</button></header>
+  <div class="bd" id="actBody"></div>
+</div></div>
+<div class="ov" id="menOv" role="dialog" aria-modal="true" aria-labelledby="menTtl"><div class="dlg">
+  <header><div style="flex:1"><small>للأخصائيات الاجتماعيات</small><h2 id="menTtl">كلمة الأخصائيات الاجتماعيات</h2></div><button class="x" data-close="menOv" aria-label="إغلاق">×</button></header>
+  <div class="bd" id="menBody"></div>
+</div></div>
+<div class="ov" id="admOv" role="dialog" aria-modal="true" aria-labelledby="admTtl"><div class="dlg" style="width:min(920px,100%)">
+  <header><div style="flex:1"><small>المشرفة الأكاديمية</small><h2 id="admTtl">لوحة التحكم بالمعرض</h2></div><button class="x" data-close="admOv" aria-label="إغلاق">×</button></header>
+  <div class="bd" id="admBody"></div>
+</div></div>
+<div id="toast" role="status"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+'use strict';
+const SB_URL='https://dzjharsysqfchgobifdk.supabase.co';
+const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR6amhhcnN5c3FmY2hnb2JpZmRrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODcxMzY4NzEsImV4cCI6MjEwMjcxMjg3MX0.73uNnmS_e1xALIRbHIMSYLMYTWYb9H7DSzteP1PKZHI';
+async function rpc(fn,args){
+  const r=await fetch(SB_URL+'/rest/v1/rpc/'+fn,{method:'POST',headers:{apikey:SB_KEY,Authorization:'Bearer '+SB_KEY,'Content-Type':'application/json'},body:JSON.stringify(args||{})});
+  const t=await r.text();let j=null;try{j=t?JSON.parse(t):null}catch(e){j=t}
+  if(!r.ok)throw new Error((j&&j.message)||t||('HTTP '+r.status));
+  return j;
+}
+async function upload(file,folder){
+  const ext=((file.name||'').split('.').pop()||'bin').toLowerCase().replace(/[^a-z0-9]/g,'')||'bin';
+  const path='book/'+folder+'/'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,7)+'.'+ext;
+  let type=file.type;if(!type&&ext==='vtt')type='text/vtt';
+  const r=await fetch(SB_URL+'/storage/v1/object/gallery/'+path,{method:'POST',headers:{apikey:SB_KEY,Authorization:'Bearer '+SB_KEY,'Content-Type':type||'application/octet-stream','x-upsert':'true'},body:file});
+  if(!r.ok)throw new Error('تعذّر رفع الملف ('+r.status+')');
+  return SB_URL+'/storage/v1/object/public/gallery/'+path;
+}
+const $=s=>document.querySelector(s);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const AR=n=>String(n).replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);
+const clamp=(v,a,b)=>v<a?a:v>b?b:v;
+const lerp=(a,b,t)=>a+(b-a)*t;
+const ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+function toast(m,ms){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(toast._t);toast._t=setTimeout(()=>t.classList.remove('on'),ms||2600)}
+function errMsg(e){const m=String(e&&e.message||e);if(/bad_code/.test(m))return'الرمز غير صحيح لهذه المؤسسة.';if(/bad_pass/.test(m))return'كلمة المرور غير صحيحة.';if(/empty_body/.test(m))return'اكتبي نص الكلمة قبل النشر.';if(/Failed to fetch|NetworkError/.test(m))return'تعذّر الاتصال. تحقّقي من الإنترنت وأعيدي المحاولة.';return m}
+function sget(k){try{return sessionStorage.getItem(k)}catch(e){return null}}
+function sset(k,v){try{sessionStorage.setItem(k,v)}catch(e){}}
+
+/* ===== demo images (abstract, no people) ===== */
+function rng(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const demoCanvases={},demoURLs={};
+function demoImage(n){
+  if(demoCanvases[n])return demoCanvases[n];
+  const c=document.createElement('canvas');c.width=640;c.height=440;const g=c.getContext('2d');const R=rng(n*977+13);
+  const pals=[['#7E1532','#E4D5B0','#B8933F','#F4EEE4'],['#2F5654','#E8DCC4','#C9A45C','#F2EDE4'],['#4A3B5C','#EADBC8','#B8933F','#F5F0E9'],['#1F4E5F','#F1E3C8','#D08C60','#F3EEE6']];
+  const p=pals[n%4];g.fillStyle=p[3];g.fillRect(0,0,640,440);
+  const m=n%5;
+  const sh=f=>{g.save();g.shadowColor='rgba(40,20,10,.22)';g.shadowBlur=14;g.shadowOffsetY=6;f();g.restore()};
+  if(m===0){sh(()=>{g.fillStyle=p[1];g.fillRect(70,50,500,320)});
+    for(let i=0;i<9;i++){const x=100+(i%3)*150+R()*20,y=80+Math.floor(i/3)*95+R()*10,r=(R()-.5)*.12;sh(()=>{g.fillStyle=[p[0],p[2],'#fff'][i%3];g.save();g.translate(x+55,y+35);g.rotate(r);g.fillRect(-55,-35,110,70);g.restore()})}}
+  else if(m===1){g.fillStyle=p[1];g.beginPath();g.arc(320,220,170,0,7);g.fill();
+    for(let i=0;i<10;i++){const a=i/10*Math.PI*2;sh(()=>{g.fillStyle=i%3?p[0]:p[2];g.beginPath();g.arc(320+Math.cos(a)*140,220+Math.sin(a)*140,24,0,7);g.fill()})}
+    g.fillStyle='#fff';g.beginPath();g.arc(320,220,52,0,7);g.fill()}
+  else if(m===2){sh(()=>{g.fillStyle='#fff';g.save();g.translate(320,220);g.rotate(-.06);g.fillRect(-190,-150,380,300);g.restore()});
+    g.save();g.translate(320,220);g.rotate(-.06);g.fillStyle=p[0];g.fillRect(-190,-150,380,70);g.fillStyle=p[2];
+    for(let i=0;i<6;i++)g.fillRect(-160,-55+i*30,(i%2?220:300)*(.6+R()*.4),10);g.fillStyle=p[1];g.beginPath();g.arc(120,70,48,0,7);g.fill();g.restore()}
+  else if(m===3){g.fillStyle=p[1];g.fillRect(0,250,640,190);
+    for(let i=0;i<4;i++){const yy=220+R()*30,r=(R()-.5)*.5;sh(()=>{g.fillStyle=i%2?'#fff':p[1];g.save();g.translate(150+i*110,yy);g.rotate(r);g.fillRect(-60,-80,120,160);g.restore()})}
+    sh(()=>{g.fillStyle=p[0];g.beginPath();g.arc(520,110,46,0,7);g.fill()});g.fillStyle=p[2];g.fillRect(60,60,140,14)}
+  else{for(let r=0;r<3;r++){g.fillStyle=p[1];g.fillRect(60,90+r*110,520,10);for(let i=0;i<9;i++){const w=26+R()*24,h=50+R()*40;g.fillStyle=[p[0],p[2],'#fff',p[1]][(i+r)%4];g.fillRect(70+i*56,90+r*110-h,w,h)}}}
+  const id=g.getImageData(0,0,640,440),d=id.data;for(let i=0;i<d.length;i+=4){const v=(R()-.5)*14;d[i]+=v;d[i+1]+=v;d[i+2]+=v}g.putImageData(id,0,0);
+  return demoCanvases[n]=c;
+}
+function demoURL(n){return demoURLs[n]||(demoURLs[n]=demoImage(n).toDataURL('image/jpeg',.86))}
+function srcURL(s){if(!s)return'';return s.indexOf('demo:')===0?demoURL(+s.slice(5)):s}
+const imgCache={};
+function loadImg(src,cb){
+  if(!src)return null;let o=imgCache[src];
+  if(!o){o=imgCache[src]={img:null,ready:false,cbs:[]};
+    if(src.indexOf('demo:')===0){o.img=demoImage(+src.slice(5));o.ready=true}
+    else{const im=new Image();im.crossOrigin='anonymous';im.onload=()=>{o.ready=true;o.cbs.splice(0).forEach(f=>f())};im.onerror=()=>{o.cbs=[]};im.src=src;o.img=im}}
+  if(!o.ready&&cb)o.cbs.push(cb);
+  return o;
+}
+function firstImage(a){const m=(a.media||[]).find(x=>x&&x.type!=='video'&&x.src);return m?m.src:''}
+
+/* ===== data → pages ===== */
+let DATA=null,PAGES=[],ORG_START={},L=0;
+const WHO={
+  head:{label:'كلمة الافتتاح',title:'كلمة رئيس قسم العلوم الاجتماعية',empty:'ستُنشر كلمة رئيس القسم هنا قريباً.',row:'كلمة رئيس القسم'},
+  coord:{label:'كلمة منسق البرنامج',title:'كلمة منسق برنامج الخدمة الاجتماعية',empty:'ستُنشر كلمة منسق البرنامج هنا قريباً.',row:'كلمة منسق البرنامج'},
+  acad:{label:'كلمة المشرفة الأكاديمية',title:'كلمة المشرفة الأكاديمية',empty:'ستُنشر كلمة المشرفة الأكاديمية هنا قريباً.',row:'كلمة المشرفة الأكاديمية'}};
+function headOK(who){const h=DATA&&DATA[who||'head'];return !!(h&&h.published!==false&&(h.body||h.video||h.audio))}
+const SW={label:'كلمة الطالبات',title:'كلمة طالبات التدريب الميداني',empty:'ستُنشر كلمة الطالبات للمؤسسة هنا قريباً.',row:'كلمة الطالبات',sig:'طالبات التدريب الميداني'};
+function wordOf(who){if(who&&who.indexOf('s:')===0){const o=(DATA.orgs||[]).find(o=>o.org===who.slice(2));return{W:SW,H:(o&&o.student_word)||{}}}return{W:WHO[who]||WHO.head,H:DATA[who]||{}}}
+function okWord(H){return !!(H&&H.published!==false&&(H.body||H.video||H.audio))}
+function headBodyTop(H){return H.video?(H.audio?556:466):(H.audio?252:160)}
+const FRONT_ROWS=()=>[{name:WHO.head.row,page:0,go:'head'},{name:WHO.coord.row,page:1,go:'coord'},{name:WHO.acad.row,page:2,go:'acad'}];
+function buildPages(){
+  const P=[];ORG_START={};
+  const words={};(DATA.words||[]).forEach(w=>words[w.org]=w);
+  P.push({t:'head',who:'head'});P.push({t:'head',who:'coord'});P.push({t:'head',who:'acad'});P.push({t:'index'});
+  (DATA.orgs||[]).forEach(o=>{
+    const list=(DATA.activities||[]).filter(a=>a.org===o.org);
+    if(!list.length&&!words[o.org])return; // listed in the index only, wing appears once content exists
+    if(P.length%2)P.push({t:'filler'});
+    ORG_START[o.org]=P.length;
+    P.push({t:'org',org:o.org,bio:o.bio,demo:o.is_demo,count:list.length});
+    for(let i=0;i<list.length;i+=4)P.push({t:'gallery',org:o.org,items:list.slice(i,i+4),pi:i/4+1,pn:Math.ceil(list.length/4)});
+    P.push({t:'word',org:o.org,w:words[o.org]||null});
+    P.push({t:'head',who:'s:'+o.org,org:o.org});
+  });
+  if(P.length%2===1)P.push({t:'filler'});
+  P.push({t:'end'});
+  PAGES=P;L=(P.length-1)/2; // leaf0 = cover (inner = P0); leaf i: front=P[2i-1] (left), back=P[2i] (right)
+}
+const ORG_LABEL={'نوفر':'مستشفى نوفر'};
+const orgName=o=>ORG_LABEL[o]||o;
+const WORD_LAB='كلمة الميدان',WORD_TTL='كلمة الأخصائيات الاجتماعيات';
+const orgPrep=o=>'في '+orgName(o);
+const spreadOfPage=p=>p===0?1:(p%2===0?p/2+1:(p+1)/2);
+function pageLabel(p){const x=PAGES[p];if(!x)return'';if(x.t==='head')return x.org||wordOf(x.who||'head').W.label;if(x.t==='index')return'الفهرس';if(x.t==='end')return'الخاتمة';return x.org||''}
+
+/* ===== DOM page builders (real HTML text over the 3D page) ===== */
+const CORNER_R='<svg class="ab corner" style="right:0" viewBox="0 0 46 46"><path d="M46 46H8Q30 38 46 8Z" fill="rgba(120,90,60,.10)"/><path d="M46 8Q30 38 8 46" fill="none" stroke="rgba(120,90,60,.35)"/></svg>';
+const CORNER_L='<svg class="ab corner" style="left:0" viewBox="0 0 46 46"><path d="M0 46H38Q16 38 0 8Z" fill="rgba(120,90,60,.10)"/><path d="M0 8Q16 38 38 46" fill="none" stroke="rgba(120,90,60,.35)"/></svg>';
+function emblemSVG(){return '<svg class="ab emb" viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="56" fill="none" stroke="#B8933F" stroke-width="2"/><circle cx="60" cy="60" r="48" fill="none" stroke="#B8933F" stroke-width=".8"/><path d="M34 82V50l26-14 26 14v32M30 84h60M44 82V58M54 82V58M66 82V58M76 82V58M34 52h52" fill="none" stroke="#7E1532" stroke-width="2.4" stroke-linejoin="round"/></svg>'}
+function dateAr(s){try{return new Date(s).toLocaleDateString('ar-QA',{year:'numeric',month:'long',day:'numeric'})}catch(e){return''}}
+function pageHTML(p,src){
+  const x=src||PAGES[p];if(!x)return'';
+  const right=p%2===0;let h='';
+  const num='<div class="ab num">'+AR(p+1)+'</div>';
+  const corner=p===0||src?'':(right?CORNER_R:CORNER_L);
+  if(x.t==='head'){
+    const who=x.who||'head',{W,H}=wordOf(who);
+    h+='<div class="ab lab ink">'+W.label+'</div>';
+    if(H.is_demo)h+='<div class="ab demo">محتوى تجريبي</div>';
+    h+='<div class="ab ttl ink">'+esc(H.title_line||W.title)+'</div>';
+    if(x.org)h+='<div class="ab wsub ink">إلى '+esc(orgName(x.org))+'</div>';
+    if(okWord(H)){
+      if(H.video)h+='<button class="ab poster" data-act="play" data-who="'+who+'" aria-label="تشغيل فيديو '+esc(W.row)+'">'+(H.poster?'<img alt="" src="'+esc(srcURL(H.poster))+'">':'')+'<span class="pl"><i></i></span><span class="cap">شاهدي الكلمة</span></button>';
+      const aTop=H.video?452:150,bTop=headBodyTop(H);
+      if(H.audio)h+='<div class="ab vbox" style="top:'+aTop+'px"><span>كلمة صوتية · استمعي إليها</span><audio controls preload="none" src="'+esc(H.audio)+'"></audio></div>';
+      if(H.body)h+='<div class="ab quote ink" style="top:'+bTop+'px;max-height:'+(680-bTop)+'px;overflow:auto;pointer-events:auto">'+esc(H.body)+'</div>';
+      h+='<div class="ab who ink" style="top:700px">'+esc(H.name||W.sig||'')+'</div><div class="ab whos" style="top:732px">'+esc(H.role||'')+'</div>';
+    }else h+='<div class="ab empty"><p>'+W.empty+'</p></div>';
+  }else if(x.t==='index'){
+    h+='<div class="ab lab ink">الفهرس</div><div class="ab ttl ink">المؤسسات التدريبية</div><div class="ab sub">اختاري جناحاً للانتقال إليه مباشرة</div>';
+    const rows=FRONT_ROWS().concat((DATA.orgs||[]).map(o=>({name:o.org,page:ORG_START[o.org],go:o.org})));
+    const rh=rows.length>11?40:50;
+    rows.forEach((r,i)=>{const has=r.page!=null;h+='<'+(has?'button':'div')+' class="ab row" style="top:'+(186+i*rh)+'px'+(has?'':';opacity:.6')+'"'+(has?' data-act="jump" data-org="'+esc(r.go)+'"':'')+'><span class="n">'+AR(i+1)+'</span><span class="t">'+esc(orgName(r.name))+'</span><span class="d"></span><span class="p">'+(has?AR(r.page+1):'قريباً')+'</span></'+(has?'button':'div')+'>'});
+  }else if(x.t==='org'){
+    h+='<div class="ab lab ink">جناح المؤسسة</div>';
+    if(x.demo)h+='<div class="ab demo">محتوى تجريبي</div>';
+    h+=emblemSVG()+'<div class="ab oname ink">'+esc(x.org)+'</div><div class="ab obio ink" style="max-height:224px;overflow:hidden">'+esc(x.bio||'')+'</div>';
+    h+='<div class="ab chips"><span class="chip">'+AR(x.count)+' '+(x.count===1?'نشاط':'أنشطة')+'</span><button class="chip hit" data-act="word" data-org="'+esc(x.org)+'">كلمة الأخصائيات</button></div>';
+    h+='<div class="ab hint">اسحبي زاوية الصفحة لتصفّح الأنشطة</div>';
+  }else if(x.t==='gallery'){
+    h+='<div class="ab lab ink">'+esc(x.org)+'</div><div class="ab ttl ink">أنشطة الطالبات'+(x.pn>1?' <span style="font-size:15px;color:#6A5F63">('+AR(x.pi)+' من '+AR(x.pn)+')</span>':'')+'</div>';
+    x.items.forEach((a,i)=>{const top=i<2?150:470;
+      h+='<button class="ab card" style="top:'+top+'px;'+(i%2===0?'right:48px':'left:48px')+'" data-act="act" data-id="'+a.id+'" aria-label="تفاصيل نشاط: '+esc(a.title)+'">'+(firstImage(a)?'<img alt="" src="'+esc(srcURL(firstImage(a)))+'">':'<span class="noimg">'+esc(a.kind||'نشاط')+'</span>')+'<span class="k">'+esc(a.kind||'نشاط')+'</span><span class="h">'+esc(a.title)+'</span></button>'});
+  }else if(x.t==='word'){
+    const w=x.w;
+    h+='<div class="ab lab ink">'+WORD_LAB+'</div><div class="ab ttl ink">'+WORD_TTL+'</div><div class="ab wsub ink">'+esc(orgPrep(x.org))+'</div>';
+    if(w){
+      if(w.is_demo)h+='<div class="ab demo">محتوى تجريبي</div>';
+      const hasA=!!w.audio,top0=hasA?(w.body?286:210):200;
+      if(hasA)h+='<div class="ab vbox"><span>كلمة صوتية · استمعي إليها</span><audio controls preload="none" src="'+esc(w.audio)+'"></audio></div>';
+      if(w.body)h+='<div class="ab wbody ink" tabindex="0" style="top:'+top0+'px;height:'+(636-top0)+'px">'+esc(w.body)+'</div>';
+      h+='<div class="ab sep"></div>';
+      h+='<div class="ab who ink" style="top:678px">'+esc(w.name||'الأخصائيات الاجتماعيات')+'</div><div class="ab whos" style="top:708px">'+esc(w.role||'')+'</div>';
+      h+='<div class="ab sig">'+(w.sig_url?'<img alt="التوقيع" src="'+esc(w.sig_url)+'">':'<span class="st">'+esc(w.sig_text||w.name||'')+'</span>')+'<small>'+(w.published_at?dateAr(w.published_at):'')+'</small></div>';
+      if(!src)h+='<button class="ab mbtn" data-act="mentor" data-org="'+esc(x.org)+'">للأخصائيات: تعديل الكلمة</button>';
+    }else{
+      h+='<div class="ab empty"><p>لم تُنشر كلمة الأخصائيات الاجتماعيات بعد.<br>يمكن أن تكون مكتوبة أو صوتية.</p><button class="btnm" data-act="mentor" data-org="'+esc(x.org)+'">أضيفي كلمتكن — كتابةً أو صوتاً</button></div>';
+    }
+  }else if(x.t==='filler'){
+    h+='<div class="ab center" style="top:360px;font:400 30px Amiri,serif;color:#B8933F">✦</div><div class="ab center ink" style="top:410px;font:400 20px/1.9 Amiri,serif;color:#6A5F63">التعلّم في الميدان يبدأ من الإصغاء</div>';
+  }else if(x.t==='end'){
+    h+='<div class="ab lab ink">الخاتمة</div>'+emblemSVG()+'<div class="ab oname ink" style="top:310px">شكراً لشركائنا في الميدان</div><div class="ab obio ink">هذا المعرض حصيلة شراكة بين القسم والمؤسسات التدريبية والمشرفات الميدانيات، وثمرة جهد طالبات حملن المهنة إلى الناس.</div><div class="ab center" style="top:662px;font:500 14px \'IBM Plex Sans Arabic\';color:#6A5F63">قسم العلوم الاجتماعية · كلية الآداب والعلوم · جامعة قطر</div>';
+  }
+  return h+(src?'':num)+corner;
+}
+
+/* ===== canvas page renderer (used while pages move) ===== */
+function wrapLines(g,text,maxW){const out=[];String(text||'').split('\n').forEach(par=>{const ws=par.split(/\s+/).filter(Boolean);let line='';ws.forEach(w=>{const t=line?line+' '+w:w;if(g.measureText(t).width>maxW&&line){out.push(line);line=w}else line=t});out.push(line)});return out}
+function txt(g,text,x,y,maxW,lh,maxLines,align){let ls=wrapLines(g,text,maxW);if(maxLines&&ls.length>maxLines){ls=ls.slice(0,maxLines);ls[maxLines-1]+=' …'}g.textAlign=align||'right';ls.forEach((l,i)=>g.fillText(l,x,y+i*lh));return ls.length*lh}
+function coverFit(g,img,x,y,w,h){const iw=img.naturalWidth||img.width,ih=img.naturalHeight||img.height;if(!iw)return;const s=Math.max(w/iw,h/ih),sw=w/s,sh=h/s;g.drawImage(img,(iw-sw)/2,(ih-sh)/2,sw,sh,x,y,w,h)}
+function rr(g,x,y,w,h,r){g.beginPath();g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);g.arcTo(x+w,y+h,x,y+h,r);g.arcTo(x,y+h,x,y,r);g.arcTo(x,y,x+w,y,r);g.closePath()}
+let paperGrain=null;
+function grain(){if(paperGrain)return paperGrain;const c=document.createElement('canvas');c.width=c.height=256;const g=c.getContext('2d');const id=g.createImageData(256,256),R=rng(7);for(let i=0;i<id.data.length;i+=4){const v=R()*255;id.data[i]=id.data[i+1]=id.data[i+2]=v;id.data[i+3]=10}g.putImageData(id,0,0);return paperGrain=c}
+function paperBase(g,W,H,right){g.fillStyle='#F8F4EC';g.fillRect(0,0,W,H);g.fillStyle=g.createPattern(grain(),'repeat');g.fillRect(0,0,W,H);
+  const gr=right?g.createLinearGradient(0,0,W*.09,0):g.createLinearGradient(W,0,W*.91,0);gr.addColorStop(0,'rgba(70,45,25,.20)');gr.addColorStop(1,'rgba(70,45,25,0)');g.fillStyle=gr;g.fillRect(0,0,W,H)}
+const F={lab:'500 13px "IBM Plex Sans Arabic"',ttl:'700 26px "Noto Kufi Arabic"',q:'400 19px Amiri',who:'600 16px "Noto Kufi Arabic"',sm:'400 13px "IBM Plex Sans Arabic"'};
+function drawPage(g,p,redraw){
+  const x=PAGES[p];if(!x)return;g.save();g.direction='rtl';g.textBaseline='top';
+  const lab=t=>{g.font=F.lab;g.fillStyle='#6A5F63';g.textAlign='right';g.fillText(t,552,40);g.fillStyle='rgba(184,147,63,.55)';g.fillRect(48,66,504,1)};
+  const ttl=t=>{g.font=F.ttl;g.fillStyle='#191417';txt(g,t,552,92,504,39,2)};
+  const demo=()=>{g.fillStyle='#B8933F';rr(g,48,4,96,24,6);g.fill();g.fillStyle='#fff';g.font='600 11px "IBM Plex Sans Arabic"';g.textAlign='center';g.fillText('محتوى تجريبي',96,9)};
+  const img=(src,X,Y,W,H,r)=>{const o=loadImg(src,redraw);g.save();rr(g,X,Y,W,H,r||0.01);g.clip();g.fillStyle='#d9cfc0';g.fillRect(X,Y,W,H);if(o&&o.ready)coverFit(g,o.img,X,Y,W,H);g.restore()};
+  if(x.t==='head'){const who=x.who||'head',{W,H}=wordOf(who);lab(W.label);if(H.is_demo)demo();ttl(H.title_line||W.title);
+    if(x.org){g.font='600 16px "Noto Kufi Arabic"';g.fillStyle='#7E1532';g.textAlign='right';g.fillText('إلى '+orgName(x.org),552,134)}
+    if(!okWord(H)){g.font='400 17px "IBM Plex Sans Arabic"';g.fillStyle='#6A5F63';txt(g,W.empty,300,300,460,30,3,'center')}
+    if(okWord(H)){if(H.video){g.fillStyle='#2b2126';rr(g,48,150,504,284,10);g.fill();if(H.poster)img(H.poster,48,150,504,284,10);g.fillStyle='rgba(255,253,250,.94)';g.beginPath();g.arc(300,292,38,0,7);g.fill();g.fillStyle='#7E1532';g.beginPath();g.moveTo(292,278);g.lineTo(314,292);g.lineTo(292,306);g.fill()}
+      if(H.audio){const aT=H.video?452:150;g.fillStyle='rgba(126,21,50,.06)';rr(g,48,aT,504,80,12);g.fill();g.fillStyle='#B8933F';g.font='600 13px "IBM Plex Sans Arabic"';g.textAlign='right';g.fillText('كلمة صوتية · استمعي إليها',538,aT+12);g.fillStyle='#7E1532';g.beginPath();g.arc(520,aT+54,15,0,7);g.fill();g.fillStyle='#fff';g.beginPath();g.moveTo(515,aT+46);g.lineTo(527,aT+54);g.lineTo(515,aT+62);g.fill();g.fillStyle='rgba(126,21,50,.25)';g.fillRect(64,aT+52,430,4)}
+      const bT=headBodyTop(H);if(H.body){g.font=F.q;g.fillStyle='#2a2226';txt(g,H.body,552,bT,504,34,Math.floor((680-bT)/34))}g.font=F.who;g.fillStyle='#191417';g.textAlign='right';g.fillText(H.name||W.sig||'',552,700);g.font=F.sm;g.fillStyle='#6A5F63';g.fillText(H.role||'',552,734)}
+  }else if(x.t==='index'){lab('الفهرس');ttl('المؤسسات التدريبية');g.font='400 14px "IBM Plex Sans Arabic"';g.fillStyle='#6A5F63';g.textAlign='right';g.fillText('اختاري جناحاً للانتقال إليه مباشرة',552,140);
+    const rows=FRONT_ROWS().concat((DATA.orgs||[]).map(o=>({name:o.org,page:ORG_START[o.org]})));const rh=rows.length>11?40:50;
+    rows.forEach((r,i)=>{const y=186+i*rh+22;r={name:orgName(r.name),page:r.page};g.globalAlpha=r.page==null?.6:1;g.strokeStyle='#B8933F';g.lineWidth=1.5;g.beginPath();g.arc(538,y,14,0,7);g.stroke();g.fillStyle='#7E1532';g.font='600 12px "IBM Plex Sans Arabic"';g.textAlign='center';g.textBaseline='middle';g.fillText(AR(i+1),538,y+1);
+      g.font='600 16px "Noto Kufi Arabic"';g.fillStyle='#191417';g.textAlign='right';g.fillText(r.name,512,y);const tw=g.measureText(r.name).width;g.font='500 14px "IBM Plex Sans Arabic"';g.fillStyle='#6A5F63';g.textAlign='left';g.fillText(r.page==null?'قريباً':AR(r.page+1),54,y);
+      g.strokeStyle='#c9bba5';g.setLineDash([2,4]);g.beginPath();g.moveTo(84,y+6);g.lineTo(500-tw,y+6);g.stroke();g.setLineDash([]);g.textBaseline='top';g.globalAlpha=1});
+  }else if(x.t==='org'||x.t==='end'){lab(x.t==='org'?'جناح المؤسسة':'الخاتمة');if(x.demo)demo();
+    g.strokeStyle='#B8933F';g.lineWidth=2;g.beginPath();g.arc(300,210,56,0,7);g.stroke();g.lineWidth=.8;g.beginPath();g.arc(300,210,48,0,7);g.stroke();
+    g.strokeStyle='#7E1532';g.lineWidth=2.4;g.beginPath();g.moveTo(274,232);g.lineTo(274,200);g.lineTo(300,186);g.lineTo(326,200);g.lineTo(326,232);g.moveTo(270,234);g.lineTo(330,234);[284,294,306,316].forEach(xx=>{g.moveTo(xx,232);g.lineTo(xx,208)});g.moveTo(274,202);g.lineTo(326,202);g.stroke();
+    g.font='700 31px "Noto Kufi Arabic"';g.fillStyle='#7E1532';txt(g,x.t==='org'?x.org:'شكراً لشركائنا في الميدان',300,x.t==='org'?306:316,480,48,2,'center');
+    g.font='400 17px "IBM Plex Sans Arabic"';g.fillStyle='#3a3034';txt(g,x.t==='org'?x.bio:'هذا المعرض حصيلة شراكة بين القسم والمؤسسات التدريبية والمشرفات الميدانيات، وثمرة جهد طالبات حملن المهنة إلى الناس.',300,436,460,32,7,'center');
+    g.textAlign='center';
+    if(x.t==='org'){g.font='600 13px "IBM Plex Sans Arabic"';g.fillStyle='#7E1532';g.fillText(AR(x.count)+' '+(x.count===1?'نشاط':'أنشطة')+'      ·      كلمة الأخصائيات',300,662);g.font=F.sm;g.fillStyle='#6A5F63';g.fillText('اسحبي زاوية الصفحة لتصفّح الأنشطة',300,730)}
+    else{g.font='500 14px "IBM Plex Sans Arabic"';g.fillStyle='#6A5F63';g.fillText('قسم العلوم الاجتماعية · كلية الآداب والعلوم · جامعة قطر',300,664)}
+  }else if(x.t==='gallery'){lab(x.org);ttl('أنشطة الطالبات');
+    x.items.forEach((a,i)=>{const X=i%2===0?304:48,Y=i<2?150:470;g.fillStyle='rgba(255,253,250,.6)';rr(g,X,Y,248,300,10);g.fill();g.strokeStyle='#E0D7CB';g.lineWidth=1;g.stroke();if(firstImage(a))img(firstImage(a),X,Y,248,180);else{g.save();rr(g,X,Y,248,180,10);g.clip();const gr=g.createLinearGradient(X,Y,X+248,Y+180);gr.addColorStop(0,'#7E1532');gr.addColorStop(1,'#5a0f25');g.fillStyle=gr;g.fillRect(X,Y,248,180);g.fillStyle='#B8933F';g.fillRect(X,Y+177,248,3);g.font='600 18px "Noto Kufi Arabic"';g.fillStyle='#E4D5B0';g.textAlign='center';g.fillText(a.kind||'نشاط',X+124,Y+76);g.restore()}
+      g.font='600 12px "IBM Plex Sans Arabic"';g.fillStyle='#B8933F';g.textAlign='right';g.fillText(a.kind||'نشاط',X+234,Y+194);g.font='600 16px "Noto Kufi Arabic"';g.fillStyle='#191417';txt(g,a.title,X+234,Y+214,220,26,2)});
+  }else if(x.t==='word'){lab(WORD_LAB);ttl(WORD_TTL);g.font='600 16px "Noto Kufi Arabic"';g.fillStyle='#7E1532';g.textAlign='right';g.fillText(orgPrep(x.org),552,134);const w=x.w;
+    if(w){if(w.is_demo)demo();const hasA=!!w.audio,top0=hasA?(w.body?286:210):200;
+      if(hasA){g.fillStyle='rgba(126,21,50,.06)';rr(g,48,190,504,80,12);g.fill();g.fillStyle='#B8933F';g.font='600 13px "IBM Plex Sans Arabic"';g.textAlign='right';g.fillText('كلمة صوتية · استمعي إليها',538,202);g.fillStyle='#7E1532';g.beginPath();g.arc(520,244,15,0,7);g.fill();g.fillStyle='#fff';g.beginPath();g.moveTo(515,236);g.lineTo(527,244);g.lineTo(515,252);g.fill();g.fillStyle='rgba(126,21,50,.25)';g.fillRect(64,242,430,4)}
+      if(w.body){g.font=F.q;g.fillStyle='#2a2226';txt(g,w.body,552,top0,504,34,Math.floor((630-top0)/34))}
+      g.fillStyle='rgba(184,147,63,.5)';g.fillRect(48,650,504,1);g.font=F.who;g.fillStyle='#191417';g.textAlign='right';g.fillText(w.name||'الأخصائيات الاجتماعيات',552,678);g.font=F.sm;g.fillStyle='#6A5F63';g.fillText(w.role||'',552,710);
+      if(w.sig_url){const o=loadImg(w.sig_url,redraw);if(o&&o.ready){const im=o.img,s=Math.min(220/im.naturalWidth,66/im.naturalHeight);g.globalCompositeOperation='multiply';g.drawImage(im,163-im.naturalWidth*s/2,676,im.naturalWidth*s,im.naturalHeight*s);g.globalCompositeOperation='source-over'}}
+      else{g.font='400 32px "Aref Ruqaa"';g.fillStyle='#7E1532';g.textAlign='center';g.fillText(w.sig_text||w.name||'',163,680)}
+    }else{g.font='400 17px "IBM Plex Sans Arabic"';g.fillStyle='#6A5F63';txt(g,'لم تُنشر كلمة الأخصائيات الاجتماعيات بعد.\nيمكن أن تكون مكتوبة أو صوتية.',300,300,460,30,3,'center')}
+  }else if(x.t==='filler'){g.textAlign='center';g.font='400 30px Amiri';g.fillStyle='#B8933F';g.fillText('✦',300,360);g.font='400 20px Amiri';g.fillStyle='#6A5F63';g.fillText('التعلّم في الميدان يبدأ من الإصغاء',300,414)}
+  g.font=F.sm;g.fillStyle='#6A5F63';g.textAlign='center';g.fillText(AR(p+1),300,798);
+  g.restore();
+}
+
+/* ===== state ===== */
+const st={turned:0,focus:'R',mode:'3d'};
+const mobile=()=>innerWidth<760&&innerWidth<innerHeight*1.05;
+let three=null;
+
+/* ===== THREE scene ===== */
+const PW=1,PH=1.4,CW=1.05,CH=1.47,TH=0.028,EPS=0.0032,SX=26,SZ=10;
+function initThree(){
+  const T=THREE;let renderer;
+  try{renderer=new T.WebGLRenderer({antialias:true,powerPreference:'high-performance'});if(!renderer.getContext())throw 0}catch(e){return null}
+  renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));renderer.setSize(innerWidth||1,innerHeight||1);
+  renderer.outputEncoding=T.sRGBEncoding;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.08;
+  renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;
+  $('#stage').appendChild(renderer.domElement);
+  const scene=new T.Scene();scene.background=new T.Color(0x120c09);scene.fog=new T.Fog(0x120c09,6,13);
+  const camera=new T.PerspectiveCamera(32,(innerWidth||1)/(innerHeight||1),.05,40);
+  const aniso=renderer.capabilities.getMaxAnisotropy();
+  const texOf=(c,rep)=>{const t=new T.CanvasTexture(c);t.encoding=T.sRGBEncoding;t.anisotropy=aniso;if(rep){t.wrapS=t.wrapT=T.RepeatWrapping;t.repeat.set(rep,rep)}return t};
+  scene.add(new T.HemisphereLight(0xfff1e0,0x2a1a10,.42));
+  const sun=new T.DirectionalLight(0xffe0bc,1.35);sun.position.set(-3.4,4.6,1.8);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);
+  Object.assign(sun.shadow.camera,{left:-2.6,right:2.6,top:2.6,bottom:-2.6,near:1,far:12});sun.shadow.bias=-.0004;sun.shadow.normalBias=.02;sun.shadow.radius=4;scene.add(sun);
+  const lamp=new T.PointLight(0xffb070,.38,9);lamp.position.set(2.8,2.2,-1.8);scene.add(lamp);
+  // desk wood
+  const wc=document.createElement('canvas');wc.width=wc.height=1024;{const g=wc.getContext('2d'),R=rng(3);g.fillStyle='#3a2418';g.fillRect(0,0,1024,1024);
+    for(let i=0;i<520;i++){const y=R()*1024,a=.04+R()*.12;g.strokeStyle=R()<.5?'rgba(20,10,5,'+a+')':'rgba(120,70,40,'+a*.7+')';g.lineWidth=.6+R()*2.4;g.beginPath();g.moveTo(0,y);for(let x=0;x<=1024;x+=32)g.lineTo(x,y+Math.sin(x*.004+i)*6+Math.sin(x*.02+i*3)*1.5);g.stroke()}
+    for(let k=0;k<4;k++){const cx=R()*1024,cy=R()*1024;for(let r=4;r<60;r+=5){g.strokeStyle='rgba(20,10,5,.08)';g.beginPath();g.ellipse(cx,cy,r*2.2,r*.7,0,0,7);g.stroke()}}}
+  const desk=new T.Mesh(new T.PlaneGeometry(14,14),new T.MeshStandardMaterial({map:texOf(wc,4),roughness:.62,metalness:0,color:0xb59a86}));desk.rotation.x=-Math.PI/2;desk.receiveShadow=true;scene.add(desk);
+  // cloth
+  const cc=document.createElement('canvas');cc.width=cc.height=256;{const g=cc.getContext('2d'),R=rng(9);g.fillStyle='#6f1029';g.fillRect(0,0,256,256);for(let y=0;y<256;y+=2){g.fillStyle='rgba(0,0,0,'+(R()*.10)+')';g.fillRect(0,y,256,1)}for(let x=0;x<256;x+=2){g.fillStyle='rgba(255,220,220,'+(R()*.05)+')';g.fillRect(x,0,1,256)}}
+  const clothMat=new T.MeshStandardMaterial({map:texOf(cc,3),roughness:.88});
+  const coverTex=texOf(drawCover()),endTex=texOf(drawEndpaper());
+  // paper edges
+  const ec=document.createElement('canvas');ec.width=64;ec.height=64;{const g=ec.getContext('2d');g.fillStyle='#efe6d4';g.fillRect(0,0,64,64);for(let y=0;y<64;y+=4){g.fillStyle='rgba(120,95,60,.28)';g.fillRect(0,y,64,1)}}
+  const edgeTexL=texOf(ec);edgeTexL.wrapS=edgeTexL.wrapT=T.RepeatWrapping;const edgeTexR=edgeTexL.clone();edgeTexR.needsUpdate=true;
+  const paperTop=new T.MeshStandardMaterial({color:0xf3ecdf,roughness:.95});
+  const blockMat=t=>{const m=new T.MeshStandardMaterial({map:t,roughness:.95});return[m,m,paperTop,paperTop,m,m]};
+  const blockL=new T.Mesh(new T.BoxGeometry(PW,1,PH),blockMat(edgeTexL)),blockR=new T.Mesh(new T.BoxGeometry(PW,1,PH),blockMat(edgeTexR));
+  [blockL,blockR].forEach(b=>{b.castShadow=true;b.receiveShadow=true;scene.add(b)});
+  const book=new T.Group();scene.add(book);
+  const back=new T.Mesh(new T.BoxGeometry(CW,TH,CH),[clothMat,clothMat,new T.MeshStandardMaterial({map:endTex,roughness:.9}),clothMat,clothMat,clothMat]);
+  back.position.set(-CW/2,TH/2,0);back.castShadow=true;back.receiveShadow=true;book.add(back);
+  const spine=new T.Mesh(new T.BoxGeometry(TH,1,CH),clothMat);spine.castShadow=true;book.add(spine);
+  const blank=right=>{const c=document.createElement('canvas');c.width=512;c.height=717;paperBase(c.getContext('2d'),512,717,right);return texOf(c)};
+  const blankR=blank(true),blankL=blank(false);
+  const quad=(x0,x1,z0,z1,y,up,uvf)=>{const g=new T.BufferGeometry();const P=[[x0,z0],[x1,z0],[x0,z1],[x1,z1]];
+    g.setAttribute('position',new T.Float32BufferAttribute(P.flatMap(p=>[p[0],y,p[1]]),3));g.setAttribute('uv',new T.Float32BufferAttribute(P.flatMap(p=>uvf(p[0],p[1])),2));
+    g.setIndex(up?[0,2,1,1,2,3]:[0,1,2,1,3,2]);g.computeVertexNormals();return g};
+  const coverPivot=new T.Group();book.add(coverPivot);
+  const cOut=new T.Mesh(quad(-CW,0,-CH/2,CH/2,TH/2+.0004,true,(x,z)=>[(x+CW)/CW,1-(z+CH/2)/CH]),new T.MeshStandardMaterial({map:coverTex,roughness:.82}));
+  const cInMat=new T.MeshStandardMaterial({roughness:.95});
+  const cIn=new T.Mesh(quad(-PW,0,-PH/2,PH/2,-TH/2-.0008,false,(x,z)=>[(-x)/PW,1-(z+PH/2)/PH]),cInMat);
+  const cInBoard=new T.Mesh(quad(-CW,0,-CH/2,CH/2,-TH/2-.0003,false,(x,z)=>[(-x)/CW*2,(z+CH/2)/CH*2]),new T.MeshStandardMaterial({map:endTex,roughness:.9}));
+  const cEdge=new T.Mesh(new T.BoxGeometry(CW,TH*.96,CH),clothMat);cEdge.position.x=-CW/2;
+  [cOut,cIn,cInBoard,cEdge].forEach(m=>{m.castShadow=true;m.receiveShadow=true;coverPivot.add(m)});
+  cIn.castShadow=false;
+  const leafGroup=new T.Group();book.add(leafGroup);
+  function makeLeaf(i){
+    const n=(SX+1)*(SZ+1),pos=new T.Float32BufferAttribute(new Float32Array(n*3),3),uf=new Float32Array(n*2),ub=new Float32Array(n*2),idxF=[],idxB=[];
+    for(let j=0;j<=SZ;j++)for(let k=0;k<=SX;k++){const v=j*(SX+1)+k,s=k/SX,zn=j/SZ;uf[v*2]=1-s;ub[v*2]=s;uf[v*2+1]=ub[v*2+1]=1-zn}
+    // vertices lie at x=-s (left of spine). (a,b,c) winding gives +y normal there.
+    for(let j=0;j<SZ;j++)for(let k=0;k<SX;k++){const a=j*(SX+1)+k,b=a+1,c=a+SX+1,d=c+1;idxF.push(a,b,c,b,d,c);idxB.push(a,c,b,b,c,d)}
+    const gF=new T.BufferGeometry(),gB=new T.BufferGeometry();gF.setAttribute('position',pos);gB.setAttribute('position',pos);
+    gF.setAttribute('uv',new T.Float32BufferAttribute(uf,2));gB.setAttribute('uv',new T.Float32BufferAttribute(ub,2));gF.setIndex(idxF);gB.setIndex(idxB);
+    const front=new T.Mesh(gF,new T.MeshStandardMaterial({roughness:.94})),backM=new T.Mesh(gB,new T.MeshStandardMaterial({roughness:.94}));
+    const grp=new T.Group();grp.add(front);grp.add(backM);[front,backM].forEach(m=>{m.frustumCulled=false;m.receiveShadow=true});
+    leafGroup.add(grp);
+    const lf={i,grp,front,back:backM,pos,gF,gB,t:0,gy:0,anim:null,drag:false,lastT:-1,lastGy:-9};
+    deform(lf,0,0);return lf;
+  }
+  function deform(lf,t,gy){
+    const a=lf.pos.array,ds=PW/SX,sn=Math.sin(Math.PI*t),c=.55,d=.38;
+    for(let j=0;j<=SZ;j++){const zn=j/SZ*2-1,z=zn*PH/2;let x=0,y=0,prev=0;
+      for(let k=0;k<=SX;k++){const s=k/SX;const al=Math.PI*clamp(t+c*sn*(s-.35)+d*sn*s*zn*gy,0,1);
+        if(k>0){const am=(al+prev)/2;x+=-Math.cos(am)*ds;y+=Math.sin(am)*ds}prev=al;
+        const v=(j*(SX+1)+k)*3;a[v]=x;a[v+1]=y;a[v+2]=z}}
+    lf.pos.needsUpdate=true;lf.gF.computeVertexNormals();lf.gB.computeVertexNormals();
+  }
+  return {T,renderer,scene,camera,book,spine,blockL,blockR,edgeTexL,edgeTexR,coverPivot,cInMat,leafGroup,makeLeaf,deform,blankR,blankL,texOf,leaves:[],pageTex:{},cam:{pos:new T.Vector3(),tgt:new T.Vector3(),tw:null},dirty:true};
+}
+function drawCover(){
+  const c=document.createElement('canvas');c.width=1024;c.height=1434;const g=c.getContext('2d'),R=rng(11);
+  g.fillStyle='#721230';g.fillRect(0,0,1024,1434);
+  for(let y=0;y<1434;y+=3){g.fillStyle='rgba(0,0,0,'+(R()*.09)+')';g.fillRect(0,y,1024,1.5)}for(let x=0;x<1024;x+=3){g.fillStyle='rgba(255,210,210,'+(R()*.04)+')';g.fillRect(x,0,1.5,1434)}
+  const sp=g.createLinearGradient(1024,0,940,0);sp.addColorStop(0,'rgba(0,0,0,.35)');sp.addColorStop(1,'rgba(0,0,0,0)');g.fillStyle=sp;g.fillRect(900,0,124,1434);
+  const gold=f=>{g.save();g.fillStyle=g.strokeStyle='rgba(0,0,0,.35)';g.translate(2,3);f();g.restore();const gr=g.createLinearGradient(0,0,0,1434);gr.addColorStop(0,'#e7cf8f');gr.addColorStop(.5,'#b8933f');gr.addColorStop(1,'#d9bd78');g.fillStyle=g.strokeStyle=gr;f()};
+  gold(()=>{g.lineWidth=3;g.strokeRect(70,70,820,1294);g.lineWidth=1.2;g.strokeRect(86,86,788,1262)});
+  gold(()=>{g.lineWidth=2.5;g.beginPath();g.arc(480,420,96,0,7);g.stroke();g.lineWidth=1;g.beginPath();g.arc(480,420,82,0,7);g.stroke();
+    g.lineWidth=4;g.beginPath();g.moveTo(430,460);g.lineTo(430,410);g.lineTo(480,384);g.lineTo(530,410);g.lineTo(530,460);g.moveTo(422,464);g.lineTo(538,464);[448,468,492,512].forEach(x=>{g.moveTo(x,458);g.lineTo(x,418)});g.stroke()});
+  g.direction='rtl';g.textAlign='center';g.textBaseline='middle';
+  gold(()=>{g.font='700 74px "Noto Kufi Arabic"';g.fillText('معرض إنجازات',480,640);g.fillText('التدريب الميداني',480,750)});
+  gold(()=>g.fillRect(380,830,200,2));
+  gold(()=>{g.font='500 38px "IBM Plex Sans Arabic"';g.fillText('في الخدمة الاجتماعية',480,900);g.font='500 30px "IBM Plex Sans Arabic"';g.fillText('قسم العلوم الاجتماعية · جامعة قطر',480,1180);g.font='600 34px "IBM Plex Sans Arabic"';g.fillText('٢٠٢٦',480,1250)});
+  return c;
+}
+function drawEndpaper(){const c=document.createElement('canvas');c.width=c.height=512;const g=c.getContext('2d');g.fillStyle='#e9dcc3';g.fillRect(0,0,512,512);g.strokeStyle='rgba(126,21,50,.22)';g.lineWidth=2;
+  for(let y=0;y<=512;y+=64)for(let x=0;x<=512;x+=64){g.beginPath();g.moveTo(x,y-22);g.lineTo(x+22,y);g.lineTo(x,y+22);g.lineTo(x-22,y);g.closePath();g.stroke()}return c}
+
+function pageTexture(p){
+  const t3=three;if(p<0||p>=PAGES.length)return t3.blankR;
+  if(t3.pageTex[p])return t3.pageTex[p].tex;
+  const W=mobile()?640:1024,H=Math.round(W*1.4);const c=document.createElement('canvas');c.width=W;c.height=H;const g=c.getContext('2d');
+  const tex=t3.texOf(c);const ent={tex};
+  ent.draw=()=>{g.setTransform(1,0,0,1,0,0);paperBase(g,W,H,p%2===0);g.setTransform(W/600,0,0,H/840,0,0);drawPage(g,p,()=>{if(three.pageTex[p]===ent){ent.draw();three.dirty=true}});tex.needsUpdate=true};
+  ent.draw();t3.pageTex[p]=ent;return tex;
+}
+function disposeFarTextures(){const t3=three;Object.keys(t3.pageTex).forEach(k=>{const p=+k;if(Math.abs(spreadOfPage(p)-st.turned)>4){t3.pageTex[p].tex.dispose();delete t3.pageTex[p]}})}
+function rebuildBook(){
+  const t3=three;if(!t3)return;
+  t3.leaves.forEach(lf=>{if(lf.i>0){lf.gF.dispose();lf.gB.dispose();lf.front.material.dispose();lf.back.material.dispose();t3.leafGroup.remove(lf.grp)}});
+  Object.values(t3.pageTex).forEach(e=>e.tex.dispose());t3.pageTex={};
+  t3.leaves=[{i:0,cover:true,t:st.turned>0?1:0,anim:null,drag:false,gy:0}];
+  for(let i=1;i<=L;i++){const lf=t3.makeLeaf(i);lf.t=i<st.turned?1:0;t3.leaves.push(lf)}
+  t3.dirty=true;
+}
+const yLeft=i=>TH+(L-i+1)*EPS,yRight=i=>TH+i*EPS;
+function busy(){return !!(three&&three.leaves.some(f=>f.anim||f.drag))}
+function updateBook(){
+  const t3=three,lv=t3.leaves;
+  let iTL=-1,iTR=-1;for(let i=1;i<lv.length;i++){const f=lv[i];if(f.anim||f.drag)continue;if(f.t===0&&iTL<0)iTL=i;if(f.t===1)iTR=i}
+  const ov=!busy()&&st.turned>0&&st.mode==='3d';
+  const ct=lv[0].t;
+  t3.coverPivot.rotation.z=-Math.PI*ct;
+  t3.coverPivot.position.y=lerp(TH+(L+1)*EPS+TH/2,TH/2,ct)+Math.sin(Math.PI*ct)*.06;
+  const cm=(ov&&st.turned===1)?t3.blankR:pageTexture(0);if(t3.cInMat.map!==cm){t3.cInMat.map=cm;t3.cInMat.needsUpdate=true}
+  const sh=TH*2+(L+1)*EPS;t3.spine.scale.y=lerp(sh,TH*.4,ct);t3.spine.position.set(TH/2*(1-ct)+.001,t3.spine.scale.y/2,0);
+  const lh=iTL>0?(L-iTL+1)*EPS:0,rh=iTR>0?iTR*EPS:0;
+  t3.blockL.visible=lh>.0005;t3.blockL.scale.y=Math.max(lh,.0001);t3.blockL.position.set(-PW/2-.004,TH+lh/2-.0004,0);t3.edgeTexL.repeat.set(1,Math.max(1,lh/EPS));
+  t3.blockR.visible=rh>.0005;t3.blockR.scale.y=Math.max(rh,.0001);t3.blockR.position.set(PW/2+.004,TH+rh/2-.0004,0);t3.edgeTexR.repeat.set(1,Math.max(1,rh/EPS));
+  for(let i=1;i<lv.length;i++){const f=lv[i];const moving=!!(f.anim||f.drag);const vis=moving||i===iTL||i===iTR;f.grp.visible=vis;if(!vis)continue;
+    if(f.t!==f.lastT||f.gy!==f.lastGy){t3.deform(f,f.t,f.gy);f.lastT=f.t;f.lastGy=f.gy}
+    f.grp.position.y=lerp(yLeft(i),yRight(i),f.t)+Math.sin(Math.PI*f.t)*.012+.0006;
+    f.front.castShadow=f.back.castShadow=moving;
+    const fm=(ov&&i===st.turned)?t3.blankL:pageTexture(2*i-1);
+    const bm=(ov&&i===st.turned-1)?t3.blankR:pageTexture(2*i);
+    if(f.front.material.map!==fm){f.front.material.map=fm;f.front.material.needsUpdate=true}
+    if(f.back.material.map!==bm){f.back.material.map=bm;f.back.material.needsUpdate=true}
+  }
+}
+
+/* ===== camera ===== */
+function camPose(kind){
+  const T=THREE,cam=three.camera,f=cam.fov*Math.PI/180,asp=cam.aspect,H=innerHeight||1;
+  let tgt,wReq,hReq,phi,yaw=0;
+  if(kind==='intro'){tgt=new T.Vector3(-CW/2,0,.12);wReq=CW*1.9;hReq=CH*1.5;phi=48*Math.PI/180;yaw=.38}
+  else if(mobile()){const s=st.focus==='R'?1:-1;tgt=new T.Vector3(s*PW*.5,0,.02);wReq=PW*1.05;hReq=PH*1.05;phi=74*Math.PI/180}
+  else{tgt=new T.Vector3(0,0,.03);wReq=PW*2+.2;hReq=PH+.1;phi=63*Math.PI/180}
+  const usable=1-140/H;
+  const dH=(hReq*Math.sin(phi)/2)/(Math.tan(f/2)*usable)+hReq*Math.cos(phi)*.5;
+  const dW=(wReq/2)/(Math.tan(f/2)*asp)+.15;
+  const d=Math.max(dH,dW);
+  const dir=new T.Vector3(Math.sin(yaw)*Math.cos(phi),Math.sin(phi),Math.cos(yaw)*Math.cos(phi));
+  return{pos:tgt.clone().add(dir.multiplyScalar(d)),tgt};
+}
+function camTo(kind,dur){const c=three.cam,p=camPose(kind);if(!dur){c.pos.copy(p.pos);c.tgt.copy(p.tgt);c.tw=null;three.dirty=true;return}
+  c.tw={fp:c.pos.clone(),ft:c.tgt.clone(),tp:p.pos,tt:p.tgt,s:performance.now(),d:dur}}
+
+/* ===== overlay: map HTML pages onto projected 3D pages ===== */
+function adj(m){return[m[4]*m[8]-m[5]*m[7],m[2]*m[7]-m[1]*m[8],m[1]*m[5]-m[2]*m[4],m[5]*m[6]-m[3]*m[8],m[0]*m[8]-m[2]*m[6],m[2]*m[3]-m[0]*m[5],m[3]*m[7]-m[4]*m[6],m[1]*m[6]-m[0]*m[7],m[0]*m[4]-m[1]*m[3]]}
+function mm(a,b){const c=Array(9);for(let i=0;i<3;i++)for(let j=0;j<3;j++){let s=0;for(let k=0;k<3;k++)s+=a[3*i+k]*b[3*k+j];c[3*i+j]=s}return c}
+function mv(m,v){return[m[0]*v[0]+m[1]*v[1]+m[2]*v[2],m[3]*v[0]+m[4]*v[1]+m[5]*v[2],m[6]*v[0]+m[7]*v[1]+m[8]*v[2]]}
+function b2p(x1,y1,x2,y2,x3,y3,x4,y4){const m=[x1,x2,x3,y1,y2,y3,1,1,1];const v=mv(adj(m),[x4,y4,1]);return mm(m,[v[0],0,0,0,v[1],0,0,0,v[2]])}
+function homo(w,h,d){const s=b2p(0,0,w,0,0,h,w,h),D=b2p.apply(null,d);const t=mm(D,adj(s));for(let i=0;i<9;i++)t[i]/=t[8];return'matrix3d('+[t[0],t[3],0,t[6],t[1],t[4],0,t[7],0,0,1,0,t[2],t[5],0,t[8]].join(',')+')'}
+function proj(x,y,z){const v=new THREE.Vector3(x,y,z).project(three.camera);return[(v.x+1)/2*innerWidth,(1-v.y)/2*innerHeight]}
+let ovShown=false;
+function updateOverlay(){
+  const k=st.turned,show=!busy()&&k>0&&st.mode==='3d';
+  const R=$('#pgR'),Lp=$('#pgL');
+  if(!show){if(ovShown){R.style.visibility=Lp.style.visibility='hidden';ovShown=false}return}
+  const yR=(k===1?TH:yRight(k-1))+.0008,yL=yLeft(k)+.0008;
+  const pr=PAGES[2*k-2]?[].concat(proj(0,yR,-PH/2),proj(PW,yR,-PH/2),proj(0,yR,PH/2),proj(PW,yR,PH/2)):null;
+  const pl=(k<=L&&PAGES[2*k-1])?[].concat(proj(-PW,yL,-PH/2),proj(0,yL,-PH/2),proj(-PW,yL,PH/2),proj(0,yL,PH/2)):null;
+  R.style.visibility=pr?'visible':'hidden';Lp.style.visibility=pl?'visible':'hidden';
+  if(pr)R.style.transform=homo(600,840,pr);if(pl)Lp.style.transform=homo(600,840,pl);
+  ovShown=true;
+}
+function fillOverlay(){const k=st.turned;const R=$('#pgR'),Lp=$('#pgL');
+  R.innerHTML=k>0?pageHTML(2*k-2):'';Lp.innerHTML=(k>0&&k<=L)?pageHTML(2*k-1):'';
+  const mob=mobile();
+  [[R,'R'],[Lp,'L']].forEach(([el,s])=>{const hid=mob&&st.focus!==s;el.setAttribute('aria-hidden',hid?'true':'false');el.querySelectorAll('button,[tabindex]').forEach(b=>b.tabIndex=hid?-1:0)});
+}
+
+/* ===== loop (renders only when something changes) ===== */
+function loop(now){
+  requestAnimationFrame(loop);const t3=three;if(!t3||st.mode!=='3d')return;
+  let active=false;
+  t3.leaves.forEach(f=>{if(f.anim){const a=f.anim,u=clamp((now-a.s)/a.d,0,1);f.t=lerp(a.from,a.to,ease(u));f.gy=lerp(a.gy0,0,u);if(u>=1){f.t=a.to;f.gy=0;f.anim=null;a.done&&a.done()}active=true}});
+  const c=t3.cam;if(c.tw){const u=clamp((now-c.tw.s)/c.tw.d,0,1),e=ease(u);c.pos.lerpVectors(c.tw.fp,c.tw.tp,e);c.tgt.lerpVectors(c.tw.ft,c.tw.tt,e);if(u>=1)c.tw=null;active=true}
+  if(t3.pendingSettle&&!busy()){t3.pendingSettle=false;onSettled()}
+  if(!active&&!t3.dirty&&!t3.dragging)return;
+  t3.camera.position.copy(c.pos);t3.camera.lookAt(c.tgt);t3.camera.updateMatrixWorld();
+  updateBook();t3.renderer.render(t3.scene,t3.camera);updateOverlay();t3.dirty=false;
+}
+
+/* ===== turning ===== */
+function animLeaf(i,to,dur,delay,done){const f=three.leaves[i];f.anim={from:f.t,to,gy0:f.gy,s:performance.now()+(delay||0),d:dur,done}}
+function goSpread(k,opts){
+  k=clamp(k,0,L+1);opts=opts||{};
+  if(st.mode!=='3d'){st.turned=k;st.focus=opts.focus||'R';renderSimple();afterChange();return}
+  if(busy())return;
+  const from=st.turned;
+  if(k===from){if(opts.focus&&opts.focus!==st.focus){st.focus=opts.focus;fillOverlay();camTo('read',650);afterChange()}return}
+  hideIntro();
+  st.focus=opts.focus||'R';if(k===0)st.focus='R';
+  const n=Math.abs(k-from),dur=n===1?(from===0||k===0?1300:850):560,gap=n===1?0:Math.min(90,900/n);
+  const done=()=>{three.pendingSettle=true};
+  if(k>from){for(let i=from,j=0;i<k;i++,j++)animLeaf(i,1,dur,j*gap,i===k-1?done:null)}
+  else{for(let i=from-1,j=0;i>=k;i--,j++)animLeaf(i,0,dur,j*gap,i===k?done:null)}
+  st.turned=k;
+  if(from===0)camTo('read',1700);else if(k===0)camTo('intro',1500);else if(mobile())camTo('read',700);
+  three.dirty=true;afterChange(true);
+}
+function onSettled(){fillOverlay();three.dirty=true;disposeFarTextures();afterChange();if(st.turned===0)$('#intro').classList.remove('hide')}
+function next(){if(mobile()&&st.turned>0&&st.focus==='R'&&st.turned<=L){st.focus='L';if(st.mode==='3d'){fillOverlay();camTo('read',650)}else renderSimple();afterChange();return}goSpread(st.turned+1,{focus:'R'})}
+function prev(){if(mobile()&&st.turned>0&&st.focus==='L'){st.focus='R';if(st.mode==='3d'){fillOverlay();camTo('read',650)}else renderSimple();afterChange();return}goSpread(st.turned-1,{focus:mobile()&&st.turned>1?'L':'R'})}
+function goPage(p){const k=spreadOfPage(p);goSpread(k,{focus:p===2*k-2?'R':'L'})}
+function goOrg(org){if(org==='head')return goPage(0);if(org==='coord')return goPage(1);if(org==='acad')return goPage(2);if(ORG_START[org]!=null)goPage(ORG_START[org])}
+
+/* ===== corner drag ===== */
+let ray,ndc,drag=null;
+function hitDesk(e,y){const r=three.renderer.domElement.getBoundingClientRect();ndc.set((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);ray.setFromCamera(ndc,three.camera);const pl=new THREE.Plane(new THREE.Vector3(0,1,0),-y);const p=new THREE.Vector3();return ray.ray.intersectPlane(pl,p)?p:null}
+const tPos=x=>Math.acos(clamp(-x/PW,-1,1))/Math.PI;
+function initDrag(){
+  ray=new THREE.Raycaster();ndc=new THREE.Vector2();
+  const cv=three.renderer.domElement;
+  cv.addEventListener('pointerdown',e=>{
+    if(busy()||three.cam.tw)return;
+    const k=st.turned,p=hitDesk(e,TH+L*EPS*.5);if(!p)return;
+    if(k===0){if(p.x<.05&&p.x>-CW-.05&&Math.abs(p.z)<CH/2+.05)goSpread(1);return}
+    if(Math.abs(p.z)>PH/2+.05||Math.abs(p.x)>PW+.05)return;
+    let i,dir;if(p.x<0){if(k>L)return;i=k;dir=1}else{i=k-1;dir=-1}
+    drag={i,dir,x0:p.x,sx:e.clientX,sy:e.clientY,moved:false,t0:tPos(p.x),gy:clamp(p.z/(PH/2),-1,1),lastX:p.x,v:0,lt:performance.now(),id:e.pointerId};
+    try{cv.setPointerCapture(e.pointerId)}catch(er){}
+  });
+  cv.addEventListener('pointermove',e=>{
+    if(!drag||e.pointerId!==drag.id)return;
+    if(!drag.moved&&Math.hypot(e.clientX-drag.sx,e.clientY-drag.sy)<6)return;
+    const f=three.leaves[drag.i];
+    if(!drag.moved){drag.moved=true;f.drag=true;f.gy=f.cover?0:drag.gy*.9;cv.classList.add('drag');three.dragging=true;hideIntro()}
+    const p=hitDesk(e,TH+L*EPS*.5);if(!p)return;const now=performance.now();
+    drag.v=(p.x-drag.lastX)/Math.max(1,now-drag.lt)*1000;drag.lastX=p.x;drag.lt=now;
+    const tp=tPos(p.x);
+    f.t=drag.dir>0?clamp((tp-drag.t0)/Math.max(.05,1-drag.t0),.001,.999):clamp(tp/Math.max(.05,drag.t0),.001,.999);
+    three.dirty=true;
+  });
+  const end=e=>{
+    if(!drag||e.pointerId!==drag.id)return;const d=drag;drag=null;cv.classList.remove('drag');three.dragging=false;
+    const f=three.leaves[d.i];
+    if(!d.moved){if(d.dir>0&&d.x0<-PW*.82)next();else if(d.dir<0&&d.x0>PW*.82)prev();return}
+    f.drag=false;
+    const toOne=d.dir>0?((f.t>.32&&d.v>-1.2)||(d.v>1.2&&f.t>.12)):!((f.t<.68&&d.v<1.2)||(d.v<-1.2&&f.t<.88));
+    const to=toOne?1:0,complete=(d.dir>0)===(to===1);
+    const dur=460*Math.abs(to-f.t)+240;
+    if(complete){st.turned+=d.dir;st.focus=(mobile()&&d.dir<0)?'L':'R';if(st.turned===0)camTo('intro',1400);else if(mobile())camTo('read',600)}
+    animLeaf(d.i,to,dur,0,()=>{three.pendingSettle=true});afterChange(true);three.dirty=true;
+  };
+  cv.addEventListener('pointerup',end);cv.addEventListener('pointercancel',end);
+}
+
+/* ===== simplified view ===== */
+function renderSimple(){
+  const sp=$('#spread'),k=st.turned,mob=mobile();let h='';
+  const page=(p,cls)=>'<div class="spage '+cls+'"><div class="pg" style="transform:none">'+pageHTML(p)+'</div></div>';
+  if(k===0)h='<div class="spage cover"><div><h1>معرض إنجازات التدريب الميداني</h1><p>في الخدمة الاجتماعية · جامعة قطر</p><p style="margin-top:28px"><button class="cta" data-open="1">ادخلي المعرض</button></p></div></div>';
+  else{const r=2*k-2,l=2*k-1;
+    if(mob)h=st.focus==='L'&&k<=L?page(l,'l'):page(r,'r');
+    else h=page(r,'r')+(k<=L?page(l,'l'):'<div class="spage l" style="background:#e9dcc3"></div>')}
+  sp.innerHTML=h;
+  const n=sp.children.length,box=$('#simple').getBoundingClientRect();
+  const s=Math.min((box.width-24)/(600*n),(box.height-24)/840,1.2);sp.style.transform='scale('+s+')';
+  sp.querySelectorAll('.pg button,.pg [tabindex]').forEach(b=>b.tabIndex=0);
+}
+
+/* ===== chrome ===== */
+function where(){
+  const k=st.turned;if(k===0)return['الغلاف','اسحبي الغلاف أو اضغطي «ادخلي المعرض»'];
+  const r=2*k-2,l=2*k-1;
+  if(mobile()){const p=st.focus==='L'&&k<=L?l:r;return[pageLabel(p)||'المعرض','صفحة '+AR(p+1)+' من '+AR(PAGES.length)]}
+  return[pageLabel(r)||pageLabel(l)||'المعرض',k<=L?'الصفحتان '+AR(r+1)+'–'+AR(l+1)+' من '+AR(PAGES.length):'الصفحة '+AR(r+1)+' من '+AR(PAGES.length)];
+}
+function afterChange(moving){
+  const k=st.turned,w=where();$('#where').innerHTML='<b>'+esc(w[0])+'</b><span>'+esc(w[1])+'</span>';
+  $('#btnPrev').disabled=k===0;
+  $('#btnNext').disabled=k>L||(k===L+1);
+  if(!moving){try{history.replaceState(null,'',location.pathname+location.search+(k===0?'':'#s='+k+(st.focus==='L'?'&f=L':'')))}catch(e){}}
+  const cur=PAGES[2*k-2]||PAGES[2*k-1];
+  document.querySelectorAll('#tocList button').forEach(b=>{const p=+b.dataset.page;b.classList.toggle('cur',b.dataset.org?!!(cur&&cur.org===b.dataset.org):spreadOfPage(p)===k)});
+}
+function buildToc(){
+  let h='<li><button data-page="0"><b>كلمة رئيس القسم</b><small>'+AR(1)+'</small></button></li><li><button data-page="1"><b>كلمة منسق البرنامج</b><small>'+AR(2)+'</small></button></li><li><button data-page="2"><b>كلمة المشرفة الأكاديمية</b><small>'+AR(3)+'</small></button></li><li><button data-page="3"><b>فهرس المؤسسات</b><small>'+AR(4)+'</small></button></li>';
+  (DATA.orgs||[]).filter(o=>ORG_START[o.org]!=null).forEach(o=>{h+='<li><button data-page="'+ORG_START[o.org]+'" data-org="'+esc(o.org)+'"><b>'+esc(o.org)+'</b><small>'+AR(ORG_START[o.org]+1)+'</small></button></li>'});
+  h+='<li><button data-page="'+(PAGES.length-1)+'"><b>الخاتمة</b><small>'+AR(PAGES.length)+'</small></button></li>';
+  $('#tocList').innerHTML=h;
+}
+function openToc(on){$('#toc').classList.toggle('on',on);$('#scrim').classList.toggle('on',on);$('#toc').setAttribute('aria-hidden',on?'false':'true');$('#btnToc').setAttribute('aria-expanded',on);if(on)setTimeout(()=>{const c=$('#tocList .cur')||$('#tocList button');c&&c.focus()},50)}
+let lastFocus=null;
+function openOv(id){lastFocus=document.activeElement;$('#'+id).classList.add('on');setTimeout(()=>{const x=$('#'+id+' .x');x&&x.focus()},30)}
+function closeOv(id){const o=$('#'+id);if(!o.classList.contains('on'))return;o.classList.remove('on');if(id==='vidOv'){const v=$('#vid');v.pause();if(document.fullscreenElement)document.exitFullscreen().catch(()=>{})}if(id==='actOv')$('#actBody').innerHTML='';if(lastFocus&&lastFocus.focus)try{lastFocus.focus()}catch(e){}}
+function hideIntro(){$('#intro').classList.add('hide')}
+
+/* ===== video ===== */
+function openVideo(who){
+  who=who||'head';const {W,H}=wordOf(who);if(!H.video)return;const v=$('#vid');
+  $('#vidOv header small').textContent=W.label+(who.indexOf('s:')===0?' · '+orgName(who.slice(2)):'');
+  v.innerHTML='';v.removeAttribute('src');v.src=srcURL(H.video);if(H.poster)v.poster=srcURL(H.poster);
+  if(H.captions){const tr=document.createElement('track');tr.kind='captions';tr.srclang='ar';tr.label='العربية';tr.src=H.captions;tr.default=true;v.appendChild(tr)}
+  $('#vCC').style.display=H.captions?'':'none';$('#vCC').setAttribute('aria-pressed','true');
+  $('#vNote').textContent=H.captions?'الترجمة النصية متاحة بالعربية':'';
+  $('#vidTtl').textContent=H.title_line||W.title;
+  openOv('vidOv');setTimeout(()=>{const tt=v.textTracks&&v.textTracks[0];if(tt)tt.mode='showing';v.play().catch(()=>{})},150);
+}
+$('#vCC').onclick=()=>{const v=$('#vid'),tt=v.textTracks&&v.textTracks[0];if(!tt)return;const on=tt.mode!=='showing';tt.mode=on?'showing':'hidden';$('#vCC').setAttribute('aria-pressed',on)};
+$('#vFS').onclick=()=>{const w=$('#vwrap'),v=$('#vid');if(document.fullscreenElement)document.exitFullscreen();else if(w.requestFullscreen)w.requestFullscreen().catch(()=>{});else if(v.webkitEnterFullscreen)v.webkitEnterFullscreen()};
+
+/* ===== activity details ===== */
+function openActivity(id){
+  const a=(DATA.activities||[]).find(x=>String(x.id)===String(id));if(!a)return;
+  $('#actOrg').textContent=a.org+(a.kind?' · '+a.kind:'');$('#actTtl').textContent=a.title;
+  const media=(a.media||[]).filter(m=>m&&m.src);let h='';
+  if(media.length){h+='<div class="media-main" id="mMain"></div><div class="mcap" id="mCap"></div>';if(media.length>1)h+='<div class="thumbs">'+media.map((m,i)=>'<button data-mi="'+i+'" aria-label="الوسيط '+AR(i+1)+'">'+(m.type==='video'?'<span style="color:#fff;font-size:20px">▶</span>':'<img alt="" src="'+esc(srcURL(m.src))+'">')+'</button>').join('')+'</div>'}
+  const sec=(t,b)=>b?'<div class="sec"><h3>'+t+'</h3><p>'+esc(b)+'</p></div>':'';
+  h+=sec('هدف النشاط',a.goal)+sec('ما قامت به الطالبة',a.did)+sec('ما تعلّمته',a.learned);
+  if(a.is_demo)h+='<p class="note">محتوى تجريبي للعرض، يُستبدل بالمواد المعتمدة من لوحة التحكم.</p>';
+  $('#actBody').innerHTML=h;
+  const show=i=>{const m=media[i];$('#mMain').innerHTML=m.type==='video'?'<video controls playsinline src="'+esc(m.src)+'"></video>':'<img alt="'+esc(m.cap||a.title)+'" src="'+esc(srcURL(m.src))+'">';$('#mCap').textContent=m.cap||'';document.querySelectorAll('#actBody .thumbs button').forEach((b,j)=>b.classList.toggle('on',j===i))};
+  if(media.length)show(0);
+  $('#actBody').onclick=e=>{const b=e.target.closest('[data-mi]');if(b)show(+b.dataset.mi)};
+  openOv('actOv');
+}
+
+/* ===== field supervisor editor (per-institution code) ===== */
+const MEN={org:null,code:null,data:null,sigMode:'text',sigUrl:''};
+function openMentor(org){
+  MEN.org=org||null;MEN.code=null;
+  const orgs=(DATA.orgs||[]).map(o=>o.org);
+  $('#menTtl').textContent=org?WORD_TTL+' '+orgPrep(org):WORD_TTL;
+  const saved=org?sget('mcode:'+org):null;
+  $('#menBody').innerHTML='<div class="f"><p class="note" style="margin:0">ادخلي برمز مؤسستك المكوّن من ٦ أرقام (تسلّمه المشرفة الأكاديمية لكل مؤسسة). يمكنك الحفظ كمسودة والعودة لاحقاً، ثم المعاينة والنشر.</p>'+
+   (org?'':'<label>المؤسسة<select id="mOrg">'+orgs.map(o=>'<option>'+esc(o)+'</option>').join('')+'</select></label>')+
+   '<label>رمز المؤسسة<input id="mCode" inputmode="numeric" autocomplete="one-time-code" maxlength="6" value="'+esc(saved||'')+'"></label><div class="msg" id="mMsg" aria-live="polite"></div><div class="btns"><button class="b p" id="mGo">دخول</button></div></div>';
+  openOv('menOv');
+  $('#mGo').onclick=mentorLogin;$('#mCode').onkeydown=e=>{if(e.key==='Enter')mentorLogin()};
+  setTimeout(()=>$('#mCode').focus(),60);
+}
+async function mentorLogin(){
+  const org=MEN.org||$('#mOrg').value,code=$('#mCode').value.trim(),msg=$('#mMsg');
+  if(!/^\d{6}$/.test(code)){msg.className='msg err';msg.textContent='الرمز ٦ أرقام.';return}
+  msg.className='msg';msg.textContent='جارٍ التحقق…';
+  try{const d=await rpc('book_mentor_get',{p_org:org,p_code:code});MEN.org=org;MEN.code=code;MEN.data=d||{};sset('mcode:'+org,code);mentorForm()}
+  catch(e){msg.className='msg err';msg.textContent=errMsg(e)}
+}
+function mentorForm(){
+  const d=MEN.data,src=d.draft||d.published||{};MEN.sigUrl=src.sig_url||'';MEN.sigMode=src.sig_url?'img':'text';
+  MEN.mode=src.mode==='voice'||src.audio?'voice':'text';MEN.audio=src.audio||'';
+  $('#menTtl').textContent=WORD_TTL+' '+orgPrep(MEN.org);
+  $('#menBody').innerHTML='<div class="f">'+
+   '<p class="note" style="margin:0">'+(d.published?'لديك كلمة منشورة'+(d.published_at?' منذ '+dateAr(d.published_at):'')+'. التعديلات تُحفظ مسودة ولا تظهر للزوار حتى تضغطي «نشر».':'لم تُنشر كلمتك بعد.')+(d.draft&&d.draft.saved_at?' آخر حفظ للمسودة: '+new Date(d.draft.saved_at).toLocaleString('ar-QA')+'.':'')+'</p>'+
+   '<div class="row2"><label>الاسم كما يظهر (اختياري)<input id="mName" maxlength="80" value="'+esc(src.name||'')+'" placeholder="الأخصائيات الاجتماعيات"></label><label>الصفة<input id="mRole" maxlength="120" value="'+esc(src.role||'')+'" placeholder="أخصائيات اجتماعيات"></label></div>'+
+   '<div><div style="font:600 13px \'IBM Plex Sans Arabic\';margin-bottom:6px">نوع الكلمة</div><div class="seg" role="group" aria-label="نوع الكلمة"><button type="button" id="mdT">كلمة مكتوبة</button><button type="button" id="mdV">كلمة صوتية</button></div></div>'+
+   '<div id="voiceBox" class="f" style="border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--paper)">'+
+     '<div class="btns" style="margin:0;align-items:center"><button type="button" class="b p" id="recBtn">● تسجيل</button><span class="note" id="recT"></span><label class="b" style="display:inline-flex;cursor:pointer">رفع ملف صوتي<input type="file" id="audFile" accept="audio/*" style="display:none"></label><button type="button" class="b d" id="audDel">حذف التسجيل</button></div>'+
+     '<div id="audPrev"></div><small class="note">حتى ٣ دقائق. يمكنك إعادة التسجيل قبل النشر.</small></div>'+
+   '<label><span id="bodyLab">نص الكلمة</span><textarea id="mBody" maxlength="2500" rows="7">'+esc(src.body||'')+'</textarea><small class="note" id="mCount"></small></label>'+
+   '<div><div style="font:600 13px \'IBM Plex Sans Arabic\';margin-bottom:6px">التوقيع</div><div class="seg" role="group" aria-label="طريقة التوقيع"><button type="button" id="sgT">توقيع مكتوب</button><button type="button" id="sgI">صورة توقيع</button></div></div>'+
+   '<div id="sgTBox"><label>اكتبي توقيعك<input id="mSig" maxlength="60" value="'+esc(src.sig_text||'')+'"></label></div>'+
+   '<div id="sgIBox"><label>ارفعي صورة التوقيع (PNG بخلفية شفافة أو بيضاء، حتى ٢ م.ب)<input type="file" id="mSigFile" accept="image/png,image/jpeg,image/webp"></label></div>'+
+   '<div class="sigprev" id="sigPrev"></div><div class="msg" id="mMsg2" aria-live="polite"></div>'+
+   '<div class="btns"><button class="b" id="mDraft">حفظ كمسودة</button><button class="b" id="mPrev">معاينة</button><button class="b p" id="mPub">نشر الكلمة</button></div><div id="mPv"></div></div>';
+  const upd=()=>{$('#sgT').classList.toggle('on',MEN.sigMode==='text');$('#sgI').classList.toggle('on',MEN.sigMode==='img');$('#sgTBox').style.display=MEN.sigMode==='text'?'':'none';$('#sgIBox').style.display=MEN.sigMode==='img'?'':'none';
+    $('#sigPrev').innerHTML=MEN.sigMode==='img'?(MEN.sigUrl?'<img alt="معاينة التوقيع" src="'+esc(MEN.sigUrl)+'">':'<span class="note">لم تُرفع صورة بعد</span>'):'<span class="st">'+esc($('#mSig').value||$('#mName').value||'')+'</span>';
+    $('#mCount').textContent=AR($('#mBody').value.length)+' / ٢٥٠٠';
+    const v=MEN.mode==='voice';$('#mdT').classList.toggle('on',!v);$('#mdV').classList.toggle('on',v);$('#voiceBox').style.display=v?'':'none';
+    $('#bodyLab').textContent=v?'نص مرافق (اختياري)':'نص الكلمة';$('#audDel').style.display=MEN.audio?'':'none';
+    $('#audPrev').innerHTML=MEN.audio?'<audio controls src="'+esc(MEN.audio)+'" style="width:100%"></audio>':'<span class="note">لم يُسجَّل صوت بعد.</span>'};
+  $('#mdT').onclick=()=>{MEN.mode='text';upd()};$('#mdV').onclick=()=>{MEN.mode='voice';upd()};
+  $('#audDel').onclick=()=>{MEN.audio='';upd()};
+  const putAudio=async(blob,name)=>{const m=$('#mMsg2');m.className='msg';m.textContent='جارٍ رفع الصوت…';try{MEN.audio=await upload(new File([blob],name,{type:blob.type||'audio/webm'}),'voice');m.textContent='';upd()}catch(er){m.className='msg err';m.textContent=errMsg(er)}};
+  $('#audFile').onchange=e=>{const f=e.target.files[0];if(!f)return;if(f.size>15e6){toast('الملف أكبر من ١٥ م.ب');return}putAudio(f,f.name);e.target.value=''};
+  $('#recBtn').onclick=async()=>{
+    if(MEN.rec){MEN.rec.stop();return}
+    if(!navigator.mediaDevices||!window.MediaRecorder){toast('التسجيل غير مدعوم في هذا المتصفح؛ ارفعي ملفاً صوتياً بدلاً منه.',4000);return}
+    let stream;try{stream=await navigator.mediaDevices.getUserMedia({audio:true})}catch(e){toast('لم يُسمح باستخدام الميكروفون.',3500);return}
+    const type=['audio/webm','audio/mp4','audio/ogg'].find(t=>MediaRecorder.isTypeSupported&&MediaRecorder.isTypeSupported(t))||'';
+    const rec=new MediaRecorder(stream,type?{mimeType:type}:undefined),ch=[];MEN.rec=rec;const t0=Date.now();
+    rec.ondataavailable=e=>e.data.size&&ch.push(e.data);
+    const tick=setInterval(()=>{const s=Math.floor((Date.now()-t0)/1000);$('#recT').textContent='يُسجَّل… '+AR(Math.floor(s/60))+':'+AR(String(s%60).padStart(2,'0'));if(s>=180)rec.stop()},250);
+    rec.onstop=()=>{clearInterval(tick);stream.getTracks().forEach(t=>t.stop());MEN.rec=null;$('#recBtn').textContent='● تسجيل';$('#recT').textContent='';
+      const b=new Blob(ch,{type:rec.mimeType||'audio/webm'});putAudio(b,'kalima.'+((rec.mimeType||'').indexOf('mp4')>=0?'m4a':(rec.mimeType||'').indexOf('ogg')>=0?'ogg':'webm'))};
+    rec.start();$('#recBtn').textContent='■ إيقاف';
+  };
+  $('#sgT').onclick=()=>{MEN.sigMode='text';upd()};$('#sgI').onclick=()=>{MEN.sigMode='img';upd()};
+  ['mSig','mName','mBody'].forEach(id=>$('#'+id).addEventListener('input',upd));
+  $('#mSigFile').onchange=async e=>{const f=e.target.files[0];if(!f)return;if(f.size>2e6){toast('حجم الصورة أكبر من ٢ م.ب');return}const m=$('#mMsg2');m.className='msg';m.textContent='جارٍ رفع التوقيع…';try{MEN.sigUrl=await upload(f,'sig');m.textContent='';upd()}catch(er){m.className='msg err';m.textContent=errMsg(er)}};
+  $('#mDraft').onclick=()=>mentorSave(false);$('#mPub').onclick=()=>mentorSave(true);
+  $('#mPrev').onclick=()=>{const w=Object.assign(mentorPayload(),{published_at:new Date().toISOString()});
+    $('#mPv').innerHTML='<p class="note">معاينة الصفحة كما ستظهر في المعرض:</p><div class="pvwrap"><div class="pvbox"><div class="pg" style="transform:scale(.5)">'+pageHTML(0,{t:'word',org:MEN.org,w})+'</div></div></div>'};
+  upd();
+}
+function mentorPayload(){return{mode:MEN.mode,audio:MEN.mode==='voice'?MEN.audio:'',name:$('#mName').value.trim(),role:$('#mRole').value.trim(),body:$('#mBody').value.trim(),sig_text:MEN.sigMode==='text'?$('#mSig').value.trim():'',sig_url:MEN.sigMode==='img'?MEN.sigUrl:''}}
+async function mentorSave(pub){
+  const m=$('#mMsg2'),w=mentorPayload();
+  if(MEN.rec){m.className='msg err';m.textContent='أوقفي التسجيل أولاً.';return}
+  if(pub&&w.mode==='voice'&&!w.audio){m.className='msg err';m.textContent='سجّلي الكلمة الصوتية أو ارفعي ملفاً قبل النشر.';return}
+  if(pub&&w.mode==='text'&&!w.body){m.className='msg err';m.textContent='اكتبي نص الكلمة قبل النشر.';$('#mBody').focus();return}
+  if(pub&&!confirm('ستظهر الكلمة للزوار في المعرض الافتراضي باسم مؤسستك. نشر الآن؟'))return;
+  m.className='msg';m.textContent=pub?'جارٍ النشر…':'جارٍ الحفظ…';
+  const bs=document.querySelectorAll('#menBody .btns .b');bs.forEach(b=>b.disabled=true);
+  try{await rpc('book_mentor_save',{p_org:MEN.org,p_code:MEN.code,p_payload:w,p_publish:pub});
+    m.className='msg ok';m.textContent=pub?'نُشرت الكلمة. ستجدينها في صفحة مؤسستك.':'حُفظت المسودة. يمكنك العودة لاحقاً بالرمز نفسه.';
+    if(pub){const org=MEN.org;await reload();setTimeout(()=>{closeOv('menOv');const p=PAGES.findIndex(x=>x.t==='word'&&x.org===org);if(p>=0)goPage(p)},800)}
+  }catch(e){m.className='msg err';m.textContent=errMsg(e)}
+  finally{bs.forEach(b=>b.disabled=false)}
+}
+
+/* shared mic recorder: toggles on the same button, max 3 minutes, returns a File */
+let REC=null;
+async function recAudio(btn,lab,done){
+  if(REC){REC.stop();return}
+  if(!navigator.mediaDevices||!window.MediaRecorder){toast('التسجيل غير مدعوم في هذا المتصفح؛ ارفعي ملفاً صوتياً بدلاً منه.',4000);return}
+  let stream;try{stream=await navigator.mediaDevices.getUserMedia({audio:true})}catch(e){toast('لم يُسمح باستخدام الميكروفون.',3500);return}
+  const type=['audio/webm','audio/mp4','audio/ogg'].find(t=>MediaRecorder.isTypeSupported&&MediaRecorder.isTypeSupported(t))||'';
+  const rec=new MediaRecorder(stream,type?{mimeType:type}:undefined),ch=[];REC=rec;const t0=Date.now();
+  rec.ondataavailable=e=>e.data.size&&ch.push(e.data);
+  const tick=setInterval(()=>{const s=Math.floor((Date.now()-t0)/1000);lab.textContent='يُسجَّل… '+AR(Math.floor(s/60))+':'+AR(String(s%60).padStart(2,'0'));if(s>=180)rec.stop()},250);
+  rec.onstop=()=>{clearInterval(tick);stream.getTracks().forEach(t=>t.stop());REC=null;btn.textContent='● تسجيل';lab.textContent='';
+    const mt=rec.mimeType||'audio/webm',ext=mt.indexOf('mp4')>=0?'m4a':mt.indexOf('ogg')>=0?'ogg':'webm';
+    done(new File([new Blob(ch,{type:mt})],'kalima.'+ext,{type:mt}))};
+  rec.start();btn.textContent='■ إيقاف';
+}
+
+/* ===== control panel ===== */
+const ADM={pass:null,d:null,tab:'acts',edit:null};
+function openAdmin(){openOv('admOv');if(ADM.pass){admLoad();return}
+  $('#admBody').innerHTML='<div class="f" style="max-width:360px"><label>كلمة مرور المشرفة الأكاديمية<input type="password" id="aPass" autocomplete="current-password"></label><div class="msg" id="aMsg"></div><div class="btns"><button class="b p" id="aGo">دخول</button></div></div>';
+  const go=async()=>{const p=$('#aPass').value;$('#aMsg').className='msg';$('#aMsg').textContent='جارٍ التحقق…';try{ADM.d=await rpc('book_admin_get',{p_pass:p});ADM.pass=p;admRender()}catch(e){$('#aMsg').className='msg err';$('#aMsg').textContent=errMsg(e)}};
+  $('#aGo').onclick=go;$('#aPass').onkeydown=e=>{if(e.key==='Enter')go()};setTimeout(()=>$('#aPass').focus(),60);
+}
+async function admLoad(){try{ADM.d=await rpc('book_admin_get',{p_pass:ADM.pass});admRender()}catch(e){toast(errMsg(e))}}
+async function admCall(fn,args,okMsg){try{const r=await rpc(fn,Object.assign({p_pass:ADM.pass},args));if(okMsg)toast(okMsg);await admLoad();await reload();return r}catch(e){toast(errMsg(e),4000);throw e}}
+function admRender(){
+  const d=ADM.d,tabs=[['acts','الأنشطة'],['orgs','المؤسسات'],['head','كلمة رئيس القسم'],['coord','كلمة منسق البرنامج'],['acad','كلمة المشرفة الأكاديمية'],['students','كلمة الطالبات للمؤسسات'],['codes','رموز الأخصائيات'],['demo','المحتوى التجريبي']];
+  $('#admBody').innerHTML='<div class="tabs" role="tablist">'+tabs.map(t=>'<button role="tab" data-tab="'+t[0]+'" class="'+(ADM.tab===t[0]?'on':'')+'" aria-selected="'+(ADM.tab===t[0])+'">'+t[1]+'</button>').join('')+'</div><div id="admTab"></div>';
+  $('#admBody .tabs').onclick=e=>{const b=e.target.closest('[data-tab]');if(b){ADM.tab=b.dataset.tab;ADM.edit=null;admRender()}};
+  const T=$('#admTab'),orgNames=(d.orgs||[]).map(o=>o.org);
+  if(ADM.tab==='acts'){
+    if(ADM.edit){admActForm(T,ADM.edit==='new'?null:(d.activities||[]).find(a=>a.id===ADM.edit),orgNames);return}
+    let x='<p class="note">يظهر للزوار ما عُلّم «منشور» فقط. لا تُرفع صور تظهر فيها وجوه أو أسماء أو تفاصيل حالات دون موافقة مكتوبة.</p><div class="btns" style="margin-bottom:12px"><button class="b p" id="aNew">+ نشاط جديد</button></div><div class="lst">';
+    (d.activities||[]).forEach(a=>{x+='<div class="it"><b>'+esc(a.title)+'<br><small>'+esc(a.org)+'</small></b>'+(a.is_demo?'<span class="tag dm">تجريبي</span>':'')+'<span class="tag '+(a.published?'pub':'')+'">'+(a.published?'منشور':'غير منشور')+'</span><button class="b" data-pub="'+a.id+'" data-v="'+(!a.published)+'">'+(a.published?'إخفاء':'نشر')+'</button><button class="b" data-ed="'+a.id+'">تعديل</button><button class="b d" data-del="'+a.id+'">حذف</button></div>'});
+    T.innerHTML=x+'</div>';
+    $('#aNew').onclick=()=>{ADM.edit='new';admRender()};
+    T.onclick=e=>{const b=e.target.closest('button');if(!b)return;
+      if(b.dataset.ed){ADM.edit=+b.dataset.ed;admRender()}
+      else if(b.dataset.pub)admCall('book_activity_publish',{p_id:+b.dataset.pub,p_published:b.dataset.v==='true'},'تم').catch(()=>{});
+      else if(b.dataset.del&&confirm('حذف هذا النشاط نهائياً؟ لا يمكن التراجع.'))admCall('book_activity_delete',{p_id:+b.dataset.del},'حُذف النشاط').catch(()=>{})};
+  }else if(ADM.tab==='orgs'){
+    let x='<p class="note">المؤسسات المنشورة تظهر في الفهرس ولكل منها جناح في المعرض.</p><div class="lst">';
+    (d.orgs||[]).forEach((o,i)=>{x+='<div class="it" style="display:grid;gap:8px"><div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><b>'+esc(o.org)+'</b>'+(o.is_demo?'<span class="tag dm">تجريبي</span>':'')+'<label class="note"><input type="checkbox" data-pubo="'+i+'" '+(o.published?'checked':'')+'> منشورة</label><label class="note">الترتيب <input type="number" data-sort="'+i+'" value="'+(o.sort||0)+'" style="width:64px"></label></div><div class="f"><textarea data-bio="'+i+'" rows="3" placeholder="نبذة قصيرة عن المؤسسة">'+esc(o.bio||'')+'</textarea></div><div class="btns"><button class="b p" data-save="'+i+'">حفظ</button></div></div>'});
+    T.innerHTML=x+'</div><div class="f" style="margin-top:16px"><label>إضافة مؤسسة<input id="oNew" maxlength="120" placeholder="اسم المؤسسة"></label><div class="btns"><button class="b" id="oAdd">إضافة</button></div></div>';
+    T.onclick=e=>{const b=e.target.closest('[data-save]');if(b){const i=+b.dataset.save,o=d.orgs[i];admCall('book_org_save',{p_org:o.org,p_bio:T.querySelector('[data-bio="'+i+'"]').value,p_published:T.querySelector('[data-pubo="'+i+'"]').checked,p_sort:+T.querySelector('[data-sort="'+i+'"]').value||0},'حُفظت المؤسسة').catch(()=>{})}};
+    $('#oAdd').onclick=()=>{const n=$('#oNew').value.trim();if(n)admCall('book_org_save',{p_org:n,p_bio:'',p_published:false,p_sort:(d.orgs||[]).length+1},'أُضيفت. اكتبي النبذة ثم انشريها.').catch(()=>{})};
+  }else if(ADM.tab==='head'||ADM.tab==='coord'||ADM.tab==='acad'||ADM.tab==='students'){
+    const who=ADM.tab,ol=d.orgs||[];let W,H;
+    if(who==='students'){if(!ol.some(o=>o.org===ADM.sorg))ADM.sorg=(ol[0]||{}).org;W=SW;H=((ol.find(o=>o.org===ADM.sorg)||{}).student_word)||{}}else{W=WHO[who];H=d[who]||{}}
+    const NH=Object.assign({},H);
+    T.innerHTML=(who==='students'?'<div class="f" style="margin-bottom:14px"><p class="note" style="margin:0;color:var(--danger)">قبل النشر: تأكدي من موافقة الطالبات كتابةً على نشر أصواتهن أو صورهن، ومن موافقة المؤسسة. لا تُذكر أسماء الطالبات؛ تُنشر الكلمة باسم «طالبات التدريب الميداني».</p><label>المؤسسة<select id="sOrg">'+ol.map(o=>'<option '+(o.org===ADM.sorg?'selected':'')+'>'+esc(o.org)+'</option>').join('')+'</select></label></div>':'')+
+     '<div class="f"><div class="row2"><label>الاسم<input id="hName" value="'+esc(H.name||'')+'" placeholder="'+esc(W.sig||'')+'"></label><label>الصفة<input id="hRole" value="'+esc(H.role||'')+'"></label></div>'+
+     '<label>عنوان الصفحة<input id="hTitle" value="'+esc(H.title_line||W.title)+'"></label>'+
+     '<p class="note" style="margin:0">الكلمة يمكن أن تكون <b>مكتوبة</b> أو <b>صوتية</b> أو <b>فيديو</b>، أو أكثر من نوع معاً. املئي ما يلزم فقط.</p>'+
+     '<fieldset style="border:1px solid var(--line);border-radius:12px;padding:12px"><legend class="note">١. كلمة مكتوبة</legend><textarea id="hBody" rows="5" style="width:100%">'+esc(H.body||'')+'</textarea></fieldset>'+
+     '<fieldset style="border:1px solid var(--line);border-radius:12px;padding:12px" class="f"><legend class="note">٢. كلمة صوتية</legend>'+
+       '<div class="btns" style="margin:0;align-items:center"><button type="button" class="b p" id="hRec">● تسجيل</button><span class="note" id="hRecT"></span><label class="b" style="display:inline-flex;cursor:pointer">رفع ملف صوتي<input type="file" id="hAud" accept="audio/*" style="display:none"></label><button type="button" class="b d" id="hAudDel">حذف الصوت</button></div><div id="hAudP"></div></fieldset>'+
+     '<fieldset style="border:1px solid var(--line);border-radius:12px;padding:12px" class="f"><legend class="note">٣. كلمة فيديو</legend>'+
+       '<div class="row2"><label>الفيديو (MP4/WebM)<input type="file" id="hVid" accept="video/mp4,video/webm"><small class="note" id="hVidN"></small></label><label>صورة غلاف الفيديو<input type="file" id="hPos" accept="image/*"><small class="note" id="hPosN"></small></label></div>'+
+       '<label>ملف الترجمة النصية (WebVTT ‎.vtt) — اختياري<input type="file" id="hCap" accept=".vtt,text/vtt"><small class="note" id="hCapN"></small></label><div class="btns" style="margin:0"><button type="button" class="b d" id="hVidDel">حذف الفيديو</button></div></fieldset>'+
+     '<label class="note"><input type="checkbox" id="hPub" '+(H.published!==false?'checked':'')+'> منشورة للزوار</label><div class="btns"><button class="b p" id="hSave">حفظ</button></div></div>';
+    const st8=()=>{$('#hVidN').textContent=NH.video?'مرفوع ✓':'لا يوجد';$('#hPosN').textContent=NH.poster?'مرفوعة ✓':'لا يوجد';$('#hCapN').textContent=NH.captions?'مرفوع ✓':'لا يوجد';$('#hVidDel').style.display=NH.video?'':'none';
+      $('#hAudDel').style.display=NH.audio?'':'none';$('#hAudP').innerHTML=NH.audio?'<audio controls src="'+esc(NH.audio)+'" style="width:100%"></audio>':'<span class="note">لا يوجد صوت.</span>'};
+    const up=(id,key,folder)=>{$('#'+id).onchange=async e=>{const f=e.target.files[0];if(!f)return;const n=$('#'+id+'N')||$('#hRecT');n.textContent='جارٍ الرفع…';try{NH[key]=await upload(f,folder||'head');st8();n.textContent='رُفع ✓ (اضغطي حفظ لتثبيته)'}catch(er){n.textContent=errMsg(er)}e.target.value=''}};
+    up('hVid','video');up('hPos','poster');up('hCap','captions');up('hAud','audio','voice');
+    $('#hVidDel').onclick=()=>{NH.video=NH.poster=NH.captions='';st8()};$('#hAudDel').onclick=()=>{NH.audio='';st8()};
+    $('#hRec').onclick=()=>recAudio($('#hRec'),$('#hRecT'),async b=>{$('#hRecT').textContent='جارٍ الرفع…';try{NH.audio=await upload(b,'voice');$('#hRecT').textContent='رُفع ✓ (اضغطي حفظ لتثبيته)';st8()}catch(er){$('#hRecT').textContent=errMsg(er)}});
+    st8();
+    $('#hSave').onclick=()=>{Object.assign(NH,{name:$('#hName').value.trim(),role:$('#hRole').value.trim(),title_line:$('#hTitle').value.trim(),body:$('#hBody').value.trim(),published:$('#hPub').checked,is_demo:false});
+      if(who==='students')admCall('book_student_word_save',{p_org:ADM.sorg,p_json:JSON.stringify(NH)},'حُفظت كلمة الطالبات').catch(()=>{});
+      else admCall({coord:'book_coord_save',acad:'book_acad_save'}[who]||'book_head_save',{p_json:JSON.stringify(NH)},'حُفظت '+W.row).catch(()=>{})};
+    if(who==='students')$('#sOrg').onchange=e=>{ADM.sorg=e.target.value;admRender()};
+  }else if(ADM.tab==='codes'){
+    const ws={};(d.words||[]).forEach(w=>ws[w.org]=w);
+    let x='<p class="note">سلّمي كل مؤسسة رمزها عبر قناة رسمية. الرمز يتيح للأخصائيات كتابة أو تسجيل كلمة مؤسستهن فقط، وإعادة التوليد تُبطل الرمز القديم.</p><div class="lst">';
+    (d.codes||[]).forEach(c=>{const w=ws[c.org];x+='<div class="it"><b>'+esc(c.org)+'</b><code style="font-size:16px;letter-spacing:2px">'+esc(c.code)+'</code>'+(w&&w.published?'<span class="tag pub">كلمة منشورة</span>':w&&w.has_draft?'<span class="tag">مسودة</span>':'<span class="tag">لا كلمة</span>')+'<button class="b" data-reset="'+esc(c.org)+'">رمز جديد</button>'+(w&&w.published?'<button class="b d" data-hide="'+esc(c.org)+'">إخفاء الكلمة</button>':'')+'</div>'});
+    T.innerHTML=x+'</div>';
+    T.onclick=e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.reset&&confirm('توليد رمز جديد لـ'+b.dataset.reset+'؟'))admCall('book_code_reset',{p_org:b.dataset.reset},'تم توليد رمز جديد').catch(()=>{});else if(b.dataset.hide&&confirm('إخفاء الكلمة المنشورة؟ تبقى مسودتها لدى الأخصائيات.'))admCall('book_word_hide',{p_org:b.dataset.hide},'أُخفيت الكلمة').catch(()=>{})};
+  }else{
+    const nd=(d.activities||[]).filter(a=>a.is_demo).length,no=(d.orgs||[]).filter(o=>o.is_demo).length;
+    T.innerHTML='<p class="note">المحتوى التجريبي الحالي: '+AR(no)+' مؤسسات، و'+AR(nd)+' أنشطة، وكلمات مشرفات تجريبية، وفيديو تجريبي لكلمة رئيس القسم. عند جاهزية المواد الحقيقية احذفيه بضغطة واحدة. أي عنصر تعدّلينه يتحوّل إلى محتوى حقيقي ولا يُحذف.</p><div class="btns"><button class="b d" id="purge">حذف كل المحتوى التجريبي</button></div>';
+    $('#purge').onclick=()=>{if(confirm('حذف كل المحتوى التجريبي نهائياً؟ لا يمكن التراجع.'))admCall('book_purge_demo',{},'حُذف المحتوى التجريبي').catch(()=>{})};
+  }
+}
+function admActForm(T,a,orgNames){
+  a=a||{org:orgNames[0]||'',title:'',kind:'',goal:'',did:'',learned:'',media:[],published:false,sort:0};
+  const media=(a.media||[]).map(m=>Object.assign({},m));
+  T.innerHTML='<div class="f"><div class="row2"><label>المؤسسة<select id="eOrg">'+orgNames.map(o=>'<option '+(o===a.org?'selected':'')+'>'+esc(o)+'</option>').join('')+'</select></label><label>نوع النشاط<input id="eKind" maxlength="30" value="'+esc(a.kind)+'" placeholder="إرشاد جماعي، حملة توعوية…"></label></div>'+
+   '<label>عنوان النشاط<input id="eTitle" maxlength="140" value="'+esc(a.title)+'"></label>'+
+   '<label>هدف النشاط<textarea id="eGoal" rows="3">'+esc(a.goal)+'</textarea></label><label>ما قامت به الطالبة<textarea id="eDid" rows="4">'+esc(a.did)+'</textarea></label><label>ما تعلّمته<textarea id="eLearn" rows="3">'+esc(a.learned)+'</textarea></label>'+
+   '<div><div style="font:600 13px \'IBM Plex Sans Arabic\';margin-bottom:6px">الصور والفيديو المعتمدة</div><div class="mlist" id="eMedia"></div><label class="note" style="margin-top:8px">إضافة ملفات <input type="file" id="eFiles" multiple accept="image/*,video/mp4,video/webm"></label></div>'+
+   '<div class="row2"><label class="note"><span><input type="checkbox" id="ePub" '+(a.published?'checked':'')+'> منشور للزوار (معتمد للنشر)</span></label><label>الترتيب<input type="number" id="eSort" value="'+(a.sort||0)+'"></label></div>'+
+   '<div class="msg" id="eMsg"></div><div class="btns"><button class="b p" id="eSave">حفظ</button><button class="b" id="eBack">رجوع</button></div></div>';
+  const drawM=()=>{$('#eMedia').innerHTML=media.map((m,i)=>'<div class="mitem">'+(m.type==='video'?'<video src="'+esc(m.src)+'" muted></video>':'<img alt="" src="'+esc(srcURL(m.src))+'">')+'<input data-cap="'+i+'" value="'+esc(m.cap||'')+'" placeholder="تعليق قصير"><button data-rm="'+i+'">إزالة</button></div>').join('')||'<span class="note">لا توجد ملفات</span>'};
+  drawM();
+  $('#eMedia').oninput=e=>{const i=e.target.dataset.cap;if(i!=null)media[+i].cap=e.target.value};
+  $('#eMedia').onclick=e=>{const i=e.target.dataset.rm;if(i!=null){media.splice(+i,1);drawM()}};
+  $('#eFiles').onchange=async e=>{const fs=[...e.target.files];$('#eMsg').textContent='جارٍ رفع '+AR(fs.length)+' ملف…';for(const f of fs){try{const u=await upload(f,'act');media.push({type:f.type.indexOf('video')===0?'video':'image',src:u,cap:''});drawM()}catch(er){toast(errMsg(er))}}$('#eMsg').textContent='';e.target.value=''};
+  $('#eBack').onclick=()=>{ADM.edit=null;admRender()};
+  $('#eSave').onclick=async()=>{const t=$('#eTitle').value.trim();if(!t){$('#eMsg').className='msg err';$('#eMsg').textContent='العنوان مطلوب.';return}
+    try{await admCall('book_activity_save',{p_id:a.id||null,p_org:$('#eOrg').value,p_title:t,p_kind:$('#eKind').value,p_goal:$('#eGoal').value,p_did:$('#eDid').value,p_learned:$('#eLearn').value,p_media:media,p_published:$('#ePub').checked,p_sort:+$('#eSort').value||0},'حُفظ النشاط');ADM.edit=null;admRender()}catch(e){}};
+}
+
+/* ===== events ===== */
+$('#btnNext').onclick=()=>next();$('#btnPrev').onclick=()=>prev();
+$('#btnOpen').onclick=()=>goSpread(1);
+$('#btnToc').onclick=()=>openToc(!$('#toc').classList.contains('on'));
+$('#scrim').onclick=()=>openToc(false);
+$('#tocList').onclick=e=>{const b=e.target.closest('[data-page]');if(!b)return;openToc(false);goPage(+b.dataset.page)};
+$('#btnMentorAny').onclick=()=>{openToc(false);openMentor(null)};
+$('#btnAdmin').onclick=()=>{openToc(false);openAdmin()};
+document.addEventListener('click',e=>{const x=e.target.closest('[data-close]');if(x){const id=x.dataset.close;if(id==='toc')openToc(false);else closeOv(id);return}
+  if(e.target.classList&&e.target.classList.contains('ov'))closeOv(e.target.id)});
+function pageAction(e){if(e.target.closest('[data-open]')){goSpread(1);return}
+  const a=e.target.closest('[data-act]');if(!a)return;e.preventDefault();const act=a.dataset.act;
+  if(act==='play')openVideo(a.dataset.who);else if(act==='jump')goOrg(a.dataset.org);else if(act==='act')openActivity(a.dataset.id);else if(act==='mentor')openMentor(a.dataset.org);
+  else if(act==='word'){const p=PAGES.findIndex(x=>x.t==='word'&&x.org===a.dataset.org);if(p>=0)goPage(p)}}
+$('#overlay').addEventListener('click',pageAction);$('#simple').addEventListener('click',pageAction);
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){const o=document.querySelector('.ov.on');if(o){closeOv(o.id);return}if($('#toc').classList.contains('on')){openToc(false);return}}
+  if(document.querySelector('.ov.on')||$('#toc').classList.contains('on'))return;
+  if(/INPUT|TEXTAREA|SELECT/.test(e.target.tagName||''))return;
+  if(e.key==='ArrowLeft'||e.key==='PageDown'){e.preventDefault();next()}
+  else if(e.key==='ArrowRight'||e.key==='PageUp'){e.preventDefault();prev()}
+  else if(e.key==='Home'){goSpread(st.turned?1:0)}
+});
+$('#btnMode').onclick=()=>setMode(st.mode==='3d'?'simple':'3d',true);
+function setMode(m,user){
+  if(m==='3d'&&!three){toast('العرض ثلاثي الأبعاد غير مدعوم على هذا الجهاز');return}
+  st.mode=m;document.body.classList.toggle('simple',m==='simple');$('#modeTxt').textContent=m==='3d'?'عرض مبسّط':'عرض ثلاثي الأبعاد';$('#btnMode').setAttribute('aria-pressed',m==='simple');
+  if(m==='simple')renderSimple();
+  else{three.leaves.forEach(f=>{f.anim=null;f.drag=false;f.t=f.i<st.turned?1:0});if(st.turned>0)hideIntro();else $('#intro').classList.remove('hide');camTo(st.turned?'read':'intro',0);fillOverlay();three.dirty=true}
+  afterChange();if(user)try{localStorage.setItem('bookMode',m)}catch(e){}
+}
+let rsT;addEventListener('resize',()=>{clearTimeout(rsT);rsT=setTimeout(()=>{if(three){three.renderer.setSize(innerWidth||1,innerHeight||1);three.camera.aspect=(innerWidth||1)/(innerHeight||1);three.camera.updateProjectionMatrix();if(!three.cam.tw)camTo(st.turned?'read':'intro',0);fillOverlay();three.dirty=true}if(st.mode==='simple')renderSimple();afterChange()},120)});
+
+/* ===== boot ===== */
+async function reload(){
+  const cur=PAGES[2*st.turned-2]||PAGES[2*st.turned-1],keep=cur&&cur.org;
+  DATA=await rpc('book_get');buildPages();buildToc();
+  st.turned=clamp(st.turned,0,L+1);
+  const now=PAGES[2*st.turned-2]||PAGES[2*st.turned-1];
+  if(keep&&ORG_START[keep]!=null&&!(now&&now.org===keep))st.turned=spreadOfPage(ORG_START[keep]);
+  if(three)rebuildBook();
+  if(st.mode==='3d'){fillOverlay();if(three)three.dirty=true}else renderSimple();
+  afterChange();
+}
+(async function boot(){
+  const ld=t=>$('#ldMsg').textContent=t;
+  try{await Promise.race([Promise.all(['700 30px "Noto Kufi Arabic"','600 16px "Noto Kufi Arabic"','400 16px "IBM Plex Sans Arabic"','500 16px "IBM Plex Sans Arabic"','600 16px "IBM Plex Sans Arabic"','400 19px Amiri','700 60px Amiri','400 30px "Aref Ruqaa"'].map(f=>document.fonts.load(f))),new Promise(r=>setTimeout(r,3500))])}catch(e){}
+  ld('جلب المواد المعتمدة للنشر');
+  try{DATA=await rpc('book_get')}catch(e){ld('تعذّر الاتصال بالخادم. أعيدي تحميل الصفحة.');return}
+  buildPages();buildToc();
+  ld('تجهيز المشهد');
+  const q=new URLSearchParams(location.search);
+  const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let pref=null;try{pref=localStorage.getItem('bookMode')}catch(e){}
+  three=(q.get('simple')==='1'||typeof THREE==='undefined')?null:initThree();
+  const hm=/s=(\d+)(?:&f=([RL]))?/.exec(location.hash);
+  if(hm){st.turned=clamp(+hm[1],0,L+1);st.focus=hm[2]||'R'}
+  if(three){rebuildBook();camTo('intro',0);initDrag();requestAnimationFrame(loop)}
+  const wantSimple=!three||pref==='simple'||(reduced&&pref!=='3d');
+  setMode(wantSimple?'simple':'3d');
+  if(!three)$('#btnMode').style.display='none';
+  if(reduced&&three&&wantSimple)toast('عُرض المعرض بصورة مبسّطة لأن جهازك يفضّل تقليل الحركة. يمكنك التبديل من الأعلى.',4200);
+  $('#loader').style.opacity=0;setTimeout(()=>$('#loader').remove(),500);
+  window.__book={st,goSpread,goPage,goOrg,next,prev,get L(){return L},get PAGES(){return PAGES},three:()=>three};
+})();
+</script>
+</body>
+</html>
