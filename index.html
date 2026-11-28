@@ -1051,6 +1051,7 @@ body.is-demo .topbar{position:relative}
 #appClosed{position:fixed;inset:0;z-index:99999;background:rgba(247,244,238,.97);display:none;align-items:center;justify-content:center;padding:16px}
 #appClosed .ac-card{background:#fff;border:1px solid var(--line,#e5e0d6);border-radius:20px;padding:32px 26px;max-width:380px;text-align:center;box-shadow:0 20px 60px -20px rgba(12,40,52,.3)}
 #appClosed .ac-ic{font-size:40px}#appClosed h2{margin:10px 0 6px;color:var(--teal,#0E5A63)}#appClosed p{margin:0;color:var(--muted,#6b7280);line-height:1.8}
+#celebCv{position:fixed;inset:0;width:100vw;height:100vh;z-index:6000;pointer-events:none}
 /* ترحيب الأسبوع الأخير (2026-11-28) */
 #finalWelcome{position:fixed;inset:0;z-index:5000;background:rgba(12,40,52,.45);display:flex;align-items:center;justify-content:center;padding:16px;animation:fwIn .35s ease-out}
 #finalWelcome .fw-card{background:#fff;border-radius:22px;padding:28px 24px;max-width:360px;width:100%;text-align:center;box-shadow:0 30px 80px -20px rgba(12,40,52,.5);animation:fwUp .5s cubic-bezier(.2,.8,.2,1)}
@@ -1072,6 +1073,7 @@ body.is-demo .topbar{position:relative}
 .access-reqs .ar-row span{color:var(--muted);font-size:12px;direction:rtl}
 .access-reqs .ar-row em{font-style:normal;font-size:12.5px;color:var(--muted)}
 .access-reqs .ar-pending{background:#FFFBF2}
+.access-reqs .ar-row span.ar-org{color:var(--teal,#0E5A63);font-weight:700;font-size:13px}
 .access-reqs .btn{padding:6px 14px;font-size:12.5px}
 .access-reqs .ar-empty{color:var(--muted);font-size:13px}
 /* عدد الزوار في لوحة المشرفة (2026-11-25) */
@@ -2892,7 +2894,7 @@ async function accessLoad(){const el=document.getElementById('accessReqs');if(!e
     let h='<div class="ar-h"><b>🔐 طلبات الدخول</b><span>'+pend.length+' بانتظار موافقتك · '+rows.length+' طلبا منذ البداية</span><button class="btn" onclick="accessLoad()">تحديث</button></div>';
     if(!rows.length)h+='<div class="ar-empty">لا توجد طلبات دخول.</div>';
     rows.forEach(function(x){const t=new Date(x.at).toLocaleString('ar-QA',{timeZone:'Asia/Qatar',day:'numeric',month:'short',hour:'numeric',minute:'2-digit'});
-      h+='<div class="ar-row ar-'+x.status+'"><div><b>'+escH(x.name||'—')+'</b><span>'+escH(x.uid)+' · '+escH(x.email||'')+' · '+escH(x.org||'')+' · '+t+'</span></div>'+
+      h+='<div class="ar-row ar-'+x.status+'"><div><b>'+escH(x.name||'—')+'</b><span class="ar-org">🏢 '+escH(x.org||'لم تحدد المؤسسة')+'</span><span>'+escH(x.uid)+' · '+escH(x.email||'')+' · '+t+'</span></div>'+
         (x.status==='pending'?'<button class="btn btn-primary" onclick="accessDecide('+x.id+',true)">قبول</button><button class="btn" onclick="accessDecide('+x.id+',false)">رفض</button>'
           :'<em>'+(x.status==='approved'?'مقبول ✓':'مرفوض')+'</em>'+(x.status==='rejected'?'<button class="btn" onclick="accessDecide('+x.id+',true)">قبول</button>':''))+'</div>';});
     el.innerHTML=h;el.style.display='block';}
@@ -3422,7 +3424,36 @@ function finalWelcome(){const now=new Date().getTime();if(FINAL_SHOWN||supMode||
     '<button class="btn btn-primary" onclick="document.getElementById(\'finalWelcome\').remove()">لنبدأ</button></div>';
   ov.addEventListener('click',function(e){if(e.target===ov)ov.remove();});
   document.body.appendChild(ov);}
-function applyStudent(){try{document.body.classList.toggle('is-demo',isDemo());}catch(e){}try{setTimeout(finalWelcome,900);}catch(e){}try{if(isDemo())setTimeout(demoJump,60);}catch(e){}document.getElementById('sbName').textContent=student.name||'طالبة';document.getElementById('sbId').textContent=student.org?'🏢 '+student.org:('الرقم: '+(student.id||'—'));
+/* احتفال الأسبوع الأخير (2026-11-28): من السبت ٢٨ نوفمبر حتى نهاية الخميس ٣ ديسمبر بتوقيت قطر،
+   تطير بالونات ويسقط ورق ملون (نحو ٧ ثوان)، مرة واحدة في اليوم لكل طالبة على جهازها */
+const CELEB_FROM=new Date('2026-11-28T00:00:00+03:00').getTime(),CELEB_TO=new Date('2026-12-04T00:00:00+03:00').getTime();
+let CELEB_SHOWN=false;
+function celebrate(force){const now=new Date().getTime();
+  if(!force&&(CELEB_SHOWN||supMode||!student.id||now<CELEB_FROM||now>=CELEB_TO))return;CELEB_SHOWN=true;
+  if(!force){const day=new Date().toLocaleDateString('en-CA',{timeZone:'Asia/Qatar'});
+    try{if(localStorage.getItem('rafiqaCeleb')===day)return;localStorage.setItem('rafiqaCeleb',day);}catch(e){}}
+  try{if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;}catch(e){}
+  const cv=document.createElement('canvas');cv.id='celebCv';document.body.appendChild(cv);
+  const c=cv.getContext('2d'),dpr=Math.min(window.devicePixelRatio||1,2);let W,H;
+  function size(){W=innerWidth;H=innerHeight;cv.width=W*dpr;cv.height=H*dpr;c.setTransform(dpr,0,0,dpr,0,0);}size();addEventListener('resize',size);
+  const COL=['#E4572E','#F3A712','#2A8A80','#6C8FFF','#FF7EB3','#3ECF8E','#A86ED6','#FFD23F'];
+  const R=function(a,b){return a+Math.random()*(b-a);};
+  const conf=[],ball=[];
+  for(let i=0;i<170;i++)conf.push({x:R(0,W),y:R(-H,-10),w:R(6,11),h:R(9,16),vy:R(1.6,3.6),vx:R(-.8,.8),r:R(0,6.28),vr:R(-.12,.12),sw:R(0,6.28),col:COL[i%COL.length]});
+  for(let i=0;i<14;i++)ball.push({x:R(20,W-20),y:H+R(20,H*.8),rx:R(18,27),vy:R(1.4,2.6),sw:R(0,6.28),col:COL[(i*3)%COL.length]});
+  const t0=performance.now(),DUR=7000;
+  function balloon(b){c.save();c.translate(b.x+Math.sin(b.sw)*10,b.y);
+    c.strokeStyle='rgba(80,80,80,.45)';c.lineWidth=1;c.beginPath();c.moveTo(0,b.rx*1.2);c.quadraticCurveTo(8,b.rx*1.9,0,b.rx*2.8);c.stroke();
+    c.fillStyle=b.col;c.beginPath();c.ellipse(0,0,b.rx,b.rx*1.2,0,0,6.283);c.fill();
+    c.beginPath();c.moveTo(-4,b.rx*1.2-1);c.lineTo(4,b.rx*1.2-1);c.lineTo(0,b.rx*1.2+6);c.closePath();c.fill();
+    c.fillStyle='rgba(255,255,255,.45)';c.beginPath();c.ellipse(-b.rx*.35,-b.rx*.45,b.rx*.22,b.rx*.35,-.5,0,6.283);c.fill();c.restore();}
+  function frame(t){const el=t-t0;c.clearRect(0,0,W,H);const fade=el>DUR-1200?Math.max(0,(DUR-el)/1200):1;c.globalAlpha=fade;
+    ball.forEach(function(b){b.y-=b.vy;b.sw+=.03;balloon(b);});
+    conf.forEach(function(p){p.y+=p.vy;p.x+=p.vx+Math.sin(p.sw)*.6;p.sw+=.05;p.r+=p.vr;if(p.y>H+20&&el<DUR-2500){p.y=-10;p.x=R(0,W);}
+      c.save();c.translate(p.x,p.y);c.rotate(p.r);c.fillStyle=p.col;c.fillRect(-p.w/2,-p.h/2,p.w,p.h*Math.abs(Math.cos(p.sw)));c.restore();});
+    if(el<DUR)requestAnimationFrame(frame);else{removeEventListener('resize',size);cv.remove();}}
+  requestAnimationFrame(frame);}
+function applyStudent(){try{document.body.classList.toggle('is-demo',isDemo());}catch(e){}try{setTimeout(finalWelcome,900);setTimeout(celebrate,700);}catch(e){}try{if(isDemo())setTimeout(demoJump,60);}catch(e){}document.getElementById('sbName').textContent=student.name||'طالبة';document.getElementById('sbId').textContent=student.org?'🏢 '+student.org:('الرقم: '+(student.id||'—'));
   document.getElementById('heroHi').textContent='أهلا بك'+(student.name&&!isDemo()?'، '+student.name:'');
   try{presTicker();}catch(e){}
   const m=document.getElementById('tMail');if(m)m.innerHTML=m.innerHTML.replace('(الاسم)',student.name||'(الاسم)').replace('(المؤسسة)',student.org||'(المؤسسة)');}
